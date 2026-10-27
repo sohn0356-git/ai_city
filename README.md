@@ -28,7 +28,7 @@ VITE_FIREBASE_APP_ID
 Node.js 22.12 이상을 사용합니다.
 
 ```sh
-npm install
+npm ci
 cp .env.example .env.local
 # .env.local에 Firebase 콘솔의 웹 앱 설정값 입력
 npm run dev
@@ -39,7 +39,7 @@ npm run build
 npm run preview
 ```
 
-로컬 주소도 /ai_city/ 경로를 사용합니다. 실제 환경변수 값은 커밋하지 마세요. 처음에는 lockfile이 없으므로 npm install을 사용합니다. 로컬에서 생성한 package-lock.json을 커밋하면 이후 npm ci로 전환할 수 있습니다.
+로컬 주소도 /ai_city/ 경로를 사용합니다. 실제 환경변수 값은 커밋하지 마세요. package-lock.json을 포함하며 배포와 로컬 모두 npm ci로 동일한 의존성을 설치합니다.
 
 ## Firebase 사용
 
@@ -48,3 +48,7 @@ src/firebase.js에서 app, auth, db(Firestore), storage를 내보냅니다. 초�
 ## PWA
 
 Android Chrome에서는 앱 설치, iPhone Safari에서는 공유 → 홈 화면에 추가를 사용합니다. 서비스 워커는 프로덕션 빌드에서만 등록되며 /ai_city/의 정적 앱 파일만 캐시합니다. Firebase 요청/사용자 데이터는 캐시하지 않습니다. 새 버전은 기존 앱 탭을 모두 닫은 후 다시 열면 적용됩니다. 앱 화면은 오프라인에서도 열 수 있지만 온라인 게임 데이터에는 연결이 필요합니다.
+
+## 의존성 유지
+
+Firestore의 Node.js 전용 전이 의존성 @grpc/grpc-js는 보안 패치를 위해 1.14 이상으로 override합니다. 브라우저에서는 해당 gRPC 코드를 사용하지 않습니다.
