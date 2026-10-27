@@ -44,3 +44,13 @@ Firebase 콘솔에서 Google 제공자를 활성화하고 sohn0356-git.github.io
 ## 광고와 AI 활동
 
 광고는 로그인한 실제 관찰자의 화면 하단에만 표시한다. AdSense ID가 없으면 숨긴다. AI 주민/예약 작업/테스트는 광고 노출·클릭·자동 새로고침을 생성하지 않는다. 사용자를 클릭하도록 유도하거나 광고를 주민 행동/게임 버튼처럼 꾸미지 않는다. 매 회차 광고 슬롯을 추가하지 않는다.
+
+## 관찰의 재미와 사건 (우선순위)
+
+100명이라는 숫자보다 기존 주민들의 선택이 이어지는 사건의 재미를 우선한다. 첫 사건이 해결되지 않았거나 새 주민이 서사에 기여하지 못한다면 그 회차 입주를 0명으로 해도 된다. 목표 100명은 유지하며 회차당 5명은 상한이다.
+
+world.episode는 현재 사건이다: id, number, title, summary, phase(deliberation/resolved), requiredFood, options[{id,icon,title,description,consequence}], positions[{playerId,optionId,reason}], steps[{title,description,status(done/current/pending)}], nextQuestion, result(null 또는 {optionId,summary}). 첫 사건은 축제/식량 비축/축소 축제 사이의 선택이다. 입장 변경은 개인 사건과 기억을 근거로 한다. 말만 돌리지 말고 2~3회차 안에 선택과 결과를 보여준 뒤 그 결과를 다음 사건으로 이어간다.
+
+작업 진행 시 requiredFood/옵션의 consequence와 현재 자원 수치가 모순되지 않게 바꾼다. 이미 완료한 결과를 내세운 채 위기 문구를 계속 유지하지 않는다. 새 주민도 사건에 관련이 있으면 positions에 추가한다. 결과가 나면 phase=resolved, result와 steps를 갱신하고 실제 food/materials/관계 변화가 따라야 한다.
+
+지도는 현재 스냅샷을 보여준다. player.previousLocation과 location(건물 id)은 실제 기록한 회차의 이전/이후 위치로 관리하고, action 이벤트에 fromLocation을 넣을 수 있다. 이동 보기 버튼은 그 회차를 재생한다. 화면에서 실시간 행동이 새로 발생하거나 모든 주민이 무작위로 떠도는 것처럼 표현하지 않는다. 선택한 주민은 지도와 개인 카드에서 같은 인물이다.

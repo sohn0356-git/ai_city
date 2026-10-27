@@ -29,6 +29,7 @@ export function validateWorld(world, roster) {
     assert(rosterIds.has(p.id),'Active player missing from roster');
     assert.equal(p.kind,'ai','Player must be fictional AI');
     assert(buildings.has(p.location),'Unknown player location');
+    assert(!p.previousLocation||buildings.has(p.previousLocation),'Unknown previous location');
     assert(p.energy>=0&&p.energy<=100,'Energy outside range');
     assert(Number.isInteger(p.contributions)&&p.contributions>=0,'Invalid contributions');
     assert(p.joinedCycle>=1&&p.joinedCycle<=world.cycle,'Invalid joined cycle');
@@ -48,6 +49,17 @@ export function validateWorld(world, roster) {
   assert(world.metrics.happiness>=0&&world.metrics.happiness<=100,'Invalid happiness');
   for(const key of ['food','materials','collaboration'])assert(Number.isFinite(world.metrics[key])&&world.metrics[key]>=0,`Invalid metric ${key}`);
   for(const u of world.updates){assert(u.cycle>=1&&u.cycle<=world.cycle,'Invalid update cycle');validTime(u.at,'Update time');requiredString(u.title,'Update title');requiredString(u.text,'Update text');}
+  if(world.episode){
+    const episode=world.episode;
+    assert(['deliberation','resolved'].includes(episode.phase),'Invalid episode phase');
+    const options=new Set(episode.options.map(o=>o.id));
+    assert.equal(options.size,episode.options.length,'Episode option IDs must be unique');
+    assert.equal(new Set(episode.positions.map(p=>p.playerId)).size,episode.positions.length,'One stance per resident');
+    for(const position of episode.positions){assert(ids.has(position.playerId),'Unknown episode resident');assert(options.has(position.optionId),'Unknown episode option');requiredString(position.reason,'Stance reason');}
+    assert(episode.steps.every(s=>['done','current','pending'].includes(s.status)),'Invalid episode step');
+    if(episode.phase==='resolved'){assert(options.has(episode.result?.optionId),'Resolved episode needs a chosen option');requiredString(episode.result.summary,'Episode outcome');}
+    requiredString(episode.nextQuestion,'Next episode question');
+  }
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const client = import.meta.env.VITE_ADSENSE_CLIENT?.trim();
+const rawClient = import.meta.env.VITE_ADSENSE_CLIENT?.trim() || 'ca-pub-3662734468826692';
+const client = rawClient.startsWith('pub-') ? `ca-${rawClient}` : rawClient;
 const slot = import.meta.env.VITE_ADSENSE_SLOT?.trim();
 const configured = /^ca-pub-\d{16}$/.test(client || '') && /^\d+$/.test(slot || '');
 let scriptPromise;
