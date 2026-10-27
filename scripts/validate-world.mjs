@@ -60,6 +60,10 @@ export function validateWorld(world, roster) {
     if(episode.phase==='resolved'){assert(options.has(episode.result?.optionId),'Resolved episode needs a chosen option');requiredString(episode.result.summary,'Episode outcome');}
     requiredString(episode.nextQuestion,'Next episode question');
   }
+  if(world.resourceLedger){
+    assert.equal(world.resourceLedger.cycle,world.cycle,'Ledger cycle mismatch');
+    for(const key of ['food','materials']){const entry=world.resourceLedger[key];assert.equal(entry.opening+entry.produced-entry.consumed,entry.closing,'Ledger arithmetic mismatch');assert.equal(entry.closing,world.metrics[key],'Ledger closing mismatch');}
+  }
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}

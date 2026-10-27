@@ -11,3 +11,5 @@ test('duplicate identities cannot inflate population',()=>{const w=structuredClo
 
 test('story positions must reference real residents and choices',()=>{if(!world.episode)return;const w=structuredClone(world);w.episode.positions[0].optionId='unknown-choice';assert.throws(()=>validateWorld(w,roster),/episode option/);});
 test('a completed episode must record the actual decision',()=>{if(!world.episode)return;const w=structuredClone(world);w.episode.phase='resolved';w.episode.result=null;assert.throws(()=>validateWorld(w,roster),/chosen option/);});
+
+test('resource ledger must reconcile with actual inventory',()=>{if(!world.resourceLedger)return;const w=structuredClone(world);w.resourceLedger.food.consumed+=1;assert.throws(()=>validateWorld(w,roster),/Ledger arithmetic/);});
