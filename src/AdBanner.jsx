@@ -1,24 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const rawClient = import.meta.env.VITE_ADSENSE_CLIENT?.trim() || 'ca-pub-3662734468826692';
-const client = rawClient.startsWith('pub-') ? `ca-${rawClient}` : rawClient;
+// Reuse the publisher and single asynchronous script declared in index.html.
+const script = document.querySelector('script[src^="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+const client = script ? new URL(script.src).searchParams.get('client') : null;
 const slot = import.meta.env.VITE_ADSENSE_SLOT?.trim();
 const configured = /^ca-pub-\d{16}$/.test(client || '') && /^\d+$/.test(slot || '');
-let scriptPromise;
-function loadAdSense() {
-  if (!scriptPromise) {
-    scriptPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`;
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
-  return scriptPromise;
-}
 
 // A single display unit for human observers. AI activity never requests or clicks ads.
 export default function AdBanner() {
@@ -31,9 +17,12 @@ export default function AdBanner() {
     const request = () => {
       if (requested.current) return;
       requested.current = true;
-      loadAdSense().then(() => {
+      try {
+        // AdSense consumes this queue after its asynchronous head script loads.
         if (!cancelled) (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }).catch(() => { if (!cancelled) setFailed(true); });
+      } catch {
+        if (!cancelled) setFailed(true);
+      }
     };
     if (!('IntersectionObserver' in window)) { request(); return () => { cancelled = true; }; }
     const observer = new IntersectionObserver((entries) => {
