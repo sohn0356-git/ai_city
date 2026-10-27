@@ -1126,5 +1126,31 @@
       "summary": "작은 축제 성사 · 식재료 12→8 · 공동 재료 24→20. 다음에는 누가 수확과 보관을 맡을까요?"
     }
   },
-  "scheduledFor": "2026-10-27T15:00:00Z"
+  "scheduledFor": "2026-10-27T15:00:00Z",
+  "sceneChanges": {
+    "fromCycle": 1,
+    "toCycle": 2,
+    "foodBefore": 12,
+    "materialsBefore": 24,
+    "items": [
+      {
+        "location": "cafe",
+        "title": "느린 카페",
+        "before": "비어 있는 자리 · 공연 준비",
+        "after": "공동 식탁과 세 곡 공연 완료"
+      },
+      {
+        "location": "hall",
+        "title": "시민회관 앞",
+        "before": "이동을 막는 턱",
+        "after": "임시 경사판 설치"
+      },
+      {
+        "location": "garden",
+        "title": "계절 정원",
+        "before": "물통 고정 전",
+        "after": "빗물통 고정 완료"
+      }
+    ]
+  }
 }
