@@ -1,6 +1,6 @@
 # AI City
 
-React + Vite 웹게임의 기본 프로젝트입니다. Firebase SDK 초기화, GitHub Pages 배포, 모바일 PWA 설치 및 앱 화면 오프라인 캐시를 제공합니다. 게임 기능과 로그인/데이터 저장 로직은 아직 포함하지 않습니다.
+각자의 페르소나와 기억을 가진 AI 주민들이 사는 관찰형 도시 게임입니다. Google 로그인한 방문자는 관찰자로 도시 지도/활동/관계/프로젝트를 보며, AI 주민을 드롭다운으로 선택합니다. 공유 세계는 Git 기반 공개 JSON, 인증은 Firebase Authentication입니다. 운영은 WORLD_GUIDE.md를 참고하세요.
 
 ## GitHub 배포
 
@@ -43,7 +43,7 @@ npm run preview
 
 ## Firebase 사용
 
-src/firebase.js에서 app, auth, db(Firestore), storage를 내보냅니다. 초기화 성공은 Firebase 서버 데이터 접근 성공을 의미하지 않습니다. 로그인 기능을 추가할 때 Firebase Authentication → Settings → Authorized domains에 sohn0356-git.github.io를 등록하고, 사용할 로그인 제공자와 Firestore/Storage 규칙을 설정하세요. 이 프로젝트는 Firebase 보안 규칙이나 기존 데이터를 변경하지 않습니다.
+src/firebase.js에서 app, auth, db(Firestore), storage를 내보냅니다. 초기화 성공은 Firebase 서버 데이터 접근 성공을 의미하지 않습니다. Google 로그인을 사용하려면 Firebase Authentication → Settings → Authorized domains에 sohn0356-git.github.io를 등록하고, 사용할 로그인 제공자와 Firestore/Storage 규칙을 설정하세요. Google 로그인 구현은 포함되어 있지만 콘솔의 Google 제공자 활성화/승인 도메인 설정은 별도로 필요합니다. 이 프로젝트는 Firebase 보안 규칙이나 기존 데이터를 변경하지 않습니다.
 
 ## PWA
 

@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 1,
+  "name": "AI City",
+  "cycle": 1,
+  "lastUpdated": "2026-10-27T13:53:55Z",
+  "nextUpdateAt": "2026-10-27T15:00:00Z",
+  "targetPopulation": 100,
+  "growthPerCycle": 5,
+  "players": [
+    {
+      "id": "p001",
+      "name": "서윤",
+      "role": "도시 설계자",
+      "kind": "ai",
+      "persona": {
+        "traits": "완벽주의지만 주민의 동선을 먼저 생각한다",
+        "voice": "천천히 듣고 도면으로 답한다",
+        "motivation": "비가 와도 안전한 중앙광장 만들기",
+        "tension": "공사를 서두르면 작은 불편을 놓칠까 두렵다"
+      },
+      "goal": "비가 와도 안전한 중앙광장 만들기",
+      "quote": "작은 불편부터 고쳐볼까요?",
+      "location": "hall",
+      "mood": "기대",
+      "energy": 82,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "광장 우회 동선을 그려 지우에게 전달했다.",
+      "memory": [
+        "아이들의 보행 동선에 턱이 있다는 지우의 지적을 받아 도면을 고쳤다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p005",
+          "affinity": 18,
+          "reason": "아이들의 보행 동선에 턱이 있다는 지우의 지적을 받아 도면을 고쳤다."
+        }
+      ]
+    },
+    {
+      "id": "p002",
+      "name": "도윤",
+      "role": "개발자",
+      "kind": "ai",
+      "persona": {
+        "traits": "호기심이 많고 실용적이지만 과하게 최적화한다",
+        "voice": "짧게 말하고 원인과 근거를 설명한다",
+        "motivation": "누구나 읽을 수 있는 도시 안내판 제작",
+        "tension": "기능을 늘리다 정작 사용자를 놓치는 버릇"
+      },
+      "goal": "누구나 읽을 수 있는 도시 안내판 제작",
+      "quote": "먼저 작게 만들어서 써보죠.",
+      "location": "lab",
+      "mood": "몰입",
+      "energy": 77,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "안내판 시제품에 건물별 이동 시간을 표시했다.",
+      "memory": [
+        "유나가 글씨가 작다고 해 숫자보다 글자 크기를 먼저 키웠다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p008",
+          "affinity": 18,
+          "reason": "유나가 글씨가 작다고 해 숫자보다 글자 크기를 먼저 키웠다."
+        }
+      ]
+    },
+    {
+      "id": "p003",
+      "name": "하린",
+      "role": "정원사",
+      "kind": "ai",
+      "persona": {
+        "traits": "느긋하지만 생태 문제에는 단호하다",
+        "voice": "식물에 비유하며 부드럽게 말한다",
+        "motivation": "방치된 공터를 계절 정원으로 바꾸기",
+        "tension": "물 절약과 새 식물의 생존 사이에서 고민한다"
+      },
+      "goal": "방치된 공터를 계절 정원으로 바꾸기",
+      "quote": "자라는 속도도 계획에 넣어야 해요.",
+      "location": "garden",
+      "mood": "차분",
+      "energy": 72,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "공터 토양을 살피고 빗물통을 놓을 자리를 표시했다.",
+      "memory": [
+        "민준에게 커피 찌꺼기는 말려서 조금씩 써야 한다고 설명했다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p004",
+          "affinity": 18,
+          "reason": "민준에게 커피 찌꺼기는 말려서 조금씩 써야 한다고 설명했다."
+        }
+      ]
+    },
+    {
+      "id": "p004",
+      "name": "민준",
+      "role": "카페 주인",
+      "kind": "ai",
+      "persona": {
+        "traits": "사람을 연결하길 좋아하지만 거절을 어려워한다",
+        "voice": "상대가 한 말을 기억하며 다정하게 묻는다",
+        "motivation": "처음 온 주민도 머물 수 있는 공동 테이블 마련",
+        "tension": "모두를 도우려다 자신의 가게 일을 미룬다"
+      },
+      "goal": "처음 온 주민도 머물 수 있는 공동 테이블 마련",
+      "quote": "자리 하나 비워둘게요.",
+      "location": "cafe",
+      "mood": "설렘",
+      "energy": 67,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "카페 창가에 공동 테이블을 두고 환영 차를 준비했다.",
+      "memory": [
+        "이준이 저녁 작은 연주를 제안해 이웃 소음부터 확인하기로 했다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p009",
+          "affinity": 18,
+          "reason": "이준이 저녁 작은 연주를 제안해 이웃 소음부터 확인하기로 했다."
+        }
+      ]
+    },
+    {
+      "id": "p005",
+      "name": "지우",
+      "role": "기록 화가",
+      "kind": "ai",
+      "persona": {
+        "traits": "관찰력이 예민하고 독창적이며 타협에 신중하다",
+        "voice": "말보다 스케치로 보여주고 색을 구체적으로 말한다",
+        "motivation": "주민 얼굴과 이야기가 담긴 첫 도시 벽화 완성",
+        "tension": "예쁜 장면만 그리면 도시의 진짜 모습을 잃을까 걱정한다"
+      },
+      "goal": "주민 얼굴과 이야기가 담긴 첫 도시 벽화 완성",
+      "quote": "이 길의 색은 아직 비어 있어요.",
+      "location": "studio",
+      "mood": "기대",
+      "energy": 82,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "광장 구석에서 열 명의 실루엣을 스케치했다.",
+      "memory": [
+        "서윤의 도면을 보고 이동이 불편한 낮은 턱을 발견해 표시했다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p001",
+          "affinity": 18,
+          "reason": "서윤의 도면을 보고 이동이 불편한 낮은 턱을 발견해 표시했다."
+        }
+      ]
+    },
+    {
+      "id": "p006",
+      "name": "시온",
+      "role": "요리사",
+      "kind": "ai",
+      "persona": {
+        "traits": "효율을 좋아하지만 음식을 나누는 데는 관대하다",
+        "voice": "재료와 양을 정확히 말하며 직설적이다",
+        "motivation": "수확과 연결된 저렴한 공동 식탁 열기",
+        "tension": "싼 가격을 지키면서 재료 낭비를 줄이고 싶다"
+      },
+      "goal": "수확과 연결된 저렴한 공동 식탁 열기",
+      "quote": "열 명이면 이만큼이면 충분해요.",
+      "location": "market",
+      "mood": "몰입",
+      "energy": 77,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "첫 공동 식탁의 채소 수요와 예상 비용을 적었다.",
+      "memory": [
+        "다온과 오늘 수확 가능한 양을 확인해 메뉴를 줄였다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p007",
+          "affinity": 18,
+          "reason": "다온과 오늘 수확 가능한 양을 확인해 메뉴를 줄였다."
+        }
+      ]
+    },
+    {
+      "id": "p007",
+      "name": "다온",
+      "role": "도시 농부",
+      "kind": "ai",
+      "persona": {
+        "traits": "꾸준하고 손이 빠르지만 새로운 도구에는 조심스럽다",
+        "voice": "경험을 들어 수수하게 말한다",
+        "motivation": "주민 식탁에 매일 채소 공급하기",
+        "tension": "농지 확장보다 지금 밭을 지켜야 한다고 생각한다"
+      },
+      "goal": "주민 식탁에 매일 채소 공급하기",
+      "quote": "오늘 먹을 것부터 챙깁시다.",
+      "location": "farm",
+      "mood": "차분",
+      "energy": 72,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "첫 수확 채소 12묶음을 시장에 전달했다.",
+      "memory": [
+        "시온이 필요한 양을 먼저 알려줘 남는 채소를 줄일 수 있었다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p006",
+          "affinity": 18,
+          "reason": "시온이 필요한 양을 먼저 알려줘 남는 채소를 줄일 수 있었다."
+        }
+      ]
+    },
+    {
+      "id": "p008",
+      "name": "유나",
+      "role": "지역 기자",
+      "kind": "ai",
+      "persona": {
+        "traits": "공정하고 집요하며 좋은 소식만 전하길 거부한다",
+        "voice": "정확히 묻고 다른 의견도 함께 기록한다",
+        "motivation": "주민 모두가 이해하는 첫 도시 소식지 발행",
+        "tension": "취재하는 사람이 이야기의 주인이 되지 않으려 한다"
+      },
+      "goal": "주민 모두가 이해하는 첫 도시 소식지 발행",
+      "quote": "그 선택의 이유도 적어도 될까요?",
+      "location": "library",
+      "mood": "설렘",
+      "energy": 67,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "입주 첫날의 불편과 기대를 각각 다섯 가지로 정리했다.",
+      "memory": [
+        "도윤의 안내판을 읽어보고 작은 글자부터 고치자고 제안했다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p002",
+          "affinity": 18,
+          "reason": "도윤의 안내판을 읽어보고 작은 글자부터 고치자고 제안했다."
+        }
+      ]
+    },
+    {
+      "id": "p009",
+      "name": "이준",
+      "role": "음악가",
+      "kind": "ai",
+      "persona": {
+        "traits": "낙천적이고 즉흥적이지만 연습 약속은 지킨다",
+        "voice": "리듬감 있게 이야기하고 분위기를 잘 살핀다",
+        "motivation": "이웃이 편히 듣는 작은 저녁 공연 열기",
+        "tension": "활기를 만들고 싶지만 조용한 이웃도 배려한다"
+      },
+      "goal": "이웃이 편히 듣는 작은 저녁 공연 열기",
+      "quote": "크게 말고, 오래 듣고 싶은 소리로요.",
+      "location": "cafe",
+      "mood": "기대",
+      "energy": 82,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "어쿠스틱 공연의 곡 순서와 종료 시간을 정했다.",
+      "memory": [
+        "민준과 소음 걱정을 나눈 뒤 확성기 없이 진행하기로 했다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p004",
+          "affinity": 18,
+          "reason": "민준과 소음 걱정을 나눈 뒤 확성기 없이 진행하기로 했다."
+        }
+      ]
+    },
+    {
+      "id": "p010",
+      "name": "노아",
+      "role": "공동체 조정자",
+      "kind": "ai",
+      "persona": {
+        "traits": "차분하고 책임감이 강하지만 혼자 결론내리지 않는다",
+        "voice": "여러 사람의 말을 요약하고 합의를 확인한다",
+        "motivation": "입주민이 스스로 결정하는 첫 회의 개최",
+        "tension": "빠른 결정과 충분한 참여 사이에서 균형을 찾는다"
+      },
+      "goal": "입주민이 스스로 결정하는 첫 회의 개최",
+      "quote": "지금 합의한 것부터 확인할게요.",
+      "location": "hall",
+      "mood": "몰입",
+      "energy": 77,
+      "contributions": 1,
+      "joinedCycle": 1,
+      "lastActiveCycle": 1,
+      "currentAction": "회의에 나온 광장·정원·식탁 제안을 공개 게시했다.",
+      "memory": [
+        "공사부터 하자는 의견과 정원부터 하자는 의견을 모아 병행 가능한 범위를 찾았다."
+      ],
+      "longTermMemory": [
+        "도시의 첫 입주민으로서 함께 살아갈 기반을 만들기로 했다."
+      ],
+      "relationships": [
+        {
+          "playerId": "p001",
+          "affinity": 18,
+          "reason": "공사부터 하자는 의견과 정원부터 하자는 의견을 모아 병행 가능한 범위를 찾았다."
+        }
+      ]
+    }
+  ],
+  "buildings": [
+    {
+      "id": "hall",
+      "name": "시민회관",
+      "kind": "civic",
+      "x": 48,
+      "y": 33,
+      "color": "#c89367",
+      "description": "주민 회의와 도시의 공동 계획"
+    },
+    {
+      "id": "cafe",
+      "name": "느린 카페",
+      "kind": "cafe",
+      "x": 25,
+      "y": 42,
+      "color": "#d6978f",
+      "description": "쉬어가며 대화를 나누는 작은 카페"
+    },
+    {
+      "id": "studio",
+      "name": "빛 작업실",
+      "kind": "studio",
+      "x": 71,
+      "y": 34,
+      "color": "#a4a2cf",
+      "description": "그림과 디자인으로 도시를 기록하는 곳"
+    },
+    {
+      "id": "garden",
+      "name": "계절 정원",
+      "kind": "garden",
+      "x": 74,
+      "y": 63,
+      "color": "#83a88c",
+      "description": "함께 가꾸는 공터와 빗물 정원"
+    },
+    {
+      "id": "market",
+      "name": "하루 시장",
+      "kind": "market",
+      "x": 48,
+      "y": 68,
+      "color": "#d5ad70",
+      "description": "먹거리와 재료가 모이는 생활의 중심"
+    },
+    {
+      "id": "lab",
+      "name": "작은 연구소",
+      "kind": "lab",
+      "x": 23,
+      "y": 70,
+      "color": "#8babc0",
+      "description": "주민의 불편을 해결하는 실험실"
+    },
+    {
+      "id": "farm",
+      "name": "햇살 농장",
+      "kind": "farm",
+      "x": 12,
+      "y": 23,
+      "color": "#9dac6c",
+      "description": "공동 식탁에 채소를 보내는 도시 농장"
+    },
+    {
+      "id": "library",
+      "name": "기록 보관소",
+      "kind": "library",
+      "x": 83,
+      "y": 19,
+      "color": "#c7b193",
+      "description": "도시의 기억과 소식지가 쌓이는 곳"
+    }
+  ],
+  "events": [
+    {
+      "id": "c1-001",
+      "cycle": 1,
+      "at": "2026-10-27T13:41:55Z",
+      "type": "action",
+      "actorId": "p001",
+      "targetId": "p005",
+      "location": "hall",
+      "text": "광장 우회 동선을 그려 지우에게 전달했다.",
+      "reason": "비가 와도 안전한 중앙광장 만들기",
+      "outcome": "아이들의 보행 동선에 턱이 있다는 지우의 지적을 받아 도면을 고쳤다."
+    },
+    {
+      "id": "c1-002",
+      "cycle": 1,
+      "at": "2026-10-27T13:42:55Z",
+      "type": "action",
+      "actorId": "p002",
+      "targetId": "p008",
+      "location": "lab",
+      "text": "안내판 시제품에 건물별 이동 시간을 표시했다.",
+      "reason": "누구나 읽을 수 있는 도시 안내판 제작",
+      "outcome": "유나가 글씨가 작다고 해 숫자보다 글자 크기를 먼저 키웠다."
+    },
+    {
+      "id": "c1-003",
+      "cycle": 1,
+      "at": "2026-10-27T13:43:55Z",
+      "type": "action",
+      "actorId": "p003",
+      "targetId": "p004",
+      "location": "garden",
+      "text": "공터 토양을 살피고 빗물통을 놓을 자리를 표시했다.",
+      "reason": "방치된 공터를 계절 정원으로 바꾸기",
+      "outcome": "민준에게 커피 찌꺼기는 말려서 조금씩 써야 한다고 설명했다."
+    },
+    {
+      "id": "c1-004",
+      "cycle": 1,
+      "at": "2026-10-27T13:44:55Z",
+      "type": "action",
+      "actorId": "p004",
+      "targetId": "p009",
+      "location": "cafe",
+      "text": "카페 창가에 공동 테이블을 두고 환영 차를 준비했다.",
+      "reason": "처음 온 주민도 머물 수 있는 공동 테이블 마련",
+      "outcome": "이준이 저녁 작은 연주를 제안해 이웃 소음부터 확인하기로 했다."
+    },
+    {
+      "id": "c1-005",
+      "cycle": 1,
+      "at": "2026-10-27T13:45:55Z",
+      "type": "action",
+      "actorId": "p005",
+      "targetId": "p001",
+      "location": "studio",
+      "text": "광장 구석에서 열 명의 실루엣을 스케치했다.",
+      "reason": "주민 얼굴과 이야기가 담긴 첫 도시 벽화 완성",
+      "outcome": "서윤의 도면을 보고 이동이 불편한 낮은 턱을 발견해 표시했다."
+    },
+    {
+      "id": "c1-006",
+      "cycle": 1,
+      "at": "2026-10-27T13:46:55Z",
+      "type": "action",
+      "actorId": "p006",
+      "targetId": "p007",
+      "location": "market",
+      "text": "첫 공동 식탁의 채소 수요와 예상 비용을 적었다.",
+      "reason": "수확과 연결된 저렴한 공동 식탁 열기",
+      "outcome": "다온과 오늘 수확 가능한 양을 확인해 메뉴를 줄였다."
+    },
+    {
+      "id": "c1-007",
+      "cycle": 1,
+      "at": "2026-10-27T13:47:55Z",
+      "type": "action",
+      "actorId": "p007",
+      "targetId": "p006",
+      "location": "farm",
+      "text": "첫 수확 채소 12묶음을 시장에 전달했다.",
+      "reason": "주민 식탁에 매일 채소 공급하기",
+      "outcome": "시온이 필요한 양을 먼저 알려줘 남는 채소를 줄일 수 있었다."
+    },
+    {
+      "id": "c1-008",
+      "cycle": 1,
+      "at": "2026-10-27T13:48:55Z",
+      "type": "action",
+      "actorId": "p008",
+      "targetId": "p002",
+      "location": "library",
+      "text": "입주 첫날의 불편과 기대를 각각 다섯 가지로 정리했다.",
+      "reason": "주민 모두가 이해하는 첫 도시 소식지 발행",
+      "outcome": "도윤의 안내판을 읽어보고 작은 글자부터 고치자고 제안했다."
+    },
+    {
+      "id": "c1-009",
+      "cycle": 1,
+      "at": "2026-10-27T13:49:55Z",
+      "type": "action",
+      "actorId": "p009",
+      "targetId": "p004",
+      "location": "cafe",
+      "text": "어쿠스틱 공연의 곡 순서와 종료 시간을 정했다.",
+      "reason": "이웃이 편히 듣는 작은 저녁 공연 열기",
+      "outcome": "민준과 소음 걱정을 나눈 뒤 확성기 없이 진행하기로 했다."
+    },
+    {
+      "id": "c1-010",
+      "cycle": 1,
+      "at": "2026-10-27T13:50:55Z",
+      "type": "action",
+      "actorId": "p010",
+      "targetId": "p001",
+      "location": "hall",
+      "text": "회의에 나온 광장·정원·식탁 제안을 공개 게시했다.",
+      "reason": "입주민이 스스로 결정하는 첫 회의 개최",
+      "outcome": "공사부터 하자는 의견과 정원부터 하자는 의견을 모아 병행 가능한 범위를 찾았다."
+    },
+    {
+      "id": "c1-talk-001",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:15Z",
+      "type": "dialogue",
+      "actorId": "p001",
+      "targetId": "p005",
+      "location": "hall",
+      "text": "도면에서 놓친 턱을 발견해줘서 고마워요. 광장 입구부터 고칠게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-002",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:23Z",
+      "type": "dialogue",
+      "actorId": "p005",
+      "targetId": "p001",
+      "location": "studio",
+      "text": "완성된 도시보다 바뀌는 도시를 그릴래요. 입구 스케치는 제가 맡을게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-003",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:31Z",
+      "type": "dialogue",
+      "actorId": "p006",
+      "targetId": "p007",
+      "location": "market",
+      "text": "오늘 열두 묶음이면 충분해요. 남는 양부터 계산하고 식탁을 열게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-004",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:39Z",
+      "type": "dialogue",
+      "actorId": "p007",
+      "targetId": "p006",
+      "location": "farm",
+      "text": "내일 수확량은 적을 수 있어요. 메뉴를 유연하게 바꿉시다.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-005",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:47Z",
+      "type": "dialogue",
+      "actorId": "p009",
+      "targetId": "p004",
+      "location": "cafe",
+      "text": "해가 지면 세 곡만 연주할게요. 여덟 시 전에는 마칠게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-006",
+      "cycle": 1,
+      "at": "2026-10-27T13:52:55Z",
+      "type": "dialogue",
+      "actorId": "p004",
+      "targetId": "p009",
+      "location": "cafe",
+      "text": "좋아요. 처음 온 주민에게는 차 한 잔과 옆자리를 내어드릴게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-007",
+      "cycle": 1,
+      "at": "2026-10-27T13:53:03Z",
+      "type": "dialogue",
+      "actorId": "p008",
+      "targetId": "p002",
+      "location": "lab",
+      "text": "안내판을 처음 보는 사람은 작은 숫자보다 건물 이름을 먼저 찾을 거예요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-008",
+      "cycle": 1,
+      "at": "2026-10-27T13:53:11Z",
+      "type": "dialogue",
+      "actorId": "p002",
+      "targetId": "p008",
+      "location": "lab",
+      "text": "맞아요. 이름 글씨부터 키우고 다시 확인해볼게요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-009",
+      "cycle": 1,
+      "at": "2026-10-27T13:53:19Z",
+      "type": "dialogue",
+      "actorId": "p003",
+      "targetId": "p010",
+      "location": "garden",
+      "text": "정원은 공사를 기다리지 않아도 시작할 수 있어요. 빗물통 자리만 지켜주세요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    },
+    {
+      "id": "c1-talk-010",
+      "cycle": 1,
+      "at": "2026-10-27T13:53:27Z",
+      "type": "dialogue",
+      "actorId": "p010",
+      "targetId": "p003",
+      "location": "hall",
+      "text": "광장 동선과 정원 자리를 함께 표시했어요. 서로 막지 않는 구간부터 시작해요.",
+      "reason": "함께 하는 첫 도시 작업",
+      "outcome": "다음 행동의 약속을 서로 확인했다."
+    }
+  ],
+  "projects": [
+    {
+      "id": "square",
+      "name": "누구나 걷는 중앙광장",
+      "description": "낮은 턱을 없애고 안내 동선을 표시해요.",
+      "progress": 18,
+      "ownerIds": [
+        "p001",
+        "p002",
+        "p005"
+      ],
+      "location": "hall",
+      "nextStep": "주민이 직접 걸어보고 우회 동선 확인하기"
+    },
+    {
+      "id": "green",
+      "name": "빗물을 담는 계절 정원",
+      "description": "작은 공터에 빗물통과 식물 자리를 마련해요.",
+      "progress": 12,
+      "ownerIds": [
+        "p003",
+        "p007"
+      ],
+      "location": "garden",
+      "nextStep": "빗물통 설치에 쓸 재활용 용기 구하기"
+    },
+    {
+      "id": "table",
+      "name": "열 명의 첫 공동 식탁",
+      "description": "오늘 수확한 재료로 이웃과 저녁을 나눠요.",
+      "progress": 35,
+      "ownerIds": [
+        "p006",
+        "p007",
+        "p004"
+      ],
+      "location": "market",
+      "nextStep": "메뉴와 식사 자리를 정하고 첫 식사 열기"
+    }
+  ],
+  "metrics": {
+    "happiness": 76,
+    "collaboration": 20,
+    "food": 12,
+    "materials": 24
+  },
+  "updates": [
+    {
+      "cycle": 1,
+      "at": "2026-10-27T13:53:55Z",
+      "title": "도시가 문을 열었어요",
+      "text": "첫 주민 10명이 입주했습니다. 주민 선택, 관계와 기억, 건물별 관찰, Google 로그인 관찰 모드를 추가했습니다."
+    }
+  ]
+}

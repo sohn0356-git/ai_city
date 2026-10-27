@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "node scripts/check-env.mjs && vite build && node scripts/build-sw.mjs",
-    "preview": "vite preview --host 0.0.0.0"
+    "build": "node scripts/check-env.mjs && node scripts/validate-world.mjs && vite build && node scripts/build-sw.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test scripts/world.test.mjs"
   },
   "dependencies": {
     "firebase": "13.1.0",

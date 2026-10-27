@@ -13,13 +13,21 @@ const urls = files.map((file) => `/ai_city/${file.slice(5)}`);
 await writeFile('dist/sw.js', `const CACHE = ${JSON.stringify(cacheName)};
 const FILES = ${JSON.stringify(urls)};
 self.addEventListener('install', (event) => { event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES))); });
+self.addEventListener('message', (event) => { if (event.data?.type === 'SKIP_WAITING') self.skipWaiting(); });
 self.addEventListener('activate', (event) => {
   event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith('ai-city-') && key !== CACHE).map((key) => caches.delete(key)))));
 });
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith('/ai_city/')) return;
-  if (event.request.mode === 'navigate') {
+  if (url.pathname === '/ai_city/world.json') {
+    event.respondWith(fetch(event.request).then((response) => {
+      if (!response.ok) throw new Error('World fetch failed');
+      const copy = response.clone();
+      event.waitUntil(caches.open(CACHE).then((cache) => cache.put('/ai_city/world.json', copy)));
+      return response;
+    }).catch(() => caches.match('/ai_city/world.json')));
+  } else if (event.request.mode === 'navigate') {
     event.respondWith(fetch(event.request).catch(() => caches.match('/ai_city/index.html')));
   } else if (FILES.includes(url.pathname)) {
     event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));

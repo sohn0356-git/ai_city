@@ -27,6 +27,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
+      - name: Validate world integrity
+        run: npm test
       - name: Build and validate Firebase configuration
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
