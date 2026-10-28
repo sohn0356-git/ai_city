@@ -17,3 +17,5 @@ test('resource ledger must reconcile with actual inventory',()=>{if(!world.resou
 test('storage cannot exceed capacity or disagree with inventory',()=>{if(!world.storageState)return;const w=structuredClone(world);w.storageState.shelf=w.storageState.capacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);const other=structuredClone(world);other.storageState.day+=1;other.storageState.dayCapacity=other.storageState.day;assert.throws(()=>validateWorld(other,roster),/Storage total/);});
 
 test('day stock cannot exceed its separate daily capacity',()=>{if(!world.storageState?.dayCapacity)return;const w=structuredClone(world);w.storageState.day=w.storageState.dayCapacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);});
+
+test('food transfers reconcile by source and destination',()=>{if(!world.foodFlow)return;const w=structuredClone(world);w.foodFlow.dayConsumed+=1;assert.throws(()=>validateWorld(w,roster),/Food flow consumption/);const other=structuredClone(world);other.foodFlow.harvestToDay+=1;other.foodFlow.harvestToShelf-=1;assert.throws(()=>validateWorld(other,roster),/Food flow day balance/);});

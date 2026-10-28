@@ -65,6 +65,16 @@ export function validateWorld(world, roster) {
     for(const key of ['food','materials']){const entry=world.resourceLedger[key];assert.equal(entry.opening+entry.produced-entry.consumed,entry.closing,'Ledger arithmetic mismatch');assert.equal(entry.closing,world.metrics[key],'Ledger closing mismatch');}
   }
   if(world.storageState){const s=world.storageState;assert(s.shelf>=0&&s.day>=0&&s.shelf<=s.capacity&&(!s.dayCapacity||s.day<=s.dayCapacity),'Invalid storage allocation');assert.equal(s.shelf+s.day,world.metrics.food,'Storage total mismatch');}
+  if(world.foodFlow){
+    const f=world.foodFlow,s=world.sceneChanges?.storageBefore;
+    assert.equal(f.cycle,world.cycle,'Food flow cycle mismatch');
+    for(const key of ['dayConsumed','shelfConsumed','harvestToShelf','harvestToDay'])assert(Number.isInteger(f[key])&&f[key]>=0,'Invalid food flow quantity');
+    assert.equal(f.dayConsumed+f.shelfConsumed,world.resourceLedger.food.consumed,'Food flow consumption mismatch');
+    assert.equal(f.harvestToShelf+f.harvestToDay,world.resourceLedger.food.produced,'Food flow harvest mismatch');
+    assert(s&&f.dayConsumed<=s.day&&f.shelfConsumed<=s.shelf,'Food flow exceeds previous stock');
+    assert.equal(s.day-f.dayConsumed+f.harvestToDay,world.storageState.day,'Food flow day balance mismatch');
+    assert.equal(s.shelf-f.shelfConsumed+f.harvestToShelf,world.storageState.shelf,'Food flow shelf balance mismatch');
+  }
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}
