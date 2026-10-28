@@ -60,3 +60,5 @@ test('XP survives event log retention',()=>{assert.equal(progression({id:'a',con
 test('measurement baseline must reconcile without claiming improvement',()=>{if(!world.measurementState)return;const w=structuredClone(world);w.measurementState.totalMinutes++;assert.throws(()=>validateWorld(w,roster),/Measurement total/);});
 
 test('verified measurements require correct savings and scope',()=>{if(!world.measurementState?.comparisonVerified)return;const w=structuredClone(world);w.measurementState.savedMinutes++;assert.throws(()=>validateWorld(w,roster),/Measurement saving/);});
+
+test('unfinished extension cannot be used',()=>{if(!world.constructionState)return;const w=structuredClone(world);w.constructionState.usable=true;assert.throws(()=>validateWorld(w,roster),/Unfinished construction/);});

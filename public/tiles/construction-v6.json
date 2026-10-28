@@ -1,0 +1,17 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "construction-v6.png",
+  "tiles": [
+    "extension-frame",
+    "planks-saw",
+    "construction-barrier",
+    "finished-covered-shelf"
+  ],
+  "gameUsed": [
+    0,
+    2
+  ],
+  "note": "Frame/barrier only in game. Finished shelf asset does not mean completion."
+}
