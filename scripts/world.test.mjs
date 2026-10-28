@@ -56,3 +56,5 @@ test('resident XP awards once per action cycle and ignores dialogue',()=>{
 });
 
 test('XP survives event log retention',()=>{assert.equal(progression({id:'a',contributions:13},[]).xp,130);});
+
+test('measurement baseline must reconcile without claiming improvement',()=>{if(!world.measurementState)return;const w=structuredClone(world);w.measurementState.totalMinutes++;assert.throws(()=>validateWorld(w,roster),/Measurement total/);});

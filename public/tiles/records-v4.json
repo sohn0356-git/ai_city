@@ -1,0 +1,16 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "records-v4.png",
+  "tiles": [
+    "time-ledger",
+    "sorting-tray",
+    "cloth-drying-rack",
+    "seed-tools"
+  ],
+  "gameUsed": [
+    0,
+    2
+  ]
+}
