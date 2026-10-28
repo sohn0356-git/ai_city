@@ -75,7 +75,7 @@ export function validateWorld(world, roster) {
     assert.equal(s.day-f.dayConsumed+f.harvestToDay,world.storageState.day,'Food flow day balance mismatch');
     assert.equal(s.shelf-f.shelfConsumed+f.harvestToShelf,world.storageState.shelf,'Food flow shelf balance mismatch');
   }
-  if(world.measurementState){const m=world.measurementState;assert.equal(m.cycle,world.cycle,'Measurement cycle mismatch');assert.equal(m.flatMinutes+m.handoffMinutes+m.restMinutes,m.totalMinutes,'Measurement total mismatch');assert.equal(m.comparisonVerified,false,'Baseline is not a verified improvement');}
+  if(world.measurementState){const m=world.measurementState;assert.equal(m.cycle,world.cycle,'Measurement cycle mismatch');assert.equal(m.flatMinutes+m.handoffMinutes+m.restMinutes,m.totalMinutes,'Measurement total mismatch');if(m.comparisonVerified){assert.equal(m.baselineMinutes-m.totalMinutes,m.savedMinutes,'Measurement saving mismatch');assert(m.trips>=2&&m.scope,'Verified comparison needs repeated trials and scope');}}
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}

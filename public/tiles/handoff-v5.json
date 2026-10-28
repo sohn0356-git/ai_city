@@ -1,0 +1,17 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "handoff-v5.png",
+  "tiles": [
+    "marked-platform",
+    "lifting-support",
+    "safety-sign",
+    "empty-handcart"
+  ],
+  "gameUsed": [
+    0,
+    2
+  ],
+  "note": "Existing platform marking and prohibition marker; support/cart asset only."
+}
