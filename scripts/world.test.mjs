@@ -19,3 +19,29 @@ test('storage cannot exceed capacity or disagree with inventory',()=>{if(!world.
 test('day stock cannot exceed its separate daily capacity',()=>{if(!world.storageState?.dayCapacity)return;const w=structuredClone(world);w.storageState.day=w.storageState.dayCapacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);});
 
 test('food transfers reconcile by source and destination',()=>{if(!world.foodFlow)return;const w=structuredClone(world);w.foodFlow.dayConsumed+=1;assert.throws(()=>validateWorld(w,roster),/Food flow consumption/);const other=structuredClone(world);other.foodFlow.harvestToDay+=1;other.foodFlow.harvestToShelf-=1;assert.throws(()=>validateWorld(other,roster),/Food flow day balance/);});
+
+import {createTileScene, buildingTile} from '../src/tileScene.mjs';
+test('tile scene reads inventory and never changes the shared world',()=>{
+ const original=JSON.stringify(world);const scene=createTileScene(world);
+ assert.equal(scene.props.filter(p=>p.kind==='shelf-stock').length,world.storageState.shelf);
+ assert.equal(scene.props.filter(p=>p.kind==='day-stock').length,world.storageState.day);
+ assert.equal(JSON.stringify(world),original);
+ assert(world.buildings.every(b=>Number.isInteger(buildingTile[b.id])));
+ assert([...scene.terrain,...scene.props].every(t=>t.tile>=0&&t.tile<64&&t.x>=0&&t.y>=0&&t.x+t.size<=1024&&t.y+t.size<=768));
+});
+test('tile scene keeps unfinished shelves empty and partial crop recovery visible',()=>{
+ const w=structuredClone(world);w.projects.find(p=>p.id==='storage-rack').progress=40;
+ let scene=createTileScene(w);assert.equal(scene.props.find(p=>p.kind==='rack').tile,34);
+ assert.equal(scene.props.filter(p=>p.kind==='shelf-stock').length,0);
+ w.fieldState={recovered:true};scene=createTileScene(w);
+ assert(scene.props.some(p=>p.kind==='crop'&&p.tile===26));
+ assert(scene.props.some(p=>p.kind==='crop'&&p.tile===27));
+});
+test('tile comparison uses supplied snapshot quantities instead of latest values',()=>{
+ const w=structuredClone(world);w.storageState={shelf:2,day:1};w.metrics.food=3;
+ const scene=createTileScene(w);
+ assert.equal(scene.props.filter(p=>p.kind==='shelf-stock').length,2);
+ assert.equal(scene.props.filter(p=>p.kind==='day-stock').length,1);
+ w.cycle=8;assert.equal(createTileScene(w).props.some(p=>p.kind==='relay'),false);
+ w.cycle=9;assert.equal(createTileScene(w).props.some(p=>p.kind==='relay'),true);
+});
