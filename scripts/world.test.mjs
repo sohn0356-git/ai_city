@@ -13,3 +13,5 @@ test('story positions must reference real residents and choices',()=>{if(!world.
 test('a completed episode must record the actual decision',()=>{if(!world.episode)return;const w=structuredClone(world);w.episode.phase='resolved';w.episode.result=null;assert.throws(()=>validateWorld(w,roster),/chosen option/);});
 
 test('resource ledger must reconcile with actual inventory',()=>{if(!world.resourceLedger)return;const w=structuredClone(world);w.resourceLedger.food.consumed+=1;assert.throws(()=>validateWorld(w,roster),/Ledger arithmetic/);});
+
+test('storage cannot exceed capacity or disagree with inventory',()=>{if(!world.storageState)return;const w=structuredClone(world);w.storageState.shelf=w.storageState.capacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);const other=structuredClone(world);other.storageState.day+=1;assert.throws(()=>validateWorld(other,roster),/Storage total/);});
