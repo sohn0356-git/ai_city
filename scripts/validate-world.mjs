@@ -64,7 +64,7 @@ export function validateWorld(world, roster) {
     assert.equal(world.resourceLedger.cycle,world.cycle,'Ledger cycle mismatch');
     for(const key of ['food','materials']){const entry=world.resourceLedger[key];assert.equal(entry.opening+entry.produced-entry.consumed,entry.closing,'Ledger arithmetic mismatch');assert.equal(entry.closing,world.metrics[key],'Ledger closing mismatch');}
   }
-  if(world.storageState){const s=world.storageState;assert(s.shelf>=0&&s.day>=0&&s.shelf<=s.capacity,'Invalid storage allocation');assert.equal(s.shelf+s.day,world.metrics.food,'Storage total mismatch');}
+  if(world.storageState){const s=world.storageState;assert(s.shelf>=0&&s.day>=0&&s.shelf<=s.capacity&&(!s.dayCapacity||s.day<=s.dayCapacity),'Invalid storage allocation');assert.equal(s.shelf+s.day,world.metrics.food,'Storage total mismatch');}
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}

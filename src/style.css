@@ -27,3 +27,5 @@
 .storage-summary{margin:0 14px 14px;padding:13px;background:#edf2e7;border:1px solid #b8c9a7;border-radius:7px;display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#617b51}.storage-summary span{font-size:11px;color:#8c927b}
 
 .relay-point{position:absolute;left:26%;top:18%;width:110px;pointer-events:none;z-index:3;text-align:center}.relay-point span{font-size:9px;background:#fff4db;border:1px solid #baa479;color:#7b653c;padding:4px;border-radius:4px;white-space:nowrap}.relay-point svg{width:80px;height:45px}
+
+.public-guide{margin:0 14px 14px;border:1px solid #c3cdb6;border-radius:8px;background:#fffdf1;padding:14px}.public-guide summary{cursor:pointer;font-size:13px;font-weight:700;min-height:30px}.public-guide article{padding:12px 0;border-top:1px solid #e0e4d4}.public-guide h4{font-size:13px;color:#5d7550}.public-guide p{font-size:12px;line-height:1.9;margin:7px 0;color:#657559}.public-guide small{font-size:11px;color:#99a188}

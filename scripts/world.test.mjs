@@ -14,4 +14,6 @@ test('a completed episode must record the actual decision',()=>{if(!world.episod
 
 test('resource ledger must reconcile with actual inventory',()=>{if(!world.resourceLedger)return;const w=structuredClone(world);w.resourceLedger.food.consumed+=1;assert.throws(()=>validateWorld(w,roster),/Ledger arithmetic/);});
 
-test('storage cannot exceed capacity or disagree with inventory',()=>{if(!world.storageState)return;const w=structuredClone(world);w.storageState.shelf=w.storageState.capacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);const other=structuredClone(world);other.storageState.day+=1;assert.throws(()=>validateWorld(other,roster),/Storage total/);});
+test('storage cannot exceed capacity or disagree with inventory',()=>{if(!world.storageState)return;const w=structuredClone(world);w.storageState.shelf=w.storageState.capacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);const other=structuredClone(world);other.storageState.day+=1;other.storageState.dayCapacity=other.storageState.day;assert.throws(()=>validateWorld(other,roster),/Storage total/);});
+
+test('day stock cannot exceed its separate daily capacity',()=>{if(!world.storageState?.dayCapacity)return;const w=structuredClone(world);w.storageState.day=w.storageState.dayCapacity+1;assert.throws(()=>validateWorld(w,roster),/storage allocation/);});
