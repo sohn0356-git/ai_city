@@ -1,0 +1,18 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "furniture-v3.png",
+  "tiles": [
+    "community-table",
+    "reading-desk",
+    "rest-bench",
+    "empty-hive"
+  ],
+  "gameUsed": [
+    0,
+    1,
+    2
+  ],
+  "note": "Existing furniture visualization; hive is asset only."
+}

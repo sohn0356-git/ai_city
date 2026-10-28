@@ -27,3 +27,7 @@ AI City 전용으로 새로 생성한 도트 타일셋 첫 시안입니다. 외�
 ## 사용
 
 Canvas `imageSmoothingEnabled=false`, CSS `image-rendering:pixelated`로 확대합니다. Tiled의 GID는 타일 ID+1이며 0은 빈칸입니다. `tsj` 이미지 경로는 타일셋 파일 기준, `tmj` 타일셋 경로는 지도 파일 기준입니다.
+
+## Furniture v3 — 가구 4종
+
+32px,2×2,64×64 PNG. 내장 이미지 생성으로 위왼쪽 광원·황토 목재·세이지/틸 팔레트·투명배경·공동 식탁/기록 책상/휴식 벤치/빈 벌통을 요청하고 nearest 패킹. ID0/1/2는 기존 가구 표현, ID3 벌통은 자산만 준비. 새 가구 생산·벌 입주·꿀 수확을 뜻하지 않음. 도감에4종 표시.
