@@ -40,3 +40,6 @@ Canvas `imageSmoothingEnabled=false`, CSS `image-rendering:pixelated`로 확대�
 
 ## Construction v6
 32px·2×2·64px PNG. 내장 이미지 생성: 위왼쪽 광원, 황토목재/세이지/틸, 투명배경, 미완성 골조·목재와 톱·공사 차단·완성 선반을 요청. nearest 패킹. ID0/2만 게임 연결. 완성 선반 그림은 자산 준비이며 실제 완공/용량 증가가 아니다.
+
+## Inspection v7
+32px·2×2·64px PNG. 내장 이미지 생성 요청: 투명 배경, 위왼쪽 광원, 황토/세이지/틸, 시험대기 선반·시험추·꽃 구획·마른 줄기. nearest 패킹. ID0/2를 실제 설치90%와 기존 관찰된 꽃 표현에 연결. ID1/3자산만 준비. 새 꽃 생산이나 하중 시험 완료를 뜻하지 않음.

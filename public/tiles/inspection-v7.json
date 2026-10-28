@@ -1,0 +1,17 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "inspection-v7.png",
+  "tiles": [
+    "shelf-awaiting-test",
+    "test-weights",
+    "flower-cluster",
+    "dry-stems"
+  ],
+  "gameUsed": [
+    0,
+    2
+  ],
+  "note": "Installed shelf remains unusable; test weights/dry stems are asset-only."
+}
