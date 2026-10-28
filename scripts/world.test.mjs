@@ -61,6 +61,8 @@ test('measurement baseline must reconcile without claiming improvement',()=>{if(
 
 test('verified measurements require correct savings and scope',()=>{if(!world.measurementState?.comparisonVerified)return;const w=structuredClone(world);w.measurementState.savedMinutes++;assert.throws(()=>validateWorld(w,roster),/Measurement saving/);});
 
-test('unfinished extension cannot be used',()=>{if(!world.constructionState)return;const w=structuredClone(world);w.constructionState.usable=true;assert.throws(()=>validateWorld(w,roster),/Unfinished construction/);});
+test('unfinished extension cannot be used',()=>{if(!world.constructionState||world.constructionState.usable)return;const w=structuredClone(world);w.constructionState.usable=true;assert.throws(()=>validateWorld(w,roster),/Unfinished construction/);});
 
 test('unfinished storage still preserves six-unit shelf capacity',()=>{if(!world.constructionState||world.constructionState.usable)return;assert.equal(world.storageState.capacity,6);assert.equal(world.constructionState.usable,false);});
+
+test('approved extension capacity must equal original shelf plus tested extra capacity',()=>{if(!world.constructionState?.usable)return;assert.equal(world.constructionState.progress,100);assert.equal(world.storageState.capacity,6+world.constructionState.testedExtraCapacity);});

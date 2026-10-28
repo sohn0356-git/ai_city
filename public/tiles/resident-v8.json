@@ -1,0 +1,17 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "resident-v8.png",
+  "residentId": "p020",
+  "tiles": [
+    "front-notebook",
+    "back-notebook",
+    "side-speaking",
+    "seated-reading"
+  ],
+  "gameUsed": [
+    0
+  ],
+  "note": "Only static front pose in game. Other poses asset-only, no invented live action."
+}
