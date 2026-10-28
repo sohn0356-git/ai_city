@@ -4,7 +4,7 @@ export default function TileGround({world}){
  const canvas=useRef(null);const [error,setError]=useState(false);
  useEffect(()=>{
   let alive=true;setError(false);const image=new Image();
-  image.onload=()=>{if(alive&&canvas.current)drawTileScene(canvas.current.getContext('2d'),image,createTileScene(world));};
+  image.onload=()=>{if(alive&&canvas.current){const ctx=canvas.current.getContext('2d');drawTileScene(ctx,image,createTileScene(world));if(world.workState){const work=new Image();work.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(work,32,0,32,32,620,480,64,64);ctx.globalAlpha=0.35;ctx.drawImage(work,0,32,32,32,370,450,64,64);ctx.globalAlpha=1;ctx.fillStyle="#263f37";ctx.font="14px sans-serif";ctx.fillText("증설 구상 · 미시공",350,525);}};work.src=`${import.meta.env.BASE_URL}tiles/work-v2.png`;}}};
   image.onerror=()=>{if(alive)setError(true);};
   image.src=`${import.meta.env.BASE_URL}tiles/ai-city-v1.png`;
   return()=>{alive=false;};

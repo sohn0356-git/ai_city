@@ -1,0 +1,16 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "work-v2.png",
+  "tiles": [
+    "sorting-bench",
+    "watering-yoke",
+    "unfinished-extension",
+    "garden-tools"
+  ],
+  "gameUsed": [
+    1,
+    2
+  ]
+}
