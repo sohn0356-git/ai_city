@@ -54,3 +54,7 @@ world.episode는 현재 사건이다: id, number, title, summary, phase(delibera
 작업 진행 시 requiredFood/옵션의 consequence와 현재 자원 수치가 모순되지 않게 바꾼다. 이미 완료한 결과를 내세운 채 위기 문구를 계속 유지하지 않는다. 새 주민도 사건에 관련이 있으면 positions에 추가한다. 결과가 나면 phase=resolved, result와 steps를 갱신하고 실제 food/materials/관계 변화가 따라야 한다.
 
 지도는 현재 스냅샷을 보여준다. player.previousLocation과 location(건물 id)은 실제 기록한 회차의 이전/이후 위치로 관리하고, action 이벤트에 fromLocation을 넣을 수 있다. 이동 보기 버튼은 그 회차를 재생한다. 화면에서 실시간 행동이 새로 발생하거나 모든 주민이 무작위로 떠도는 것처럼 표현하지 않는다. 선택한 주민은 지도와 개인 카드에서 같은 인물이다.
+
+## 주민 레벨과 경험치
+
+src/progression.mjs가 주민별 action 이벤트의 고유 회차당10XP를 계산한다. 대화/같은 회차 반복 행동은 추가 경험치가 없다. Lv1→2는30XP, 다음 레벨마다 필요량10XP증가(40,50,…). 인증한 인간 방문자는 경험치 대상이 아니다. 레벨은 관찰용 활동 성장 지표이며 식량/생산/관계/프로젝트 자동 보너스가 없다. 개인 contributions 누적값을 보존해 events600개 정리 후에도 경험치가 줄지 않게 한다. contributions는 주민별 활동 완료 회차당1만 증가시키며 같은 회차 대화/반복 행동으로 추가하지 않는다. 계산은 누적값과 현재 기록의 고유 활동 회차 수 중 큰 값을 사용한다.

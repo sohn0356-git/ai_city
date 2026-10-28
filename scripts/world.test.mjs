@@ -45,3 +45,14 @@ test('tile comparison uses supplied snapshot quantities instead of latest values
  w.cycle=8;assert.equal(createTileScene(w).props.some(p=>p.kind==='relay'),false);
  w.cycle=9;assert.equal(createTileScene(w).props.some(p=>p.kind==='relay'),true);
 });
+
+import {progression} from '../src/progression.mjs';
+test('resident XP awards once per action cycle and ignores dialogue',()=>{
+ const p={id:'a'};const action=cycle=>({actorId:'a',type:'action',cycle});
+ assert.deepEqual(progression(p,[]),{level:1,xp:0,inLevel:0,required:30,toNext:30,activeCycles:0});
+ assert.equal(progression(p,[action(1),action(1),{actorId:'a',type:'dialogue',cycle:2},{actorId:'b',type:'action',cycle:2}]).xp,10);
+ const g=progression(p,[action(1),action(2),action(3)]);assert.equal(g.level,2);assert.equal(g.inLevel,0);assert.equal(g.required,40);
+ assert.equal(progression(p,Array.from({length:12},(_,i)=>action(i+1))).level,4);
+});
+
+test('XP survives event log retention',()=>{assert.equal(progression({id:'a',contributions:13},[]).xp,130);});

@@ -32,7 +32,7 @@
 
 .food-flow{padding:18px;background:#f4f0df;border:2px solid #243a45;border-radius:12px;margin:12px 0}.food-flow h3{margin:0 0 14px;font-size:16px}.food-flow>div{margin:12px 0}.food-flow b,.food-flow span{display:block;font-size:14px}.flow-units{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}.flow-units i{font-style:normal;background:#687e89;color:white;padding:10px 15px;border-radius:4px}.flow-units i.daily{background:#967244}.incoming i{background:#477759}.incoming i.daily{background:#a57128}.food-flow small{font-size:12px}
 
-/* Shared coordinate space for terrain, buildings and residents. */
+/* Production tile map: one coordinate space for terrain, buildings and residents. */
 .tile-viewport{overflow:auto;max-height:680px;margin:0 12px;border:3px solid #34594a;border-radius:10px;background:#74a050;overscroll-behavior:contain;scrollbar-color:#d9b472 #34594a}
 .comparison-stage .tile-map,.tile-map.visual-map{margin:0;border-radius:0;min-height:0;aspect-ratio:4/3;background:#74a050;isolation:isolate}
 .tile-map::after{display:none}.tile-ground{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;z-index:0;pointer-events:none}
@@ -41,3 +41,5 @@
 .tile-world-status{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px}.tile-world-status span{background:#f0efde;border:1px solid #cad2b6;padding:6px 9px;border-radius:5px;font-size:12px;color:#42573d}.tile-error{position:absolute;left:10%;right:10%;top:0;z-index:20;background:#fff5e4;color:#613b27;padding:12px;font-size:14px}
 @media(max-width:760px){.tile-viewport{max-height:540px;margin:0 8px}.tile-map .building{width:80px}.tile-map .building-tile{width:64px;height:64px}.tile-map .building strong{font-size:12px;padding:2px 4px}.tile-map .building strong small{display:none}.tile-map .map-resident>strong{font-size:12px}.tile-controls{padding-left:10px;padding-right:10px}.tile-map .map-note{font-size:12px}.tile-map .map-resident:not(.followed) .resident-bubble{display:none}}
 @media(prefers-reduced-motion:reduce){.tile-map .map-resident{transition:none}}
+
+.growth-card{margin:16px 0;padding:16px;background:#273f37;color:#fff4d2;border:2px solid #e8b65b;border-radius:10px}.growth-card>div{display:flex;align-items:center;gap:12px}.growth-card b{font-size:26px;color:#f5c76e}.growth-card span,.growth-card p{font-size:13px}.growth-card small{font-size:12px;color:#d4decd}.growth-card progress{display:block;width:100%;height:12px;margin:14px 0;accent-color:#e8b65b}.growth-card p{margin:8px 0}
