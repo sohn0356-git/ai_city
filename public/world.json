@@ -12307,16 +12307,22 @@
     },
     "items": [
       {
-        "location": "cafe",
-        "title": "첫낭독",
-        "before": "대사검토·음악맞춤",
-        "after": "3분1회·관객4명·추가배식0"
+        "location": "lab",
+        "title": "기존 도구 점검표",
+        "before": "점검표 초안 없음",
+        "after": "분류/초안25% · 유료 완료0"
       },
       {
-        "location": "hall",
-        "title": "태우입주",
-        "before": "20명",
-        "after": "21명·검증통로안내"
+        "location": "market",
+        "title": "식량 흐름",
+        "before": "선반7묶음",
+        "after": "배식7 뒤 수확7 보충 · 잔량7"
+      },
+      {
+        "location": "library",
+        "title": "탐험 일정 인계",
+        "before": "현재 탐험만 표시",
+        "after": "현재 전투 보존·종료 뒤 다음 일정 예약"
       }
     ],
     "workBefore": {
@@ -13087,22 +13093,22 @@
   },
   "cycleOutcomes": [
     {
-      "title": "첫3분낭독",
-      "status": "done",
-      "detail": "관객4명·추가배식0",
-      "location": "cafe"
-    },
-    {
-      "title": "태우첫안내",
-      "status": "done",
-      "detail": "기존통로1회·새길개방없음",
-      "location": "hall"
-    },
-    {
-      "title": "식량여유회복",
+      "title": "기존 도구 점검표 초안",
+      "location": "lab",
       "status": "pending",
-      "detail": "수확6·배식7로잔량8→7",
-      "location": "farm"
+      "detail": "부품 분류/초안25% · 유료 의뢰 완료0"
+    },
+    {
+      "title": "수확과 배식",
+      "location": "market",
+      "status": "done",
+      "detail": "수확7·배식7·선반7 유지"
+    },
+    {
+      "title": "슬라임 전투 정산",
+      "location": "library",
+      "status": "pending",
+      "detail": "20:05 종료 예정 일정 보존 · 다음 갱신에서 실제 정산"
     }
   ],
   "fieldState": {
@@ -13115,10 +13121,16 @@
   },
   "relationshipHighlights": [
     {
+      "actorId": "p010",
+      "targetId": "p018",
+      "delta": 1,
+      "reason": "수확과 배식이 같아 식량 여유가 늘지 않았다는 설명에 합의"
+    },
+    {
       "actorId": "p020",
-      "targetId": "p004",
-      "delta": 2,
-      "reason": "수정한기억을짧은낭독으로함께읽었다."
+      "targetId": "p021",
+      "delta": 1,
+      "reason": "갈림길에서 돌아가 확인한 기억을 과장하지 않고 다음 대사에 사용하기로 합의"
     }
   ],
   "storageState": {
