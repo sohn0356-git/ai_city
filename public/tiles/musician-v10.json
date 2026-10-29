@@ -1,0 +1,17 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "musician-v10.png",
+  "residentId": "p009",
+  "tiles": [
+    "front-instrument",
+    "back-instrument",
+    "side-playing",
+    "seated-rest"
+  ],
+  "gameUsed": [
+    0
+  ],
+  "note": "Static front pose only. Other poses prepared, no fabricated live animation."
+}
