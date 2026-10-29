@@ -73,3 +73,9 @@ test('performed reading requires duration and known audience',()=>{if(!world.rea
 
 import {layoutWorld,residentPoint} from '../src/mapLayout.mjs';
 test('town layout preserves world and leaves residents below buildings',()=>{const original=JSON.stringify(world);const view=layoutWorld(world);assert.equal(JSON.stringify(world),original);for(const a of view.buildings){for(const b of view.buildings){if(a.id!==b.id)assert(Math.hypot(a.x-b.x,a.y-b.y)>=20);}const p=residentPoint(a,0,4);assert(p.y>a.y+5);assert(p.x>0&&p.x<100);}assert.equal(view.players,world.players);});
+
+import {battle,activityState,makePlans} from '../src/activity.mjs';
+import {settle} from './settle-adventures.mjs';
+import {layoutWorld as liveLayout} from '../src/mapLayout.mjs';
+test('shared schedules are clock based and reconnect deterministic',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());const p=w.players[0],v=liveLayout(w);assert.deepEqual(activityState(p,v,start+70*60000),activityState(p,v,start+70*60000));assert.equal(activityState(p,v,start+70*60000).kind,'fighting');assert.equal(activityState(p,v,start+130*60000).after,true);assert.equal(w.activityPlans.length,w.players.length);});
+test('adventure XP settles only after end and only once',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());w.adventureRewards=[];const before=w.players[0].combatXp||0;assert.equal(settle(w,start),0);assert.equal(settle(w,start+120*60000),w.players.length);assert.equal(w.players[0].combatXp,before+battle(w.activityPlans[0].combatSnapshot).xp);assert.equal(settle(w,start+240*60000),0);});

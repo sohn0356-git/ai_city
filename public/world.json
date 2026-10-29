@@ -109,7 +109,8 @@
           "reason": "기존 자리만 사용해 통로를 확보했고 새 무대는 설치하지 않았다."
         }
       ],
-      "previousLocation": "market"
+      "previousLocation": "market",
+      "combatXp": 0
     },
     {
       "id": "p002",
@@ -203,7 +204,8 @@
           "reason": "3분낭독1회·추가배식0·관객4명 결과를 기록했다."
         }
       ],
-      "previousLocation": "library"
+      "previousLocation": "library",
+      "combatXp": 0
     },
     {
       "id": "p003",
@@ -297,7 +299,8 @@
           "reason": "꽃은 관찰하되 벌통 후보 자리를 통로 밖으로 한정, 설치는 미착수다."
         }
       ],
-      "previousLocation": "farm"
+      "previousLocation": "farm",
+      "combatXp": 0
     },
     {
       "id": "p004",
@@ -401,7 +404,8 @@
           "reason": "은아와3분낭독1회 완료, 추가 음식 행사와 무대 설치는 없었다."
         }
       ],
-      "previousLocation": "cafe"
+      "previousLocation": "cafe",
+      "combatXp": 0
     },
     {
       "id": "p005",
@@ -500,7 +504,8 @@
           "reason": "기존 카페 자리에서 이뤄진 낭독 스케치를 남겼다."
         }
       ],
-      "previousLocation": "studio"
+      "previousLocation": "studio",
+      "combatXp": 0
     },
     {
       "id": "p006",
@@ -579,7 +584,8 @@
           "reason": "8+6-7=7, 선반7·당일0. 낭독 자체 추가배식은0이다."
         }
       ],
-      "previousLocation": "market"
+      "previousLocation": "market",
+      "combatXp": 0
     },
     {
       "id": "p007",
@@ -658,7 +664,8 @@
           "reason": "수확6 전달, 생산이 배식7보다1적다는 사실을 남겼다."
         }
       ],
-      "previousLocation": "farm"
+      "previousLocation": "farm",
+      "combatXp": 0
     },
     {
       "id": "p008",
@@ -767,7 +774,8 @@
           "reason": "3분낭독1회와 관객4명, 독서 종료 뒤 진행 사실을 기록했다."
         }
       ],
-      "previousLocation": "cafe"
+      "previousLocation": "cafe",
+      "combatXp": 0
     },
     {
       "id": "p009",
@@ -846,7 +854,8 @@
           "reason": "3분낭독의 음악 진입1회 완료, 별도 긴 공연은 열지 않았다."
         }
       ],
-      "previousLocation": "cafe"
+      "previousLocation": "cafe",
+      "combatXp": 0
     },
     {
       "id": "p010",
@@ -975,7 +984,8 @@
           "reason": "총21명입주, 다음 증원은 식량 여유 회복 확인 뒤로 남겼다."
         }
       ],
-      "previousLocation": "hall"
+      "previousLocation": "hall",
+      "combatXp": 0
     },
     {
       "id": "p011",
@@ -1056,7 +1066,8 @@
           "reason": "평지 시험 후 풀림은 없었지만 경사로 재설계는 별도 과제로 남겼다."
         }
       ],
-      "previousLocation": "market"
+      "previousLocation": "market",
+      "combatXp": 0
     },
     {
       "id": "p012",
@@ -1137,7 +1148,8 @@
           "reason": "선반7·당일0을 대사했고 천을 재사용했다."
         }
       ],
-      "previousLocation": "market"
+      "previousLocation": "market",
+      "combatXp": 0
     },
     {
       "id": "p013",
@@ -1236,7 +1248,8 @@
           "reason": "경사·좁은길 금지와 자재 운반 미시험을 인계했다."
         }
       ],
-      "previousLocation": "lab"
+      "previousLocation": "lab",
+      "combatXp": 0
     },
     {
       "id": "p014",
@@ -1308,7 +1321,8 @@
           "reason": "현재 꽃 존재만 추가 기록, 계절 개화와 벌 조건은 미확인이다."
         }
       ],
-      "previousLocation": "garden"
+      "previousLocation": "garden",
+      "combatXp": 0
     },
     {
       "id": "p015",
@@ -1374,7 +1388,8 @@
           "reason": "기존 잔량1+수확6=선반7, 밀가루·빵은 미확보다."
         }
       ],
-      "previousLocation": "market"
+      "previousLocation": "market",
+      "combatXp": 0
     },
     {
       "id": "p016",
@@ -1453,7 +1468,8 @@
           "reason": "19회차검토본·20회차실행결과를 분리보관했다."
         }
       ],
-      "previousLocation": "library"
+      "previousLocation": "library",
+      "combatXp": 0
     },
     {
       "id": "p017",
@@ -1515,7 +1531,8 @@
           "reason": "기존 통 안전 점검 유지, 점토·가마·새 제작은 미착수다."
         }
       ],
-      "previousLocation": "lab"
+      "previousLocation": "lab",
+      "combatXp": 0
     },
     {
       "id": "p018",
@@ -1573,7 +1590,8 @@
           "reason": "재료3소비와 보관 한도6+2 유지가 함께 기록됐다."
         }
       ],
-      "previousLocation": "library"
+      "previousLocation": "library",
+      "combatXp": 0
     },
     {
       "id": "p019",
@@ -1618,7 +1636,8 @@
           "reason": "후보지 관찰만 유지, 벌·벌통·꿀 생산은 미착수다."
         }
       ],
-      "previousLocation": "garden"
+      "previousLocation": "garden",
+      "combatXp": 0
     },
     {
       "id": "p020",
@@ -1659,7 +1678,8 @@
           "reason": "첫 공개낭독3분1회 완료, 다음 작품이나 긴 공연은 미완료다."
         }
       ],
-      "previousLocation": "cafe"
+      "previousLocation": "cafe",
+      "combatXp": 0
     },
     {
       "id": "p021",
@@ -1696,7 +1716,8 @@
           "reason": "첫 입주 안내 동선1회 확인, 경사 자전거와 새 도로 개방은 하지 않았다."
         }
       ],
-      "previousLocation": "studio"
+      "previousLocation": "studio",
+      "combatXp": 0
     }
   ],
   "buildings": [
@@ -12165,5 +12186,323 @@
       "p021"
     ],
     "extraFood": 0
-  }
+  },
+  "activityPlans": [
+    {
+      "id": "plan-20-p001",
+      "playerId": "p001",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "market",
+      "task": "태우와 카페 입구 통로를 비워 짧은 낭독의 서는 위치를 확인했다",
+      "encounterId": "echo-20-p001",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p002",
+      "playerId": "p002",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "library",
+      "destination": "library",
+      "task": "은아에게 실제 낭독 결과와 검토본의 차이를 확인해 화면 기록에 붙였다",
+      "encounterId": "echo-20-p002",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p003",
+      "playerId": "p003",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "farm",
+      "destination": "farm",
+      "task": "다온과 익은 구역을 선별하고 마른 구획을 제외했다",
+      "encounterId": "echo-20-p003",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p004",
+      "playerId": "p004",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "market",
+      "task": "독서 시간이 끝난 뒤 기존 두 자리를 열고 검토한 대사를 읽었다",
+      "encounterId": "echo-20-p004",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p005",
+      "playerId": "p005",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "studio",
+      "task": "빈 의자와 낭독하는 사람을 한 장면으로 그렸다",
+      "encounterId": "echo-20-p005",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p006",
+      "playerId": "p006",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "market",
+      "destination": "market",
+      "task": "선반7묶음을 공동 배식하고 수확6을 받았다",
+      "encounterId": "echo-20-p006",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p007",
+      "playerId": "p007",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "farm",
+      "destination": "farm",
+      "task": "성숙한 채소6묶음을 시장에 인계했다",
+      "encounterId": "echo-20-p007",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p008",
+      "playerId": "p008",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "library",
+      "task": "민준과 관객에게 낭독 길이와 독서 시간 간섭을 물었다",
+      "encounterId": "echo-20-p008",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p009",
+      "playerId": "p009",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "cafe",
+      "task": "은아의 마지막 대사 뒤 한 소절을 짧게 붙였다",
+      "encounterId": "echo-20-p009",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p010",
+      "playerId": "p010",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "hall",
+      "destination": "hall",
+      "task": "태우 한 명을 맞고 첫 안내는 검증된 통로로 제한했다",
+      "encounterId": "echo-20-p010",
+      "combatSnapshot": {
+        "contributions": 20,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p011",
+      "playerId": "p011",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "market",
+      "destination": "market",
+      "task": "선반7묶음 적재 뒤 고정과 통로 상태를 확인했다",
+      "encounterId": "echo-20-p011",
+      "combatSnapshot": {
+        "contributions": 18,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p012",
+      "playerId": "p012",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "market",
+      "destination": "market",
+      "task": "은준과 배식 뒤 덮개를 열어 남은 재고를 확인했다",
+      "encounterId": "echo-20-p012",
+      "combatSnapshot": {
+        "contributions": 18,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p013",
+      "playerId": "p013",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "lab",
+      "destination": "lab",
+      "task": "태우에게 평지 물 전용 자전거와 금지 구간을 설명했다",
+      "encounterId": "echo-20-p013",
+      "combatSnapshot": {
+        "contributions": 17,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p014",
+      "playerId": "p014",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "garden",
+      "destination": "garden",
+      "task": "은호와 꽃 관찰 기록을 같은 구획에서 이어갔다",
+      "encounterId": "echo-20-p014",
+      "combatSnapshot": {
+        "contributions": 16,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p015",
+      "playerId": "p015",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "market",
+      "destination": "market",
+      "task": "수확6을 검수해 배식 뒤 빈 선반6곳에 넣었다",
+      "encounterId": "echo-20-p015",
+      "combatSnapshot": {
+        "contributions": 13,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p016",
+      "playerId": "p016",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "library",
+      "destination": "library",
+      "task": "검토본을 보존하고3분낭독 결과를 별도 기록으로 붙였다",
+      "encounterId": "echo-20-p016",
+      "combatSnapshot": {
+        "contributions": 12,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p017",
+      "playerId": "p017",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "lab",
+      "destination": "garden",
+      "task": "은원의 통 점검을 돕고 파손 그릇을 분리했다",
+      "encounterId": "echo-20-p017",
+      "combatSnapshot": {
+        "contributions": 11,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p018",
+      "playerId": "p018",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "library",
+      "destination": "library",
+      "task": "은솔과 낭독 시간·관객수·추가 배식0을 대조했다",
+      "encounterId": "echo-20-p018",
+      "combatSnapshot": {
+        "contributions": 9,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p019",
+      "playerId": "p019",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "garden",
+      "destination": "garden",
+      "task": "하린에게 꽃 후보지와 통로가 여전히 분리되는지 물었다",
+      "encounterId": "echo-20-p019",
+      "combatSnapshot": {
+        "contributions": 5,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p020",
+      "playerId": "p020",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "cafe",
+      "task": "민준의 확인된 대사를3분길이로 읽고 관객 반응을 들었다",
+      "encounterId": "echo-20-p020",
+      "combatSnapshot": {
+        "contributions": 3,
+        "combatXp": 0
+      },
+      "status": "planned"
+    },
+    {
+      "id": "plan-20-p021",
+      "playerId": "p021",
+      "startsAt": "2026-10-29T03:43:54.162Z",
+      "endsAt": "2026-10-29T05:43:54.162Z",
+      "home": "cafe",
+      "destination": "hall",
+      "task": "은원에게 금지 구간을 확인한 뒤 기존 통로로 카페까지 걸었다",
+      "encounterId": "echo-20-p021",
+      "combatSnapshot": {
+        "contributions": 1,
+        "combatXp": 0
+      },
+      "status": "planned"
+    }
+  ],
+  "adventureRewards": []
 }
