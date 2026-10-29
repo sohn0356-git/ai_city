@@ -1,0 +1,21 @@
+{
+  "image": "survey-v19.png",
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "columns": 2,
+  "tiles": [
+    "measuring-pole",
+    "rope-peg",
+    "survey-notebook",
+    "tool-satchel"
+  ],
+  "connected": [
+    2
+  ],
+  "prepared": [
+    0,
+    1,
+    3
+  ],
+  "meaning": "Map-review overlay, not owned inventory"
+}
