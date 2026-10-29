@@ -1,3 +1,4 @@
+import {BOSS_RULES,bossProgress,floorUnlocked,spawnState,floorMonster,SLOTS} from './dungeonRules.mjs';
 import {MONSTERS,monsterById,defeated,damage} from './monsters.mjs';
 import {progression,combatStats} from './progression.mjs';
 export const DUNGEON={id:'dungeon',name:'메아리 동굴',x:49,y:88};
@@ -35,5 +36,12 @@ export function activityState(player,world,now){
 export function makePlans(world,startsAt){
  const endsAt=new Date(Date.parse(startsAt)+120*60000).toISOString();
  const destinations={p001:'market',p002:'library',p003:'farm',p004:'market',p005:'studio',p006:'market',p007:'farm',p008:'library',p009:'cafe',p010:'hall',p011:'market',p012:'market',p013:'lab',p014:'garden',p015:'market',p016:'library',p017:'garden',p018:'library',p019:'garden',p020:'cafe',p021:'hall'};
- return world.players.map(p=>({id:`plan-${world.cycle}-${p.id}`,playerId:p.id,startsAt,endsAt,home:p.location,destination:destinations[p.id]||p.location,task:p.currentAction.replace(/[。.]$/,''),encounterId:`echo-${world.cycle}-${p.id}`,monsterId:(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]).id,monsterSnapshot:structuredClone(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]),combatSnapshot:{contributions:p.contributions,combatXp:p.combatXp||0,progressionVersion:p.progressionVersion,xpReset:p.xpReset?structuredClone(p.xpReset):undefined},economyVersion:1,goldReward:3,status:'planned'}));
+ const used=new Set();
+ return world.players.map(p=>{const level=progression(p,[]).level;
+ const boss=BOSS_RULES.find(r=>floorUnlocked(world,r.floor)&&bossProgress(world,r.floor).ready&&level>=r.minLevel&&!used.has(r.id));
+ const floors=[1,2,3].filter(f=>floorUnlocked(world,f));let floor=floors.find(f=>!defeated(world,p.id,floorMonster(f).id))||floors[floors.length-1];
+ let monster,spawnId;
+ if(boss){monster=MONSTERS.find(m=>m.id===boss.id);floor=boss.floor;used.add(boss.id);}
+ else{let slot=Array.from({length:SLOTS},(_,i)=>i).find(i=>spawnState(world,floor,i,Date.parse(startsAt)).alive&&!used.has(`f${floor}-spawn${i}`));if(slot===undefined)throw Error('No available dungeon spawn; wait for respawn');spawnId=`f${floor}-spawn${slot}`;used.add(spawnId);monster=floorMonster(floor);}
+ return {id:`plan-${world.cycle}-${p.id}`,playerId:p.id,startsAt,endsAt,home:p.location,destination:destinations[p.id]||p.location,task:p.currentAction.replace(/[。.]$/,''),encounterId:`echo-${world.cycle}-${p.id}`,monsterId:monster.id,monsterSnapshot:structuredClone(monster),combatSnapshot:{contributions:p.contributions,combatXp:p.combatXp||0,progressionVersion:p.progressionVersion,xpReset:p.xpReset?structuredClone(p.xpReset):undefined},dungeonRulesVersion:1,floor,spawnId,economyVersion:1,goldReward:boss?10:3,status:'planned'};});
 }

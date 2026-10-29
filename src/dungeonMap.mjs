@@ -1,6 +1,8 @@
 export const CAVE_COLS=48,CAVE_ROWS=36,CAVE_WIDTH=1536,CAVE_HEIGHT=1152;
 export function caveTile(f,x,y){
  if(x<=0||y<=0||x>=47||y>=35)return 1;
+ if(x>=42&&x<=45&&y>=30&&y<=33)return x===44&&y===32?7:0;
+ if((y===3&&x>=2&&x<=44)||(x===44&&y>=3&&y<=32))return 0;
  if(x<5&&y<5)return x===2&&y===2?7:0;
  if(f===1){if((x===15||x===31)&&y%12>3)return 1;if((y===11||y===24)&&x%16>5)return 1;if(x%12===7&&y%10===5)return 5;return 0;}
  if(f===2){if(y>=14&&y<=18)return (x>=8&&x<=10)||(x>=35&&x<=37)?4:3;if(x>=21&&x<=25&&y>=5&&y<=10)return 3;return 2;}
