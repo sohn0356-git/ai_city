@@ -83,3 +83,6 @@ src/progression.mjs가 주민별 action 이벤트의 고유 회차당10XP를 계
 
 ## 예약 실행이 현재 일정 종료보다 빠른 경우
 현재activityPlans를끝나기전에교체하지마. queuedActivityPlans는주민별현재endsAt이후시작하는다음120분계획.브라우저는queued시작시전환하고정산은양쪽에서끝난고유ID만처리.다음회차시점에기존activityPlans가끝났으면정산후queued를현재로승격하고새queued는그끝에예약해.승격전스냅샷/ID보존,중첩예약/미종료보상금지.입주민증가시각별계획누락없게검토.
+
+## 최신 사용자 XP 규칙 v3 (이전 활동 XP 규칙보다 우선)
+도시활동/대화/기여로XP지급금지.주민별새종류최초승리만몬스터level정수만큼지급(Lv1=1XP,Lv3=3XP).반복승리/후퇴0XP.각몬스터xp필드도level과동일하게유지하고정산은저장된몬스터스냅샷level로계산.기존처치증거/기억/골드보존.사용자요청으로22회차까지의모든주민표시XP다시0으로초기화,player.progressionVersion3과xpReset.combatXp기준점사용.새주민도version3.기여횟수는세계활동기록일뿐성장재료가아님.초기화이전전투정산원장을삭제하거나다시보상하지마.기존Lv성장필요량/능력치식은유지.

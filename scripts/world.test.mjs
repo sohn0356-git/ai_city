@@ -85,13 +85,13 @@ test('first kills are species specific and resident specific',()=>{
  const w=structuredClone(world);w.adventureRewards=[];w.players=w.players.slice(0,2);w.players.forEach(p=>p.combatXp=0);
  const start=Date.parse('2026-10-29T00:00:00Z');
  w.activityPlans=makePlans(w,new Date(start).toISOString());settle(w,start+120*60000);
- assert(w.adventureRewards.every(r=>r.firstKill&&r.xp===15));
+ assert(w.adventureRewards.every(r=>r.firstKill&&r.xp===1));
  assert(defeated(w,w.players[0].id,'echo-shadow'));assert(!defeated(w,w.players[0].id,'cave-slime'));
  w.cycle++;w.activityPlans=makePlans(w,new Date(start+120*60000).toISOString());
  assert(w.activityPlans.every(p=>p.monsterId==='echo-shadow'));w.activityPlans.forEach(p=>{p.monsterId='cave-slime';p.monsterSnapshot=structuredClone(MONSTERS.find(m=>m.id==='cave-slime'));});
- settle(w,start+240*60000);assert(w.players.every(p=>p.combatXp===30));
+ settle(w,start+240*60000);assert(w.players.every(p=>p.combatXp===2));
  w.cycle++;w.activityPlans=makePlans(w,new Date(start+240*60000).toISOString());settle(w,start+360*60000);
- assert(w.adventureRewards.slice(-2).every(r=>r.xp===0&&!r.firstKill));assert(w.players.every(p=>p.combatXp===30));
+ assert(w.adventureRewards.slice(-2).every(r=>r.xp===0&&!r.firstKill));assert(w.players.every(p=>p.combatXp===2));
 });
 test('plans freeze monster balance and never select locked species',()=>{
  const plans=makePlans(world,'2026-10-29T00:00:00Z');
@@ -131,3 +131,6 @@ test('spawn reappears only after actual victory cooldown',()=>{const w={};const 
 test('new plans assign one boss only and never reuse spawn slots',()=>{const w=structuredClone(world);w.adventureRewards=Array.from({length:6},(_,i)=>({id:'ready'+i,monsterId:'echo-shadow',outcome:'victory',playerId:w.players[i%3].id,dungeonRulesVersion:1}));w.players.forEach(p=>{p.progressionVersion=2;p.xpReset={cycle:21,contributions:p.contributions,combatXp:0};p.combatXp=100;});const plans=makePlans(w,'2026-10-29T20:00:00Z');assert.equal(plans.filter(p=>p.monsterId==='lantern-warden').length,1);const ordinary=plans.filter(p=>p.spawnId);assert.equal(new Set(ordinary.map(p=>p.spawnId)).size,ordinary.length);assert(ordinary.every(p=>p.floor===1));});
 
 test('queued schedules begin only after current plan ends and cannot overlap',()=>{const w=structuredClone(world);if(!w.queuedActivityPlans)return;const p=w.players[0],end=Date.parse(w.activityPlans[0].endsAt),view=liveLayout(w);assert.equal(activityState(p,view,end-1).plan.id,w.activityPlans[0].id);assert.equal(activityState(p,view,end).plan.id,w.queuedActivityPlans[0].id);const invalid=structuredClone(w);invalid.queuedActivityPlans[0].startsAt=invalid.activityPlans[0].startsAt;assert.throws(()=>validateWorld(invalid,roster),/overlaps/);const rewardCount=w.adventureRewards.length;settle(w,end-1);assert.equal(w.adventureRewards.length,rewardCount);});
+
+test('strict XP grants nothing for any city activity and uses monster level for first kills',()=>{const p={id:'a',progressionVersion:3,contributions:999,combatXp:15,xpReset:{cycle:22,contributions:22,combatXp:15}};assert.equal(progression(p,Array.from({length:50},(_,i)=>({actorId:'a',type:'action',cycle:23+i}))).xp,0);p.combatXp+=3;assert.equal(progression(p,[]).xp,3);assert(MONSTERS.every(m=>m.xp===m.level));const strong={...MONSTERS[0],level:3,xp:999,hp:1};assert.equal(battle({progressionVersion:3},strong).xp,3);});
+test('published current residents have zero XP after latest explicit reset',()=>{if(world.progressionVersion!==3)return;for(const p of world.players){const x={...p,combatXp:p.xpReset.combatXp};assert.equal(progression(x,world.events).xp,0);}});

@@ -117,11 +117,11 @@
       ],
       "previousLocation": "hall",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -225,11 +225,11 @@
       ],
       "previousLocation": "library",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -333,11 +333,11 @@
       ],
       "previousLocation": "garden",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -451,11 +451,11 @@
       ],
       "previousLocation": "cafe",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -569,11 +569,11 @@
       ],
       "previousLocation": "studio",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -662,11 +662,11 @@
       ],
       "previousLocation": "market",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -755,11 +755,11 @@
       ],
       "previousLocation": "farm",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -888,11 +888,11 @@
       ],
       "previousLocation": "library",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -981,11 +981,11 @@
       ],
       "previousLocation": "cafe",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -1124,11 +1124,11 @@
       ],
       "previousLocation": "hall",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 21,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 22,
         "combatXp": 15
       }
     },
@@ -1219,11 +1219,11 @@
       ],
       "previousLocation": "market",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 19,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 20,
         "combatXp": 15
       }
     },
@@ -1314,11 +1314,11 @@
       ],
       "previousLocation": "market",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 19,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 20,
         "combatXp": 15
       }
     },
@@ -1427,11 +1427,11 @@
       ],
       "previousLocation": "lab",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 18,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 19,
         "combatXp": 15
       }
     },
@@ -1523,11 +1523,11 @@
       ],
       "previousLocation": "garden",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 17,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 18,
         "combatXp": 15
       }
     },
@@ -1603,11 +1603,11 @@
       ],
       "previousLocation": "market",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 14,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 15,
         "combatXp": 15
       }
     },
@@ -1696,11 +1696,11 @@
       ],
       "previousLocation": "library",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 13,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 14,
         "combatXp": 15
       }
     },
@@ -1772,11 +1772,11 @@
       ],
       "previousLocation": "lab",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 12,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 13,
         "combatXp": 15
       }
     },
@@ -1854,11 +1854,11 @@
       ],
       "previousLocation": "library",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 10,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 11,
         "combatXp": 15
       }
     },
@@ -1913,11 +1913,11 @@
       ],
       "previousLocation": "garden",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 6,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 7,
         "combatXp": 15
       }
     },
@@ -1973,11 +1973,11 @@
       ],
       "previousLocation": "cafe",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 4,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 5,
         "combatXp": 15
       }
     },
@@ -2034,11 +2034,11 @@
       ],
       "previousLocation": "hall",
       "combatXp": 15,
-      "progressionVersion": 2,
+      "progressionVersion": 3,
       "xpReset": {
-        "at": "2026-10-29T09:39:46.723296Z",
-        "cycle": 21,
-        "contributions": 2,
+        "at": "2026-10-29T12:12:07.842209Z",
+        "cycle": 22,
+        "contributions": 3,
         "combatXp": 15
       }
     }
@@ -14205,8 +14205,8 @@
     "reviewedEncounters": 21,
     "note": "기존 그림자 처치21건·315XP, 골드 소급지급0. 새 슬라임 결과는 미확정."
   },
-  "progressionVersion": 2,
-  "xpResetAt": "2026-10-29T09:39:46.723296Z",
+  "progressionVersion": 3,
+  "xpResetAt": "2026-10-29T12:12:07.842209Z",
   "battleLogs": [],
   "maintenanceState": {
     "cycle": 22,

@@ -12,7 +12,7 @@ export function battle(player,monster='echo-shadow'){
   hp=Math.max(0,hp-received);turns.push({turn,hp,enemyHp,damage:hit,received,phase,skill:m.skill,guard});
   if(hp<=stats.maxHp*.3&&enemyHp>0)break;
  }
- return {enemy:m.name,monsterId:m.id,monster:m,turns,outcome:enemyHp===0?'victory':'retreat',xp:enemyHp===0?m.xp:0,hp,maxHp:stats.maxHp,playerStats:stats};
+ return {enemy:m.name,monsterId:m.id,monster:m,turns,outcome:enemyHp===0?'victory':'retreat',xp:enemyHp===0?m.level:0,hp,maxHp:stats.maxHp,playerStats:stats};
 }
 export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y));let remaining=Math.min(1,Math.max(0,t))*distances.reduce((a,b)=>a+b,0);for(let i=0;i<3;i++){if(remaining<=distances[i]||i===2){const f=distances[i]?remaining/distances[i]:1;return {x:points[i].x+(points[i+1].x-points[i].x)*f,y:points[i].y+(points[i+1].y-points[i].y)*f};}remaining-=distances[i];}return b;}
 export function activityState(player,world,now){
