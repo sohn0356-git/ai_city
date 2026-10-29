@@ -23,8 +23,9 @@ export function completeService(world,{id,providerId,evidenceIds,at}){
  if(order.status==='completed')return false;
  const service=SERVICES.find(s=>s.id===order.serviceId),provider=world.players.find(p=>p.id===providerId);
  if(!provider||providerId===order.playerId||!['p004','p013'].includes(providerId)||providerId!==(service.id==='cafe-rest'?'p004':'p013'))throw Error('Invalid provider');
+ if(!Number.isFinite(Date.parse(at))||Date.parse(at)<Date.parse(order.at))throw Error('Invalid completion time');
  const evidence=(evidenceIds||[]).map(id=>world.events.find(e=>e.id===id));
- if(evidence.length!==2||evidence.some(e=>!e||e.type!=='action'||e.cycle!==world.cycle||e.location!==service.place||Date.parse(e.at)>Date.parse(at))||!evidence.some(e=>e.actorId===order.playerId)||!evidence.some(e=>e.actorId===providerId))throw Error('Missing service evidence');
+ if(evidence.length!==2||evidence.some(e=>!e||e.type!=='action'||e.cycle!==world.cycle||e.location!==service.place||!Number.isFinite(Date.parse(e.at))||Date.parse(e.at)<Date.parse(order.at)||Date.parse(e.at)>Date.parse(at))||!evidence.some(e=>e.actorId===order.playerId)||!evidence.some(e=>e.actorId===providerId))throw Error('Missing service evidence');
  const capacity=service.id==='cafe-rest'?2:1;
  if(economy(world).orders.filter(o=>o.serviceId===service.id&&o.completedCycle===world.cycle).length>=capacity)throw Error('Service capacity exceeded');
  Object.assign(order,{status:'completed',providerId,evidenceIds,completedAt:at,completedCycle:world.cycle});return true;
