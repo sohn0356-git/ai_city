@@ -70,3 +70,5 @@
 .cave-exit{position:absolute;z-index:4;background:#e8d69a;color:#283c35;border:3px solid #798259;border-radius:6px;min-height:48px;max-width:150px}.cave-exit:disabled{background:#514f48;color:#e4d4b2;opacity:1}.cave-boss{position:absolute;z-index:4;background:#463f41;color:#ffe5a4;display:flex;flex-direction:column;align-items:center;border:2px solid #e5bd63;padding:10px}.boss-progress{background:#f8edcf;border:1px solid #c4ac77;border-radius:8px;padding:12px;margin-top:12px}.boss-progress small{display:block;line-height:1.6}
 
 .public-links{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0}.public-links a{padding:8px 0;color:#315c48;font-size:14px;text-decoration:underline}
+
+.cave-resident>.monster-sprite{display:inline-block;width:32px;height:32px;margin-left:4px}.cave-resident>small{display:block;background:#263b35;color:#fff4d7;font-size:11px;white-space:nowrap}.habitat-info p .resident-avatar{vertical-align:middle;margin-right:6px}

@@ -1,14 +1,23 @@
 export const CAVE_COLS=48,CAVE_ROWS=36,CAVE_WIDTH=1536,CAVE_HEIGHT=1152;
+export function floorGeometry(f){const [cols,rows]=f===2?[56,40]:f===3?[44,44]:[48,36];return {cols,rows,width:cols*32,height:rows*32,exit:{x:cols-4,y:rows-4},boss:{x:cols-8,y:rows-7}};}
 export function caveTile(f,x,y){
- if(x<=0||y<=0||x>=47||y>=35)return 1;
- if(x>=42&&x<=45&&y>=30&&y<=33)return x===44&&y===32?7:0;
- if((y===3&&x>=2&&x<=44)||(x===44&&y>=3&&y<=32))return 0;
+ const g=floorGeometry(f),ex=g.exit.x,ey=g.exit.y;
+ if(x<=0||y<=0||x>=g.cols-1||y>=g.rows-1)return 1;
+ if(x===ex&&y===ey)return 7;
+ if(y===g.boss.y&&x>=g.boss.x&&x<=ex)return 0;
+ if((y===3&&x>=2&&x<=ex)||(x===ex&&y>=3&&y<=ey))return 0;
+ if(x>=ex-2&&x<=ex+1&&y>=ey-2&&y<=ey+1)return x===ex&&y===ey?7:0;
+ if(f===3&&x>5&&y>5&&Math.abs(x-g.cols/2)+Math.abs(y-g.rows/2)>27)return 1;
+
+ 
+ 
+ 
  if(x<5&&y<5)return x===2&&y===2?7:0;
  if(f===1){if((x===15||x===31)&&y%12>3)return 1;if((y===11||y===24)&&x%16>5)return 1;if(x%12===7&&y%10===5)return 5;return 0;}
  if(f===2){if(y>=14&&y<=18)return (x>=8&&x<=10)||(x>=35&&x<=37)?4:3;if(x>=21&&x<=25&&y>=5&&y<=10)return 3;return 2;}
  if((x-24)**2+(y-18)**2<20)return 6;if((x===12||x===36)&&y>7&&y<29&&y%10>2)return 1;return (x+y)%17===0?6:0;
 }
-export function walkable(f,x,y){return x>0&&y>0&&x<47&&y<35&&![1,3,6].includes(caveTile(f,x,y));}
+export function walkable(f,x,y){const g=floorGeometry(f);return x>0&&y>0&&x<g.cols-1&&y<g.rows-1&&![1,3,6].includes(caveTile(f,x,y));}
 export function caveResidentPoint(id){const n=Number(id.slice(1))-1;return {x:3+n%5*2,y:3+Math.floor(n/5)*2};}
 // Seeded adjacent-step wandering: all observers see the same position at the same UTC time.
 const paths=new Map();
