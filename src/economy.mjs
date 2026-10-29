@@ -16,3 +16,16 @@ export function orderService(world,{id,playerId,serviceId,at}){
  world.economy.ledger.push({id,from:playerId,to:'town-treasury',amount:service.price,at,kind:'order',serviceId});
  world.economy.orders.push({id,playerId,serviceId,status:'pending',at});return true;
 }
+
+// Completion needs both the customer and provider's recorded activity, never a browser timer.
+export function completeService(world,{id,providerId,evidenceIds,at}){
+ const order=economy(world).orders.find(o=>o.id===id);if(!order)throw Error('Unknown order');
+ if(order.status==='completed')return false;
+ const service=SERVICES.find(s=>s.id===order.serviceId),provider=world.players.find(p=>p.id===providerId);
+ if(!provider||providerId===order.playerId||!['p004','p013'].includes(providerId)||providerId!==(service.id==='cafe-rest'?'p004':'p013'))throw Error('Invalid provider');
+ const evidence=(evidenceIds||[]).map(id=>world.events.find(e=>e.id===id));
+ if(evidence.length!==2||evidence.some(e=>!e||e.type!=='action'||e.cycle!==world.cycle||e.location!==service.place||Date.parse(e.at)>Date.parse(at))||!evidence.some(e=>e.actorId===order.playerId)||!evidence.some(e=>e.actorId===providerId))throw Error('Missing service evidence');
+ const capacity=service.id==='cafe-rest'?2:1;
+ if(economy(world).orders.filter(o=>o.serviceId===service.id&&o.completedCycle===world.cycle).length>=capacity)throw Error('Service capacity exceeded');
+ Object.assign(order,{status:'completed',providerId,evidenceIds,completedAt:at,completedCycle:world.cycle});return true;
+}

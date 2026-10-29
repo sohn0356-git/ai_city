@@ -1,12 +1,12 @@
-// One award per resident per recorded action cycle. Repeated dialogue cannot farm XP.
+// v3: only first-species combat XP; city contributions are historical activity counts.
 export function progression(player, events){
  const cycles=new Set(events.filter(e=>e.actorId===player.id&&e.type==='action'&&(!player.xpReset||e.cycle>player.xpReset.cycle)).map(e=>e.cycle));
  // Snapshot-scoped events prevent future-cycle XP leaking into comparison scenes.
  const credited=Math.max(cycles.size,Math.max(0,(Number.isInteger(player.contributions)?player.contributions:0)-(player.xpReset?.contributions||0)));
  const xp=(player.progressionVersion===3?0:credited*10)+Math.max(0,(player.combatXp||0)-(player.xpReset?.combatXp||0));
  const v2=player.progressionVersion>=2;
- let level=1,threshold=v2?100:30,remaining=xp;
- while(remaining>=threshold&&(!v2||level<50)){remaining-=threshold;level++;threshold=v2?100+(level-1)*50:30+(level-1)*10;}
+ let level=1,threshold=player.progressionVersion===3?1:v2?100:30,remaining=xp;
+ while(remaining>=threshold&&(!v2||level<50)){remaining-=threshold;level++;threshold=player.progressionVersion===3?level:v2?100+(level-1)*50:30+(level-1)*10;}
  return {level,xp,inLevel:v2&&level===50?threshold:remaining,required:threshold,toNext:v2&&level===50?0:threshold-remaining,activeCycles:credited};
 }
 

@@ -78,7 +78,7 @@ import {battle,activityState,makePlans} from '../src/activity.mjs';
 import {settle} from './settle-adventures.mjs';
 import {layoutWorld as liveLayout} from '../src/mapLayout.mjs';
 test('shared schedules are clock based and reconnect deterministic',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());const p=w.players[0],v=liveLayout(w);assert.deepEqual(activityState(p,v,start+70*60000),activityState(p,v,start+70*60000));assert.equal(activityState(p,v,start+70*60000).kind,'fighting');assert.equal(activityState(p,v,start+130*60000).after,true);assert.equal(w.activityPlans.length,w.players.length);});
-test('adventure XP settles only after end and only once',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());w.adventureRewards=[];const before=w.players[0].combatXp||0;assert.equal(settle(w,start),0);assert.equal(settle(w,start+120*60000),w.players.length);assert.equal(w.players[0].combatXp,before+battle(w.activityPlans[0].combatSnapshot).xp);assert.equal(settle(w,start+240*60000),0);});
+test('adventure XP settles only after end and only once',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());w.adventureRewards=[];const before=w.players[0].combatXp||0;assert.equal(settle(w,start),0);assert.equal(settle(w,start+120*60000),w.players.length);assert.equal(w.players[0].combatXp,before+battle(w.activityPlans[0].combatSnapshot,w.activityPlans[0].monsterSnapshot).xp);assert.equal(settle(w,start+240*60000),0);});
 
 import {MONSTERS,defeated} from '../src/monsters.mjs';
 test('first kills are species specific and resident specific',()=>{
@@ -95,7 +95,7 @@ test('first kills are species specific and resident specific',()=>{
 });
 test('plans freeze monster balance and never select locked species',()=>{
  const plans=makePlans(world,'2026-10-29T00:00:00Z');
- for(const p of plans){assert(p.monsterSnapshot.available);assert.notEqual(p.monsterSnapshot,MONSTERS.find(m=>m.id===p.monsterId));assert.equal(p.monsterSnapshot.id,p.monsterId);}
+ for(const p of plans){assert(p.monsterSnapshot.available||(p.monsterSnapshot.boss&&bossProgress(world,p.floor).ready&&floorUnlocked(world,p.floor)));assert.notEqual(p.monsterSnapshot,MONSTERS.find(m=>m.id===p.monsterId));assert.equal(p.monsterSnapshot.id,p.monsterId);}
  const m={...MONSTERS[0],hp:9999,attack:9999,pattern:['attack']};assert.equal(battle({contributions:0},m).xp,0);
 });
 
@@ -113,7 +113,7 @@ test('dungeon floors have distinct layouts and resident positions stay inside',(
 import {creditVictory,orderService,balance} from '../src/economy.mjs';
 test('gold ledger prevents duplicate rewards, overspending and duplicate orders',()=>{const w={players:[{id:'a'}]};assert.equal(creditVictory(w,{id:'win-1',playerId:'a',amount:3,at:'2026-10-29T00:00:00Z'}),true);assert.equal(creditVictory(w,{id:'win-1',playerId:'a',amount:3}),false);assert.equal(balance(w,'a'),3);assert.throws(()=>orderService(w,{id:'order-1',playerId:'a',serviceId:'tool-check'}),/Insufficient/);assert.equal(orderService(w,{id:'order-1',playerId:'a',serviceId:'cafe-rest'}),true);assert.equal(orderService(w,{id:'order-1',playerId:'a',serviceId:'cafe-rest'}),false);assert.equal(balance(w,'a'),0);assert.equal(balance(w,'town-treasury'),3);assert.equal(w.economy.orders[0].status,'pending');assert.equal(w.economy.ledger.filter(t=>t.kind==='victory').reduce((n,t)=>n+t.amount,0),balance(w,'a')+balance(w,'town-treasury'));});
 
-test('completed new adventures persist exact turns and gold, never before end',()=>{const w=structuredClone(world);w.adventureRewards=[];w.economy={ledger:[],orders:[]};w.players.forEach(p=>p.combatXp=0);const start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());assert.equal(settle(w,start),0);assert.equal(w.economy.ledger.length,0);settle(w,start+120*60000);for(const r of w.battleLogs){assert(r.turns.length>0);const plan=w.activityPlans.find(p=>p.encounterId===r.id);assert.deepEqual(r.turns,battle(plan.combatSnapshot,plan.monsterSnapshot).turns);}const gold=w.economy.ledger.length;settle(w,start+240*60000);assert.equal(w.economy.ledger.length,gold);});
+test('completed new adventures persist exact turns and gold, never before end',()=>{const w=structuredClone(world);w.adventureRewards=[];w.battleLogs=[];w.economy={ledger:[],orders:[]};w.players.forEach(p=>p.combatXp=0);const start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());assert.equal(settle(w,start),0);assert.equal(w.economy.ledger.length,0);settle(w,start+120*60000);for(const r of w.battleLogs){assert(r.turns.length>0);const plan=w.activityPlans.find(p=>p.encounterId===r.id);assert.deepEqual(r.turns,battle(plan.combatSnapshot,plan.monsterSnapshot).turns);}const gold=w.economy.ledger.length;settle(w,start+240*60000);assert.equal(w.economy.ledger.length,gold);});
 
 import {caveTile,walkable,roamPoint,CAVE_WIDTH,CAVE_HEIGHT} from '../src/dungeonMap.mjs';
 test('large dungeon uses valid atlas IDs and habitat wanderers never enter blocked cells',()=>{assert.equal(CAVE_WIDTH,1536);assert.equal(CAVE_HEIGHT,1152);for(let f=1;f<=3;f++)for(let y=0;y<36;y++)for(let x=0;x<48;x++){assert(caveTile(f,x,y)>=0&&caveTile(f,x,y)<8);}for(let f=1;f<=2;f++)for(let i=0;i<10;i++)for(let t=0;t<320;t++){const p=roamPoint(f,i,t*3000);assert(walkable(f,p.x,p.y));assert.deepEqual(p,roamPoint(f,i,t*3000));}assert.equal(caveTile(2,9,15),4);assert.equal(caveTile(2,20,15),3);});
@@ -134,3 +134,22 @@ test('queued schedules begin only after current plan ends and cannot overlap',()
 
 test('strict XP grants nothing for any city activity and uses monster level for first kills',()=>{const p={id:'a',progressionVersion:3,contributions:999,combatXp:15,xpReset:{cycle:22,contributions:22,combatXp:15}};assert.equal(progression(p,Array.from({length:50},(_,i)=>({actorId:'a',type:'action',cycle:23+i}))).xp,0);p.combatXp+=3;assert.equal(progression(p,[]).xp,3);assert(MONSTERS.every(m=>m.xp===m.level));const strong={...MONSTERS[0],level:3,xp:999,hp:1};assert.equal(battle({progressionVersion:3},strong).xp,3);});
 test('published current residents have zero XP after latest explicit reset',()=>{if(world.progressionVersion!==3)return;for(const p of world.players){const x={...p,combatXp:p.xpReset.combatXp};assert.equal(progression(x,world.events).xp,0);}});
+
+import {completeService} from '../src/economy.mjs';
+test('service completion requires recorded customer/provider activity and capacity',()=>{
+ const at='2026-10-29T13:00:00Z',w={cycle:23,players:[{id:'a'},{id:'b'},{id:'c'},{id:'p004'}],events:[]};
+ for(const id of ['a','b','c']){creditVictory(w,{id:'gold-'+id,playerId:id,amount:3,at});orderService(w,{id:'order-'+id,playerId:id,serviceId:'cafe-rest',at});w.events.push({id:'act-'+id,actorId:id,type:'action',cycle:23,location:'cafe',at});}
+ w.events.push({id:'provider',actorId:'p004',type:'action',cycle:23,location:'cafe',at});
+ assert.throws(()=>completeService(w,{id:'order-a',providerId:'p004',evidenceIds:[],at}),/evidence/);
+ for(const id of ['a','b'])assert.equal(completeService(w,{id:'order-'+id,providerId:'p004',evidenceIds:['act-'+id,'provider'],at}),true);
+ assert.equal(completeService(w,{id:'order-a'}),false);
+ assert.throws(()=>completeService(w,{id:'order-c',providerId:'p004',evidenceIds:['act-c','provider'],at}),/capacity/);
+ assert.equal(balance(w,'town-treasury'),9);assert.equal(w.economy.orders[2].status,'pending');
+});
+test('strict first-kill growth reaches the first boss without city XP or historical changes',()=>{
+ const p={progressionVersion:3,combatXp:16,xpReset:{combatXp:15},contributions:999};assert.equal(progression(p,[]).level,2);p.combatXp=18;assert.equal(progression(p,[]).level,3);
+ const old={progressionVersion:2,combatXp:1,contributions:0};assert.equal(progression(old,[]).level,1);
+});
+import {dungeonDecor} from '../src/dungeonDecor.mjs';
+test('dungeon exit overlay follows actual boss victory and preserves world',()=>{const w={adventureRewards:[]},before=JSON.stringify(w);assert(dungeonDecor(w,1).props.some(p=>p.id==='locked-exit'));assert.equal(JSON.stringify(w),before);w.adventureRewards.push({monsterId:'lantern-warden',outcome:'victory'});assert(!dungeonDecor(w,1).props.some(p=>p.id==='locked-exit'));for(const p of dungeonDecor(w,2).props){assert(p.tile>=0&&p.tile<4);assert(walkable(2,p.x,p.y));}});
+test('published economy reconciles issuance, resident wallets and treasury',()=>{const issued=world.economy.ledger.filter(t=>t.from==='dungeon').reduce((s,t)=>s+t.amount,0);assert.equal(issued,world.players.reduce((s,p)=>s+balance(world,p.id),0)+balance(world,'town-treasury'));assert(world.players.every(p=>balance(world,p.id)>=0));for(const o of world.economy.orders.filter(o=>o.status==='completed'&&o.completedCycle===world.cycle)){assert.equal(o.evidenceIds.length,2);assert(o.evidenceIds.every(id=>world.events.some(e=>e.id===id)));}});

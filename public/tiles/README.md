@@ -73,3 +73,6 @@ imagegen 2×2/64px/RGBA/32px논리. IDs0장부,1구급낭,2동전접시,3안내�
 
 ### maintenance-v17.png
 64×64/2열2행32px, imagegen투명배경·좌상단광원·목재/베이지/세이지. index0발명가(미입주준비),1분류함/2점검표(기존작업자리표현게임연결),3손드릴(준비·신규재고아님).
+
+### wayfinding-v18.png
+64×64 RGBA, 2열2행·32px 논리. IDs0 route-arrow/1 locked-rope/2 return-lantern/3 boss-altar. 내장 imagegen 사용. 프롬프트: 서로 다른 던전 길표식4종, 투명2×2격자, 베이지돌/세이지/갈색목재, 좌상단광원, 단단한픽셀. 생성 원본1536×1024를 nearest64×64로 정규화, 원본alpha보존. DungeonGround에4종 모두 연결, 잠긴 출구 밧줄은 실제 층 개방 상태에 따라 제거. 추가 재고나 물리적 시설 완공이 아닌 관찰 안내 오버레이. 알파 여백/셀경계/CRC/격자 검사 수행.

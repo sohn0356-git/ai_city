@@ -1,0 +1,19 @@
+{
+  "image": "wayfinding-v18.png",
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "columns": 2,
+  "tiles": [
+    "route-arrow",
+    "locked-rope",
+    "return-lantern",
+    "boss-altar"
+  ],
+  "connected": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "meaning": "Observer navigation overlays; no physical construction or inventory"
+}
