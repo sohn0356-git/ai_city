@@ -1,0 +1,20 @@
+{
+  "image": "crops-v20.png",
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "columns": 2,
+  "tiles": [
+    "sprout-bed",
+    "mature-leaves",
+    "wilted-crop",
+    "empty-crate"
+  ],
+  "connected": [
+    1,
+    2
+  ],
+  "prepared": [
+    0,
+    3
+  ]
+}
