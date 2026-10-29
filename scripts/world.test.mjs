@@ -98,3 +98,11 @@ test('plans freeze monster balance and never select locked species',()=>{
  for(const p of plans){assert(p.monsterSnapshot.available);assert.notEqual(p.monsterSnapshot,MONSTERS.find(m=>m.id===p.monsterId));assert.equal(p.monsterSnapshot.id,p.monsterId);}
  const m={...MONSTERS[0],hp:9999,attack:9999,pattern:['attack']};assert.equal(battle({contributions:0},m).xp,0);
 });
+
+import {pinchFrame} from '../src/useMapPinch.mjs';
+test('pinch keeps the touched world point anchored and clamps zoom',()=>{
+ const start={scale:1,distance:100,x:400,y:300};
+ const enlarged=pinchFrame(start,200,{x:100,y:80});
+ assert.equal(enlarged.scale,2);assert.equal((enlarged.left+100)/enlarged.scale,400);assert.equal((enlarged.top+80)/enlarged.scale,300);
+ assert.equal(pinchFrame(start,10000,{x:100,y:80}).scale,2.5);assert.equal(pinchFrame(start,1,{x:100,y:80}).scale,.3);
+});
