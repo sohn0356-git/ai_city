@@ -16,7 +16,8 @@ export function battle(player,monster='echo-shadow'){
 }
 export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y));let remaining=Math.min(1,Math.max(0,t))*distances.reduce((a,b)=>a+b,0);for(let i=0;i<3;i++){if(remaining<=distances[i]||i===2){const f=distances[i]?remaining/distances[i]:1;return {x:points[i].x+(points[i+1].x-points[i].x)*f,y:points[i].y+(points[i+1].y-points[i].y)*f};}remaining-=distances[i];}return b;}
 export function activityState(player,world,now){
- const plan=world.activityPlans?.find(p=>p.playerId===player.id);if(!plan)return null;
+ const queued=world.queuedActivityPlans?.find(p=>p.playerId===player.id);
+ const plan=queued&&now>=Date.parse(queued.startsAt)?queued:world.activityPlans?.find(p=>p.playerId===player.id);if(!plan)return null;
  const home=world.buildings.find(b=>b.id===plan.home)||world.buildings[0],work=world.buildings.find(b=>b.id===plan.destination)||home;
  const elapsed=Math.max(0,(now-Date.parse(plan.startsAt))/60000),after=elapsed>=120;
  // Continued patrol/rest after the plan end never grants another combat reward.
