@@ -1,0 +1,1 @@
+{"image":"monsters-v11.png","tileWidth":32,"tileHeight":32,"width":64,"height":64,"columns":2,"tiles":[{"id":"cave-slime","index":0},{"id":"cave-bat","index":1},{"id":"stone-golem","index":2},{"id":"echo-shadow","index":3}],"motions":"CSS idle/warn/attack/skill/rest/defeated; one pose per species"}

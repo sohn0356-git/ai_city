@@ -12201,7 +12201,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p002",
@@ -12216,7 +12235,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p003",
@@ -12231,7 +12269,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p004",
@@ -12246,7 +12303,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p005",
@@ -12261,7 +12337,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p006",
@@ -12276,7 +12371,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p007",
@@ -12291,7 +12405,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p008",
@@ -12306,7 +12439,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p009",
@@ -12321,7 +12473,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p010",
@@ -12336,7 +12507,26 @@
         "contributions": 20,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p011",
@@ -12351,7 +12541,26 @@
         "contributions": 18,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p012",
@@ -12366,7 +12575,26 @@
         "contributions": 18,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p013",
@@ -12381,7 +12609,26 @@
         "contributions": 17,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p014",
@@ -12396,7 +12643,26 @@
         "contributions": 16,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p015",
@@ -12411,7 +12677,26 @@
         "contributions": 13,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p016",
@@ -12426,7 +12711,26 @@
         "contributions": 12,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p017",
@@ -12441,7 +12745,26 @@
         "contributions": 11,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p018",
@@ -12456,7 +12779,26 @@
         "contributions": 9,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p019",
@@ -12471,7 +12813,26 @@
         "contributions": 5,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p020",
@@ -12486,7 +12847,26 @@
         "contributions": 3,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     },
     {
       "id": "plan-20-p021",
@@ -12501,7 +12881,26 @@
         "contributions": 1,
         "combatXp": 0
       },
-      "status": "planned"
+      "status": "planned",
+      "monsterId": "echo-shadow",
+      "monsterSnapshot": {
+        "id": "echo-shadow",
+        "name": "동굴 그림자",
+        "level": 1,
+        "hp": 22,
+        "attack": 5,
+        "defense": 1,
+        "xp": 15,
+        "sprite": 3,
+        "available": true,
+        "skill": "그림자 손길",
+        "multiplier": 1.2,
+        "pattern": [
+          "warn",
+          "skill",
+          "rest"
+        ]
+      }
     }
   ],
   "adventureRewards": []

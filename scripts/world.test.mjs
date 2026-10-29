@@ -79,3 +79,22 @@ import {settle} from './settle-adventures.mjs';
 import {layoutWorld as liveLayout} from '../src/mapLayout.mjs';
 test('shared schedules are clock based and reconnect deterministic',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());const p=w.players[0],v=liveLayout(w);assert.deepEqual(activityState(p,v,start+70*60000),activityState(p,v,start+70*60000));assert.equal(activityState(p,v,start+70*60000).kind,'fighting');assert.equal(activityState(p,v,start+130*60000).after,true);assert.equal(w.activityPlans.length,w.players.length);});
 test('adventure XP settles only after end and only once',()=>{const w=structuredClone(world),start=Date.parse('2026-10-29T00:00:00Z');w.activityPlans=makePlans(w,new Date(start).toISOString());w.adventureRewards=[];const before=w.players[0].combatXp||0;assert.equal(settle(w,start),0);assert.equal(settle(w,start+120*60000),w.players.length);assert.equal(w.players[0].combatXp,before+battle(w.activityPlans[0].combatSnapshot).xp);assert.equal(settle(w,start+240*60000),0);});
+
+import {MONSTERS,defeated} from '../src/monsters.mjs';
+test('first kills are species specific and resident specific',()=>{
+ const w=structuredClone(world);w.adventureRewards=[];w.players=w.players.slice(0,2);w.players.forEach(p=>p.combatXp=0);
+ const start=Date.parse('2026-10-29T00:00:00Z');
+ w.activityPlans=makePlans(w,new Date(start).toISOString());settle(w,start+120*60000);
+ assert(w.adventureRewards.every(r=>r.firstKill&&r.xp===15));
+ assert(defeated(w,w.players[0].id,'echo-shadow'));assert(!defeated(w,w.players[0].id,'cave-slime'));
+ w.cycle++;w.activityPlans=makePlans(w,new Date(start+120*60000).toISOString());
+ assert(w.activityPlans.every(p=>p.monsterId==='cave-slime'));
+ settle(w,start+240*60000);assert(w.players.every(p=>p.combatXp===30));
+ w.cycle++;w.activityPlans=makePlans(w,new Date(start+240*60000).toISOString());settle(w,start+360*60000);
+ assert(w.adventureRewards.slice(-2).every(r=>r.xp===0&&!r.firstKill));assert(w.players.every(p=>p.combatXp===30));
+});
+test('plans freeze monster balance and never select locked species',()=>{
+ const plans=makePlans(world,'2026-10-29T00:00:00Z');
+ for(const p of plans){assert(p.monsterSnapshot.available);assert.notEqual(p.monsterSnapshot,MONSTERS.find(m=>m.id===p.monsterId));assert.equal(p.monsterSnapshot.id,p.monsterId);}
+ const m={...MONSTERS[0],hp:9999,attack:9999,pattern:['attack']};assert.equal(battle({contributions:0},m).xp,0);
+});
