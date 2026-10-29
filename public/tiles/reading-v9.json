@@ -1,0 +1,16 @@
+{
+  "tileSize": 32,
+  "columns": 2,
+  "rows": 2,
+  "image": "reading-v9.png",
+  "tiles": [
+    "manuscript-quill",
+    "music-stand",
+    "folded-curtain",
+    "instrument-stool"
+  ],
+  "gameUsed": [
+    0
+  ],
+  "note": "Manuscript marks actual reviewed draft. Remaining props asset-only, no stage built."
+}

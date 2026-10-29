@@ -77,6 +77,7 @@ export function validateWorld(world, roster) {
   }
   if(world.measurementState){const m=world.measurementState;assert.equal(m.cycle,world.cycle,'Measurement cycle mismatch');assert.equal(m.flatMinutes+m.handoffMinutes+m.restMinutes,m.totalMinutes,'Measurement total mismatch');if(m.comparisonVerified){assert.equal(m.baselineMinutes-m.totalMinutes,m.savedMinutes,'Measurement saving mismatch');assert(m.trips>=2&&m.scope,'Verified comparison needs repeated trials and scope');}}
   if(world.constructionState){const s=world.constructionState;assert.equal(s.progress,world.projects.find(p=>p.id==='storage-extension').progress,'Construction progress mismatch');assert(!s.usable||s.progress===100,'Unfinished construction cannot be usable');if(s.usable)assert.equal(world.storageState.capacity,6+s.testedExtraCapacity,'Approved capacity mismatch');}
+  if(world.readingState){const r=world.readingState;assert.equal(r.cycle,world.cycle,'Reading cycle mismatch');assert(ids.has(r.authorId)&&r.reviewerIds.every(id=>ids.has(id)),'Unknown reading contributor');assert(r.lines.length>0&&r.lines.every(l=>ids.has(l.speakerId)&&l.text.trim()),'Invalid reading line');assert.equal(r.performed,false,'Reviewed draft is not a performance');}
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}

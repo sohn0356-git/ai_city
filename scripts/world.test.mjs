@@ -66,3 +66,5 @@ test('unfinished extension cannot be used',()=>{if(!world.constructionState||wor
 test('unfinished storage still preserves six-unit shelf capacity',()=>{if(!world.constructionState||world.constructionState.usable)return;assert.equal(world.storageState.capacity,6);assert.equal(world.constructionState.usable,false);});
 
 test('approved extension capacity must equal original shelf plus tested extra capacity',()=>{if(!world.constructionState?.usable)return;assert.equal(world.constructionState.progress,100);assert.equal(world.storageState.capacity,6+world.constructionState.testedExtraCapacity);});
+
+test('reading draft cannot reference unknown speakers or claim performance',()=>{if(!world.readingState)return;const w=structuredClone(world);w.readingState.lines[0].speakerId='unknown';assert.throws(()=>validateWorld(w,roster),/reading line/);});
