@@ -55,3 +55,6 @@ Canvas `imageSmoothingEnabled=false`, CSS `image-rendering:pixelated`로 확대�
 
 ## Monsters v11
 32px·2×2·64px. 내장 이미지 생성: 투명배경·위왼쪽광원·세이지/틸/황토·단단한픽셀, 슬라임/박쥐/골렘/그림자 서로다른4종 요청. nearest패킹. 도감4종 표시, 그림자/슬라임만 출현. 모션은 CSS, 별도방향별프레임 아님.
+
+### residents-v12.png
+imagegen generated 5×5 atlas,160×160 RGBA,32px cells. Row-major p001–p021(index0–20),21–23 blank,24 dungeon entrance. 직업별복장/머리/도구를 구분한정면외형,별도보행프레임없음. 생성프롬프트:21직업별주민과이끼낀석조동굴입구,투명5×5격자,따뜻한제한색상·좌상단광원. 기존 시트 유지.
