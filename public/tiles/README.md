@@ -58,3 +58,6 @@ Canvas `imageSmoothingEnabled=false`, CSS `image-rendering:pixelated`로 확대�
 
 ### residents-v12.png
 imagegen generated 5×5 atlas,160×160 RGBA,32px cells. Row-major p001–p021(index0–20),21–23 blank,24 dungeon entrance. 직업별복장/머리/도구를 구분한정면외형,별도보행프레임없음. 생성프롬프트:21직업별주민과이끼낀석조동굴입구,투명5×5격자,따뜻한제한색상·좌상단광원. 기존 시트 유지.
+
+### cave-v13.png
+64×64 RGBA(32px논리2×2), imagegen 신규생성. 프롬프트: 낮은흙언덕동굴,베이지돌/세이지이끼,좌상단광원,투명배경,마을규모. 지도동굴입구연결,기존v12동굴유지.
