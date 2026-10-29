@@ -64,3 +64,6 @@ imagegen generated 5×5 atlas,160×160 RGBA,32px cells. Row-major p001–p021(in
 
 ### expedition-v14.png
 imagegen 2×2/64px/RGBA/32px논리. IDs0장부,1구급낭,2동전접시,3안내판. 좌상단광원·세이지/목재/베이지제한색. 0만기록보관소연결,1~3준비자산. 물품재고아님.
+
+### dungeon-v15.png
+128×64·4열2행·32px, imagegen 전용동굴타일. IDs0바닥/1벽/2이끼/3물/4다리/5횃불/6수정/7계단. 모두DungeonGround에연결. 제한된세이지·베이지·회색,좌상단광원.연속지형접합은실제타일반복배치검사대상.
