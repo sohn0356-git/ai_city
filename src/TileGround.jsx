@@ -1,17 +1,19 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {createTileScene,drawTileScene,MAP_WIDTH,MAP_HEIGHT,buildingTile} from './tileScene.mjs';
 export default function TileGround({world}){
- const canvas=useRef(null);const [error,setError]=useState(false);
- useEffect(()=>{
-  let alive=true;setError(false);const image=new Image();
-  image.onload=()=>{if(alive&&canvas.current){const ctx=canvas.current.getContext('2d');drawTileScene(ctx,image,createTileScene(world));if(world.readingState){const reading=new Image();reading.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(reading,0,0,32,32,280,355,48,48);}};reading.onerror=()=>{if(alive)setError(true);};reading.src=`${import.meta.env.BASE_URL}tiles/reading-v9.png`;}if(world.constructionState?.progress===90){const inspect=new Image();inspect.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(inspect,0,0,32,32,370,450,64,64);ctx.drawImage(inspect,0,32,32,32,790,440,40,40);}};inspect.onerror=()=>{if(alive)setError(true);};inspect.src=`${import.meta.env.BASE_URL}tiles/inspection-v7.png`;}if(world.constructionState){const construction=new Image();construction.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;if(world.constructionState.usable)ctx.drawImage(construction,32,32,32,32,370,450,64,64);else if(world.constructionState.progress<90)ctx.drawImage(construction,0,0,32,32,370,450,64,64);if(!world.constructionState.usable)ctx.drawImage(construction,0,32,32,32,430,485,40,40);ctx.fillStyle="#263f37";ctx.font="14px sans-serif";ctx.fillText(world.constructionState.usable?`사용 승인 · 총선반 ${world.storageState.capacity}`:`설치 ${world.constructionState.progress}% · 적재 금지`,350,540);}};construction.onerror=()=>{if(alive)setError(true);};construction.src=`${import.meta.env.BASE_URL}tiles/construction-v6.png`;}if(world.handoffState){const handoff=new Image();handoff.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(handoff,0,0,32,32,600,480,64,64);ctx.drawImage(handoff,0,32,32,32,260,520,48,48);}};handoff.onerror=()=>{if(alive)setError(true);};handoff.src=`${import.meta.env.BASE_URL}tiles/handoff-v5.png`;}if(world.measurementState){const record=new Image();record.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(record,0,0,32,32,850,220,56,56);ctx.drawImage(record,0,32,32,32,520,540,56,56);}};record.onerror=()=>{if(alive)setError(true);};record.src=`${import.meta.env.BASE_URL}tiles/records-v4.png`;}if(world.furnitureState){const furniture=new Image();furniture.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;const f=world.furnitureState;if(f.table)ctx.drawImage(furniture,0,0,32,32,300,350,64,64);if(f.readingDesk)ctx.drawImage(furniture,32,0,32,32,830,175,64,64);if(f.restBench)ctx.drawImage(furniture,0,32,32,32,200,370,64,64);}};furniture.onerror=()=>{if(alive)setError(true);};furniture.src=`${import.meta.env.BASE_URL}tiles/furniture-v3.png`;}if(world.workState&&!world.constructionState){const work=new Image();work.onload=()=>{if(alive){ctx.imageSmoothingEnabled=false;ctx.drawImage(work,32,0,32,32,620,480,64,64);ctx.globalAlpha=0.35;ctx.drawImage(work,0,32,32,32,370,450,64,64);ctx.globalAlpha=1;ctx.fillStyle="#263f37";ctx.font="14px sans-serif";ctx.fillText("증설 구상 · 미시공",350,525);}};work.src=`${import.meta.env.BASE_URL}tiles/work-v2.png`;}}};
-  image.onerror=()=>{if(alive)setError(true);};
-  image.src=`${import.meta.env.BASE_URL}tiles/ai-city-v1.png`;
-  return()=>{alive=false;};
- },[world]);
- return <><canvas ref={canvas} className="tile-ground" width={MAP_WIDTH} height={MAP_HEIGHT} aria-hidden="true"/>{error&&<p className="tile-error" role="alert">타일 이미지를 불러오지 못했어요. 연결 후 새로고침해 주세요. 주민 선택은 계속 사용할 수 있어요.</p>}</>;
+ const canvas=useRef(null),[error,setError]=useState(false);
+ useEffect(()=>{let alive=true;setError(false);
+ const load=name=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=`${import.meta.env.BASE_URL}tiles/${name}.png`;});
+ const layers=[];
+ const add=(file,id,x,y,size=64)=>layers.push({file,id,x,y,size});
+ if(world.furnitureState){add('furniture-v3',0,24,43);add('furniture-v3',1,85,21);add('furniture-v3',2,13,44);}
+ if(world.readingState)add('reading-v9',0,27,43,48);
+ if(world.measurementState)add('records-v4',0,85,27,48);
+ if(world.handoffState)add('handoff-v5',0,69,71);
+ if(world.constructionState){add('construction-v6',world.constructionState.usable?3:world.constructionState.progress>=90?3:0,57,68);if(!world.constructionState.usable)add('construction-v6',2,61,68,40);}
+ else if(world.workState)add('work-v2',2,57,68);
+ Promise.all([...new Set(['ai-city-v1',...layers.map(l=>l.file)])].map(async name=>[name,await load(name)])).then(entries=>{if(!alive||!canvas.current)return;const images=Object.fromEntries(entries),ctx=canvas.current.getContext('2d');drawTileScene(ctx,images['ai-city-v1'],createTileScene(world));for(const l of layers)ctx.drawImage(images[l.file],l.id%2*32,Math.floor(l.id/2)*32,32,32,l.x/100*MAP_WIDTH-l.size/2,l.y/100*MAP_HEIGHT-l.size/2,l.size,l.size);if(world.constructionState){ctx.font='16px sans-serif';ctx.fillStyle='#263f37';ctx.fillText(world.constructionState.usable?'확장 선반 · 사용 승인':`설치 ${world.constructionState.progress}% · 적재 금지`,MAP_WIDTH*.53,MAP_HEIGHT*.735);}}).catch(()=>{if(alive)setError(true);});
+ return()=>{alive=false;};},[world]);
+ return <><canvas ref={canvas} className="tile-ground" width={MAP_WIDTH} height={MAP_HEIGHT} aria-hidden="true"/>{error&&<p className="tile-error" role="alert">지도 타일을 불러오지 못했어요. 연결 후 새로고침해 주세요.</p>}</>;
 }
-export function BuildingTile({id}){
- const tile=buildingTile[id]??40;
- return <span className="building-tile" aria-hidden="true" style={{backgroundImage:`url(${import.meta.env.BASE_URL}tiles/ai-city-v1.png)`,backgroundPosition:`${tile%8/7*100}% ${Math.floor(tile/8)/7*100}%`}}/>;
-}
+export function BuildingTile({id}){const tile=buildingTile[id]??40;return <span className="building-tile" aria-hidden="true" style={{backgroundImage:`url(${import.meta.env.BASE_URL}tiles/ai-city-v1.png)`,backgroundPosition:`${tile%8/7*100}% ${Math.floor(tile/8)/7*100}%`}}/>;}

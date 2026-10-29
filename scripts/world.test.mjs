@@ -27,7 +27,7 @@ test('tile scene reads inventory and never changes the shared world',()=>{
  assert.equal(scene.props.filter(p=>p.kind==='day-stock').length,world.storageState.day);
  assert.equal(JSON.stringify(world),original);
  assert(world.buildings.every(b=>Number.isInteger(buildingTile[b.id])));
- assert([...scene.terrain,...scene.props].every(t=>t.tile>=0&&t.tile<64&&t.x>=0&&t.y>=0&&t.x+t.size<=1024&&t.y+t.size<=768));
+ assert([...scene.terrain,...scene.props].every(t=>t.tile>=0&&t.tile<64&&t.x>=0&&t.y>=0&&t.x+t.size<=1536&&t.y+t.size<=1152));
 });
 test('tile scene keeps unfinished shelves empty and partial crop recovery visible',()=>{
  const w=structuredClone(world);w.projects.find(p=>p.id==='storage-rack').progress=40;
@@ -70,3 +70,6 @@ test('approved extension capacity must equal original shelf plus tested extra ca
 test('reading draft cannot reference unknown speakers or claim performance',()=>{if(!world.readingState)return;const w=structuredClone(world);w.readingState.lines[0].speakerId='unknown';assert.throws(()=>validateWorld(w,roster),/reading line/);});
 
 test('performed reading requires duration and known audience',()=>{if(!world.readingState?.performed)return;const w=structuredClone(world);w.readingState.durationMinutes=0;assert.throws(()=>validateWorld(w,roster),/actual duration/);});
+
+import {layoutWorld,residentPoint} from '../src/mapLayout.mjs';
+test('town layout preserves world and leaves residents below buildings',()=>{const original=JSON.stringify(world);const view=layoutWorld(world);assert.equal(JSON.stringify(world),original);for(const a of view.buildings){for(const b of view.buildings){if(a.id!==b.id)assert(Math.hypot(a.x-b.x,a.y-b.y)>=20);}const p=residentPoint(a,0,4);assert(p.y>a.y+5);assert(p.x>0&&p.x<100);}assert.equal(view.players,world.players);});

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import TileGround, {BuildingTile} from './TileGround';
+import {layoutWorld,residentPoint,WIDTH} from './mapLayout.mjs';
 const colors=['#ba7761','#6f94ad','#8a9c6a','#c19371','#a28ab3','#b49a5d','#7e9a7c','#a47e8e','#8c92b2','#6b9490'];
 function Resident({player,index,position,selected,onSelect,replay,compact}) {
   const [from,to]=position;
@@ -19,7 +20,8 @@ function Resident({player,index,position,selected,onSelect,replay,compact}) {
   </button>;
 }
 export default function CityStage({world,selected,onSelect,building,onBuilding,sceneBefore=false}) {
-  const [zoom,setZoom]=useState('fit');
+  world=layoutWorld(world);
+  const [zoom,setZoom]=useState('1');
   const viewport=useRef(null);
   useEffect(()=>{
     if(zoom==='fit'||!viewport.current)return;
@@ -38,18 +40,15 @@ export default function CityStage({world,selected,onSelect,building,onBuilding,s
     const source=buildingById(actions[0]?.fromLocation||p.previousLocation||p.location);
     const peers=world.players.filter(other=>other.location===p.location);
     const localIndex=peers.findIndex(other=>other.id===p.id);
-    const columns=Math.min(peers.length,5);
-    const x=destination.x+(localIndex%columns-(columns-1)/2)*6;
-    const y=destination.y+13+Math.floor(localIndex/5)*7;
-    return [{id:source.id,x:source.x,y:source.y+13},{id:destination.id,x:Math.max(5,Math.min(95,x)),y:Math.max(10,Math.min(89,y))}];
+    return [residentPoint(source,localIndex,peers.length),residentPoint(destination,localIndex,peers.length)];
   });
   const displayed=world.players.filter(p=>{
     if(selected!=='all')return p.id===selected||world.events.some(e=>e.cycle===world.cycle&&((e.actorId===selected&&e.targetId===p.id)||(e.targetId===selected&&e.actorId===p.id)));
     if(building!=='all')return p.location===building;
     return allResidents||world.players.indexOf(p)<20;
   });
-  return <div className="city-stage-wrap"><div className="stage-toolbar"><span><i/>{replay?'지난 회차 이동 재생 중':'현재 위치 · 마지막 회차 기준'}</span><button onClick={()=>{setRound(n=>n+1);setReplay(true);}} disabled={replay}>{replay?'재생 중…':'▶ 회차 이동 보기'}</button></div><div className="tile-controls" role="group" aria-label="지도 확대"><span>32px TILE WORLD</span>{[['fit','전체'],['1','확대'],['1.5','더 확대']].map(([value,label])=><button key={value} aria-pressed={zoom===value} onClick={()=>setZoom(value)}>{label}</button>)}</div><div className="tile-viewport" ref={viewport} tabIndex="0" aria-label="도시 지도, 확대 후 가로 세로로 스크롤"><div className="city-map visual-map tile-map" style={{width:zoom==='fit'?'100%':`${1024*Number(zoom)}px`}} aria-label="타일로 표시한 주민과 도시 시설">
-    <TileGround world={world}/>
+  return <div className="city-stage-wrap"><div className="stage-toolbar"><span><i/>{replay?'지난 회차 이동 재생 중':'현재 위치 · 마지막 회차 기준'}</span><button onClick={()=>{setRound(n=>n+1);setReplay(true);}} disabled={replay}>{replay?'재생 중…':'▶ 회차 이동 보기'}</button></div><div className="tile-controls" role="group" aria-label="지도 확대"><span>32px TILE WORLD</span>{[['fit','전체'],['1','산책'],['1.5','가까이']].map(([value,label])=><button key={value} aria-pressed={zoom===value} onClick={()=>setZoom(value)}>{label}</button>)}</div><div className="tile-viewport" ref={viewport} tabIndex="0" aria-label="도시 지도, 확대 후 가로 세로로 스크롤"><div className="city-map visual-map tile-map" style={{width:zoom==='fit'?'100%':`${WIDTH*Number(zoom)}px`}} aria-label="타일로 표시한 주민과 도시 시설">
+    <TileGround world={world}/><div className="district-label" style={{left:"9%",top:"4%"}}>농장 지구</div><div className="district-label" style={{left:"43%",top:"4%"}}>시민 광장</div><div className="district-label" style={{left:"74%",top:"4%"}}>기록 지구</div><div className="district-label" style={{left:"42%",top:"56%"}}>시장 지구</div><div className="district-label" style={{left:"74%",top:"57%"}}>정원 지구</div>
     {world.buildings.map(b=><button key={b.id} className={`building ${building===b.id?'selected':''}`} style={{left:`${b.x}%`,top:`${b.y}%`}} onClick={()=>onBuilding(building===b.id?'all':b.id)} aria-label={`${b.name}, 주민 ${world.players.filter(p=>p.location===b.id).length}명`}><BuildingTile id={b.id}/><strong>{b.name}<small>{world.players.filter(p=>p.location===b.id).length}명</small></strong></button>)}
     {replay&&selected!=='all'&&<svg className="follow-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">{world.players.filter(p=>p.id===selected).map(p=>{const pos=positions[world.players.indexOf(p)];return <path key={p.id} d={`M${pos[0].x},${pos[0].y} L${pos[1].x},${pos[1].y}`}/>;})}</svg>}
     {displayed.map(p=>{const index=world.players.indexOf(p);return <Resident key={`${p.id}-${round}`} player={p} index={index} position={positions[index]} selected={selected===p.id} onSelect={onSelect} replay={replay} compact={displayed.length>20}/>;})}
