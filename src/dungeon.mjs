@@ -1,0 +1,4 @@
+export const FLOORS=[{id:1,name:'등불 회랑',theme:'amber',description:'기둥 사이의 꺾인 회랑 · 그림자 대련',monster:'echo-shadow'}, {id:2,name:'이끼 저수굴',theme:'moss',description:'수로와 돌다리로 연결된 습한 동굴 · 슬라임 대련',monster:'cave-slime'}, {id:3,name:'메아리 수정실',theme:'crystal',description:'수정 기둥을 두른 원형 길 · 미개방 탐방 시안',monster:'cave-bat'}];
+export function floorFor(plan){return plan?.monsterId==='cave-slime'?2:plan?.monsterId==='cave-bat'||plan?.monsterId==='stone-golem'?3:1;}
+export function dungeonPoint(id){const n=Number(id.slice(1))-1;return {x:5+(n%5)*3,y:5+Math.floor(n/5)*2};}
+export function floorTile(f,x,y){if(x===0||y===0||x===23||y===17)return 'wall';if(f===1)return x%6===0&&y%5===0?'pillar':'stone';if(f===2)return y===8&&x!==7&&x!==17?'water':(x+y)%11===0?'moss':'stone';return ((x-12)**2+(y-9)**2<9)?'crystal':x%7===0&&y%4===0?'pillar':'stone';}

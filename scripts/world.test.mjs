@@ -106,3 +106,6 @@ test('pinch keeps the touched world point anchored and clamps zoom',()=>{
  assert.equal(enlarged.scale,2);assert.equal((enlarged.left+100)/enlarged.scale,400);assert.equal((enlarged.top+80)/enlarged.scale,300);
  assert.equal(pinchFrame(start,10000,{x:100,y:80}).scale,2.5);assert.equal(pinchFrame(start,1,{x:100,y:80}).scale,.3);
 });
+
+import {floorFor,floorTile,dungeonPoint} from '../src/dungeon.mjs';
+test('dungeon floors have distinct layouts and resident positions stay inside',()=>{assert.equal(floorFor({monsterId:'echo-shadow'}),1);assert.equal(floorFor({monsterId:'cave-slime'}),2);assert.equal(floorTile(2,8,8),'water');assert.equal(floorTile(2,7,8),'stone');assert.equal(floorTile(3,12,9),'crystal');for(const p of world.players){const a=dungeonPoint(p.id);assert(a.x>0&&a.x<23&&a.y>0&&a.y<17);}assert.equal(floorTile(1,0,0),'wall');});
