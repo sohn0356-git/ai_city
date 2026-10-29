@@ -7,6 +7,7 @@ export default function TileGround({world}){
  const layers=[];
  const add=(file,id,x,y,size=64)=>layers.push({file,id,x,y,size});
  if(world.furnitureState){add('furniture-v3',0,24,43);add('furniture-v3',1,85,21);add('furniture-v3',2,13,44);}
+ if(world.expeditionJournal)add('expedition-v14',0,81,26,48);
  if(world.readingState)add('reading-v9',0,27,43,48);
  if(world.measurementState)add('records-v4',0,85,27,48);
  if(world.handoffState)add('handoff-v5',0,69,71);

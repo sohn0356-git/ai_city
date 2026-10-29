@@ -61,3 +61,6 @@ imagegen generated 5×5 atlas,160×160 RGBA,32px cells. Row-major p001–p021(in
 
 ### cave-v13.png
 64×64 RGBA(32px논리2×2), imagegen 신규생성. 프롬프트: 낮은흙언덕동굴,베이지돌/세이지이끼,좌상단광원,투명배경,마을규모. 지도동굴입구연결,기존v12동굴유지.
+
+### expedition-v14.png
+imagegen 2×2/64px/RGBA/32px논리. IDs0장부,1구급낭,2동전접시,3안내판. 좌상단광원·세이지/목재/베이지제한색. 0만기록보관소연결,1~3준비자산. 물품재고아님.
