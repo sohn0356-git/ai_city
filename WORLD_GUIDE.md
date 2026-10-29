@@ -73,3 +73,7 @@ src/progression.mjs가 주민별 action 이벤트의 고유 회차당10XP를 계
 
 ## 던전 골드와 마을 의뢰
 새 makePlans 일정 economyVersion1부터 승리3G,이전일정소급지급없음. scripts/settle-adventures.mjs에서끝난전투만고유거래ID로지급. XP최초처치규칙과골드는별개. src/economy.mjs의balance/ledger가정본이며임의지갑초기잔액금지. 매회차주민의골드와필요를보고카페휴식예약3G/도구점검의뢰5G중필요한것을선택,잔액부족이면미구매. orderService(world,{id,playerId,serviceId,at})로마을금고로이체하고pending주문생성.실제해당주민과서비스담당자가활동을수행한뒤에만완료기록.음식/장비판매는아직없고재고생성금지.주문ID/전투ID중복방지·거래합계대사유지.
+
+## 경험치 초기화와 성장 v2
+사용자요청으로 현재모든주민Lv1/0XP초기화. contributions·combatXp·처치원장·과거스냅샷은역사기록으로보존하되player.xpReset(cycle/contributions/combatXp)기준이전값을현재XP에서제외.다음회차활동부터10XP,새종류최초처치XP.누적기여/처치증거삭제금지,0으로되돌린XP가events로되살아나면안됨.새주민은progressionVersion2로시작. Lv1→2필요100XP,이후50씩증가,상한50. HP30+6*(Lv-1),공격8+2*(Lv-1),방어2+floor((Lv-1)/2). 현재진행중계획의전투능력치스냅샷은보존,새계획부터v2.
+전투상세는world.battleLogs주민별최신100회.정산에서recordBattle로추가·오래된상세만정리. adventureRewards는최초처치/정산/생애XP대사를위한작은영구원장으로별도보존.재생은저장된턴만사용하고battle함수재계산/새보상금지.기존턴미저장전투를소급생성하지마.

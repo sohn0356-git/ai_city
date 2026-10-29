@@ -1,17 +1,17 @@
 import {MONSTERS,monsterById,defeated,damage} from './monsters.mjs';
-import {progression} from './progression.mjs';
+import {progression,combatStats} from './progression.mjs';
 export const DUNGEON={id:'dungeon',name:'메아리 동굴',x:49,y:88};
 export function battle(player,monster='echo-shadow'){
- const m=typeof monster==='string'?monsterById(monster):monster,level=progression(player,[]).level;
- let hp=24+level*4,enemyHp=m.hp;const turns=[],attack=6+level*2,defense=1+Math.floor(level/2);
+ const m=typeof monster==='string'?monsterById(monster):monster,stats=combatStats(player);
+ let hp=stats.maxHp,enemyHp=m.hp;const turns=[],{attack,defense}=stats;
  for(let turn=1;turn<=24&&hp>0&&enemyHp>0;turn++){
   const phase=m.pattern[(turn-1)%m.pattern.length],guard=phase==='skill';
   const hit=guard?0:damage(attack,m.defense);enemyHp=Math.max(0,enemyHp-hit);
   const received=enemyHp>0&&['attack','skill'].includes(phase)?Math.max(1,Math.floor(damage(m.attack,defense,phase==='skill'?m.multiplier:1)*(guard?.5:1))):0;
   hp=Math.max(0,hp-received);turns.push({turn,hp,enemyHp,damage:hit,received,phase,skill:m.skill,guard});
-  if(hp<=(24+level*4)*.3&&enemyHp>0)break;
+  if(hp<=stats.maxHp*.3&&enemyHp>0)break;
  }
- return {enemy:m.name,monsterId:m.id,monster:m,turns,outcome:enemyHp===0?'victory':'retreat',xp:enemyHp===0?m.xp:0,hp,maxHp:24+level*4};
+ return {enemy:m.name,monsterId:m.id,monster:m,turns,outcome:enemyHp===0?'victory':'retreat',xp:enemyHp===0?m.xp:0,hp,maxHp:stats.maxHp,playerStats:stats};
 }
 export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y));let remaining=Math.min(1,Math.max(0,t))*distances.reduce((a,b)=>a+b,0);for(let i=0;i<3;i++){if(remaining<=distances[i]||i===2){const f=distances[i]?remaining/distances[i]:1;return {x:points[i].x+(points[i+1].x-points[i].x)*f,y:points[i].y+(points[i+1].y-points[i].y)*f};}remaining-=distances[i];}return b;}
 export function activityState(player,world,now){
@@ -35,5 +35,5 @@ export function activityState(player,world,now){
 export function makePlans(world,startsAt){
  const endsAt=new Date(Date.parse(startsAt)+120*60000).toISOString();
  const destinations={p001:'market',p002:'library',p003:'farm',p004:'market',p005:'studio',p006:'market',p007:'farm',p008:'library',p009:'cafe',p010:'hall',p011:'market',p012:'market',p013:'lab',p014:'garden',p015:'market',p016:'library',p017:'garden',p018:'library',p019:'garden',p020:'cafe',p021:'hall'};
- return world.players.map(p=>({id:`plan-${world.cycle}-${p.id}`,playerId:p.id,startsAt,endsAt,home:p.location,destination:destinations[p.id]||p.location,task:p.currentAction.replace(/[。.]$/,''),encounterId:`echo-${world.cycle}-${p.id}`,monsterId:(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]).id,monsterSnapshot:structuredClone(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]),combatSnapshot:{contributions:p.contributions,combatXp:p.combatXp||0},economyVersion:1,goldReward:3,status:'planned'}));
+ return world.players.map(p=>({id:`plan-${world.cycle}-${p.id}`,playerId:p.id,startsAt,endsAt,home:p.location,destination:destinations[p.id]||p.location,task:p.currentAction.replace(/[。.]$/,''),encounterId:`echo-${world.cycle}-${p.id}`,monsterId:(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]).id,monsterSnapshot:structuredClone(MONSTERS.filter(m=>m.available&&!defeated(world,p.id,m.id))[0]||MONSTERS[0]),combatSnapshot:{contributions:p.contributions,combatXp:p.combatXp||0,progressionVersion:p.progressionVersion,xpReset:p.xpReset?structuredClone(p.xpReset):undefined},economyVersion:1,goldReward:3,status:'planned'}));
 }
