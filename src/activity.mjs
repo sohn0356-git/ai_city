@@ -22,6 +22,8 @@ export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const 
 export function activityState(player,world,now){
  const queued=world.queuedActivityPlans?.find(p=>p.playerId===player.id);
  const plan=queued&&now>=Date.parse(queued.startsAt)?queued:world.activityPlans?.find(p=>p.playerId===player.id);if(!plan)return null;
+
+ if(plan.steps&&now>=Date.parse(plan.endsAt)){const last=stepState(plan,Date.parse(plan.endsAt)-1);return {...last,id:'resting',kind:'resting',label:'계획 종료 · 결과 확인 대기',progress:1,after:true,plan,result:null,turn:null};}
  if(plan.steps&&now>=Date.parse(plan.startsAt)&&now<Date.parse(plan.endsAt)){const state=stepState(plan,now);if(!state)return null;const result=state.kind==='fighting'?battle(plan.combatSnapshot||player,plan.monsterSnapshot):null;if(result){result.firstKillEligible=!defeated(world,player.id,result.monsterId);result.awardXp=result.firstKillEligible?result.xp:0;}return {...state,plan,result,turn:result?result.turns[Math.min(result.turns.length-1,Math.floor(state.progress*result.turns.length))]:null};}
  const home=world.buildings.find(b=>b.id===plan.home)||world.buildings[0],work=world.buildings.find(b=>b.id===plan.destination)||home;
  const elapsed=Math.max(0,(now-Date.parse(plan.startsAt))/60000),after=elapsed>=120;
