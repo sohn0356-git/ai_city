@@ -1,3 +1,4 @@
+import {passiveBonus,equippedSkills} from './essenceSkills.mjs';
 // v3: only first-species combat XP; city contributions are historical activity counts.
 export function progression(player, events){
  const cycles=new Set(events.filter(e=>e.actorId===player.id&&e.type==='action'&&(!player.xpReset||e.cycle>player.xpReset.cycle)).map(e=>e.cycle));
@@ -10,4 +11,4 @@ export function progression(player, events){
  return {level,xp,inLevel:v2&&level===50?threshold:remaining,required:threshold,toNext:v2&&level===50?0:threshold-remaining,activeCycles:credited};
 }
 
-export function combatStats(player){const level=progression(player,[]).level;return player.progressionVersion>=2?{level,maxHp:30+(level-1)*6,attack:8+(level-1)*2,defense:2+Math.floor((level-1)/2)}:{level,maxHp:24+level*4,attack:6+level*2,defense:1+Math.floor(level/2)};}
+export function combatStats(player){const level=progression(player,[]).level;const base=player.progressionVersion>=2?{level,maxHp:30+(level-1)*6,attack:8+(level-1)*2,defense:2+Math.floor((level-1)/2)}:{level,maxHp:24+level*4,attack:6+level*2,defense:1+Math.floor(level/2)};const bonus=passiveBonus(equippedSkills(player));return {...base,maxHp:base.maxHp+bonus.maxHp,attack:base.attack+bonus.attack,defense:base.defense+bonus.defense};}

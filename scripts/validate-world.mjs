@@ -1,3 +1,4 @@
+import {validateEssences} from '../src/essences.mjs';
 import {validateSteps} from '../src/planSteps.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -84,6 +85,7 @@ export function validateWorld(world, roster) {
   if(world.battleLogs){const counts=new Map();assert.equal(new Set(world.battleLogs.map(r=>r.id)).size,world.battleLogs.length,'Duplicate battle log');for(const r of world.battleLogs){assert(ids.has(r.playerId),'Unknown battle resident');const n=(counts.get(r.playerId)||0)+1;counts.set(r.playerId,n);assert(n<=100,'Retain at most 100 battles per resident');assert(r.turns?.length>0&&r.monsterSnapshot?.hp>0,'Invalid replay snapshot');assert((world.adventureRewards||[]).some(a=>a.id===r.id&&a.playerId===r.playerId),'Replay needs actual settlement');}}
   for(const p of world.players)if(p.xpReset){assert(p.xpReset.cycle<=world.cycle&&p.xpReset.contributions<=p.contributions&&(p.xpReset.combatXp||0)<=(p.combatXp||0),'Invalid XP reset baseline');}
   for(const plan of [...(world.activityPlans||[]),...(world.queuedActivityPlans||[])])if(plan.steps)validateSteps(plan,world);
+  validateEssences(world);
   return true;
 }
 export async function loadWorld(){return Promise.all(['public/world.json','public/roster.json'].map(path=>readFile(path,'utf8').then(JSON.parse)));}
