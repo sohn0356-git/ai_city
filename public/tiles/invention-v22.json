@@ -1,0 +1,20 @@
+{
+  "image": "invention-v22.png",
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "columns": 2,
+  "tiles": [
+    "lever-diagram",
+    "pulley-diagram",
+    "wooden-gear",
+    "metal-spring"
+  ],
+  "connected": [
+    0
+  ],
+  "prepared": [
+    1,
+    2,
+    3
+  ]
+}

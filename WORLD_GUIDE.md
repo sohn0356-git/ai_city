@@ -94,3 +94,9 @@ v3의 레벨별 필요XP는1,2,3,…(Lv1→2=1, Lv2→3=2), 상한50. 최초 종
 
 ## 주민별120분 단계계획 v2 (26회차부터)
 새 일정은 plan.scheduleVersion=2,steps[]를 가진다. 각 step은 kind(walking/working/resting/fighting),startsAt,endsAt,placeId,label,partnerIds,정지point 또는 walking의from/to/path 좌표를 저장한다. src/planSteps.mjs의validateSteps가120분 연속구간·장소·상대·경로·단일전투스냅샷을 검증한다. 직업/상황에 따라 도시전용과 탐험 일정을 개별 작성하며 전원을 강제로전투시키지 않는다. makePlans는 기존 스냅샷 시드 생성용이며 새 계획은 직접steps를 구성하고validateSteps후저장하라. 도시전용은encounterId/monsterSnapshot/보상필드 제거,settle은완료표시만하고XP/골드/전투로그를생성하지않는다. 진행중legacy일정계산과스냅샷은그대로유지한다. queued가이미시작했다면현재로승격하고그뒤에새queued를입력한다. currentAction은계획검토행동이며미래수확/구매/전투완료를뜻하지않는다. 지도·건물입장·던전은activityState의같은step을읽는다. PlanTimeline에주민별단계/상대/시각/목적표시. 현재전투중보스와같은보스를새예약에서중복배정하지마라. 좌표는layoutWorld의건물좌표기준이다.
+
+
+## 27회차 입주/확인대기 보강
+태빈p022는발명가로입주,maintenance-v17 index0준비아바타연결. 신규주민은xpReset없이v3 combatXp0으로시작가능하며현재즉시120분계획과다음예약을각자종료시각에맞춰입력한다. 서로다른입주시각때문에queued시작시각이전원같을필요는없다. 도시전용일정이시간상끝나면awaiting-review이며실제작업완료를뜻하지않는다. 구체결과는다음회차action/증거로검토후반영. step.requestedPartnerIds는요청상대,partnerIds는같은장소·겹치는시각이있는협업예정상대만남긴다. 시간표는예약/진행중/시간종료·결과확인필요를표시한다. 새보스배정은최소레벨뿐아니라현재능력치의deterministic battle결과가victory인지확인하며기존진행스냅샷은변경하지않는다. 이끼도롱뇽후퇴로3층은미개방,서윤의다음재도전은보류.
+
+일정 승격은 주민별로 판단하라. 새 입주민과 기존 주민의 시작/종료시각이 다르면 배열 첫 주민의 시각으로 전원 승격하지 마라. 각 주민의 현재 일정이 끝나고 해당 queued가 시작했을 때만 그 주민을 승격하며, 다른 주민의 아직 진행 중인 current/미시작 queued는 그대로 보존하라. 새 예약을 안전하게 더 붙일 수 없다면 이미 저장된 예약을 덮어쓰지 말고 다음 실행까지 유지하라.

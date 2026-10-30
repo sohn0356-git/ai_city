@@ -41,7 +41,7 @@ export function makePlans(world,startsAt){
  const destinations={p001:'market',p002:'library',p003:'farm',p004:'market',p005:'studio',p006:'market',p007:'farm',p008:'library',p009:'cafe',p010:'hall',p011:'market',p012:'market',p013:'lab',p014:'garden',p015:'market',p016:'library',p017:'garden',p018:'library',p019:'garden',p020:'cafe',p021:'hall'};
  const used=new Set();
  return world.players.map(p=>{const level=progression(p,[]).level;
- const boss=BOSS_RULES.find(r=>floorUnlocked(world,r.floor)&&bossProgress(world,r.floor).ready&&level>=r.minLevel&&!used.has(r.id));
+ const boss=BOSS_RULES.find(r=>floorUnlocked(world,r.floor)&&bossProgress(world,r.floor).ready&&level>=r.minLevel&&!used.has(r.id)&&battle(p,MONSTERS.find(m=>m.id===r.id)).outcome==='victory');
  const floors=[1,2,3].filter(f=>floorUnlocked(world,f));let floor=floors.find(f=>!defeated(world,p.id,floorMonster(f).id))||floors[floors.length-1];
  let monster,spawnId;
  if(boss){monster=MONSTERS.find(m=>m.id===boss.id);floor=boss.floor;used.add(boss.id);}
