@@ -6,6 +6,7 @@ export default function TileGround({world}){
  const load=name=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=`${import.meta.env.BASE_URL}tiles/${name}.png`;});
  const layers=[];
  const add=(file,id,x,y,size=64)=>layers.push({file,id,x,y,size});
+ if(world.planState)add('planning-v21',0,84,24,48);
  if(world.cropVisualState){add('crops-v20',2,72,31,48);add('crops-v20',1,76,31,48);}
  if(world.furnitureState){add('furniture-v3',0,24,43);add('furniture-v3',1,85,21);add('furniture-v3',2,13,44);}
  if(world.maintenanceState){add('maintenance-v17',1,21,78,48);add('maintenance-v17',2,25,78,48);}

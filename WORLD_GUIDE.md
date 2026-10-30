@@ -90,3 +90,7 @@ src/progression.mjs가 주민별 action 이벤트의 고유 회차당10XP를 계
 ## 23회차 성장 막힘 수정 (v3 최신 우선)
 v3의 레벨별 필요XP는1,2,3,…(Lv1→2=1, Lv2→3=2), 상한50. 최초 종류별 몬스터level만 지급하는 규칙에서100XP 요구가 첫보스 도전조건을 막던 문제를 수정했다. 기존v1/v2전투 스냅샷 계산은 변경하지 않는다. 현재XP나 원장을 추가 지급/초기화하지 않는다.
 서비스 완료는 completeService의 고객/담당자 action 증거2건과 장소·현재회차·시각 확인이 필요하다. 카페 회차2건, 도구점검1건 상한. 접수 때만 골드이체, 완료 때 이중지출없음. 음식·장비 실재고 판매는 아직 미구현.
+
+
+## 주민별120분 단계계획 v2 (26회차부터)
+새 일정은 plan.scheduleVersion=2,steps[]를 가진다. 각 step은 kind(walking/working/resting/fighting),startsAt,endsAt,placeId,label,partnerIds,정지point 또는 walking의from/to/path 좌표를 저장한다. src/planSteps.mjs의validateSteps가120분 연속구간·장소·상대·경로·단일전투스냅샷을 검증한다. 직업/상황에 따라 도시전용과 탐험 일정을 개별 작성하며 전원을 강제로전투시키지 않는다. makePlans는 기존 스냅샷 시드 생성용이며 새 계획은 직접steps를 구성하고validateSteps후저장하라. 도시전용은encounterId/monsterSnapshot/보상필드 제거,settle은완료표시만하고XP/골드/전투로그를생성하지않는다. 진행중legacy일정계산과스냅샷은그대로유지한다. queued가이미시작했다면현재로승격하고그뒤에새queued를입력한다. currentAction은계획검토행동이며미래수확/구매/전투완료를뜻하지않는다. 지도·건물입장·던전은activityState의같은step을읽는다. PlanTimeline에주민별단계/상대/시각/목적표시. 현재전투중보스와같은보스를새예약에서중복배정하지마라. 좌표는layoutWorld의건물좌표기준이다.

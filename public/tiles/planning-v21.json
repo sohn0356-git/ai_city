@@ -1,0 +1,20 @@
+{
+  "image": "planning-v21.png",
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "columns": 2,
+  "tiles": [
+    "timetable-board",
+    "route-map",
+    "discussion-table",
+    "hourglass"
+  ],
+  "connected": [
+    0
+  ],
+  "prepared": [
+    1,
+    2,
+    3
+  ]
+}
