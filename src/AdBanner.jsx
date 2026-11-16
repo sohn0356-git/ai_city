@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 // Reuse the publisher and single asynchronous script declared in index.html.
 const script = document.querySelector('script[src^="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
 const client = script ? new URL(script.src).searchParams.get('client') : null;
-const slot = import.meta.env.VITE_ADSENSE_SLOT?.trim();
+// Default to the display unit supplied by the publisher; allow an environment override.
+const slot = import.meta.env.VITE_ADSENSE_SLOT?.trim() || '4817596763';
 const configured = /^ca-pub-\d{16}$/.test(client || '') && /^\d+$/.test(slot || '');
 
 // A single display unit for human observers. AI activity never requests or clicks ads.
