@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState } from 'react';
 import ResidentAvatar from '../ResidentAvatar';
-import { progression } from '../progression.mjs';
+import { combatStats, progression } from '../progression.mjs';
 import { formatTime } from './format.mjs';
 const ResidentDetails = lazy(() => import('./ResidentDetails'));
 
@@ -40,7 +40,10 @@ export default function ResidentInspector({ resident, world, onClose, onSelect, 
           <>
             <progress max="1" value={activity.progress} aria-label="현재 단계 진행률" />
             {activity.step && (
-              <small>{formatTime(activity.step.endsAt)}까지 · 저장된 일정 기준</small>
+              <small>
+                {formatTime(activity.step.endsAt)}까지 ·{' '}
+                {world.lifeActivities ? '자동 액션 진행' : '저장된 일정 기준'}
+              </small>
             )}
           </>
         )}
@@ -49,6 +52,20 @@ export default function ResidentInspector({ resident, world, onClose, onSelect, 
         )}
       </section>
       <div className="resident-vitals">
+        {player.hp !== undefined && (
+          <label>
+            체력 <meter min="0" max={combatStats(player).maxHp} value={player.hp} />
+            <b>
+              {player.hp}/{combatStats(player).maxHp}
+            </b>
+          </label>
+        )}
+        {player.hunger !== undefined && (
+          <label>
+            허기 <meter min="0" max="100" low="40" high="75" optimum="20" value={player.hunger} />
+            <b>{player.hunger}</b>
+          </label>
+        )}
         <label>
           에너지 <meter min="0" max="100" value={player.energy} />
           <b>{player.energy}</b>

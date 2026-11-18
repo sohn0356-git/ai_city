@@ -4,7 +4,7 @@ import { formatDate } from './format.mjs';
 const EpisodePanel = lazy(() => import('../EpisodePanel'));
 const ComparisonStage = lazy(() => import('../ComparisonStage'));
 
-export default function CityRecords({ world, selection, onReset, onSelect, onPlace }) {
+export default function CityRecords({ world, selection, onReset, onSelect, onPlace, onReplay }) {
   const [tab, setTab] = useState('news');
   const [episodeOpen, setEpisodeOpen] = useState(false);
   const [comparisonOpen, setComparisonOpen] = useState(false);
@@ -23,7 +23,8 @@ export default function CityRecords({ world, selection, onReset, onSelect, onPla
   );
   const pages = Math.max(1, Math.ceil(events.length / 8));
   const index = Math.min(page, pages - 1);
-  const placeName = (id) => world.buildings.find((p) => p.id === id)?.name || '도시';
+  const placeName = (id) =>
+    world.buildings.find((p) => p.id === id)?.name || (id === 'dungeon' ? '메아리 동굴' : '도시');
   const selectedName = world.players.find((p) => p.id === selection.residentId)?.name;
   return (
     <section className="records-screen">
@@ -87,6 +88,9 @@ export default function CityRecords({ world, selection, onReset, onSelect, onPla
                   <p>{e.outcome}</p>
                   {e.reason && <p className="muted">선택한 이유 · {e.reason}</p>}
                   <button onClick={() => onSelect(e.actorId)}>이 주민 따라보기 ↗</button>
+                  {e.lifeRecord && onReplay && (
+                    <button onClick={() => onReplay(e.lifeRecord)}>이 행동 재생 ▶</button>
+                  )}
                 </div>
               </details>
             ))}
@@ -139,7 +143,7 @@ export default function CityRecords({ world, selection, onReset, onSelect, onPla
               <summary>지난 회차와 비교</summary>
               {comparisonOpen && (
                 <ComparisonStage
-                  world={world}
+                  world={world.legacyWorld || world}
                   selected="all"
                   building="all"
                   onSelect={onSelect}

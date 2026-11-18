@@ -3,6 +3,7 @@ import { formatTime } from './format.mjs';
 const BattleReplay = lazy(() => import('../BattleReplay'));
 const WalletPanel = lazy(() => import('../WalletPanel'));
 const EssencePanel = lazy(() => import('../EssencePanel'));
+const LifeActionDetails = lazy(() => import('./LifeActionDetails'));
 const MonsterBook = lazy(() => import('../MonsterBook'));
 
 export default function ResidentDetails({ world, player, now, onSelect }) {
@@ -24,7 +25,12 @@ export default function ResidentDetails({ world, player, now, onSelect }) {
           </button>
         ))}
       </div>
-      {tab === 'schedule' && (
+      {tab === 'schedule' && world.lifeActivities && (
+        <Suspense fallback={<p>액션 기록을 여는 중…</p>}>
+          <LifeActionDetails player={player} world={world} />
+        </Suspense>
+      )}
+      {tab === 'schedule' && !world.lifeActivities && (
         <>
           {plans.map((plan) => (
             <article className="schedule-card" key={plan.id}>

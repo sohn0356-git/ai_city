@@ -27,6 +27,8 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 | 로컬 개발 | `npm run dev` → `/ai_city/` |
 | 전체 단위 테스트 | `npm test` |
 | 특정 테스트 | `node --test scripts/plan-end.test.mjs` 등 실제 해당 파일 |
+| 자율 생활 검사 | `node scripts/check-life.mjs` |
+| 자율 생활 진행 (파일 변경) | `npm run world:tick` |
 | 세계 데이터 검증 | `node scripts/validate-world.mjs` |
 | 타일 검증 | `node scripts/check-tiles.mjs` |
 | 빌드 | `npm run build` |
@@ -47,6 +49,7 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 | `src/observation.mjs`, `src/ui/` | 공통 현재 상태·선택 전이·검색과 기능별 화면 |
 | `src/CityStage.jsx`, `src/TileGround.jsx`, `src/mapLayout.mjs` | 도시 무대, 타일, 좌표 배치 |
 | `src/ComparisonStage.jsx` | 저장된 회차 상태 비교 |
+| `src/simulation/`, `src/hooks/useLife*`, `src/ui/Life*` | 가중 랜덤 액션·자율 실행·저장된 일상 재생 |
 | `src/activity.mjs`, `src/planSteps.mjs` | 공유 시각에 따른 활동·경로·단계 계산 |
 | `src/DungeonView.jsx`, `src/dungeonRules.mjs`, `src/monsters.mjs` | 던전 표시와 전투·출현 규칙 |
 | `src/progression.mjs`, `src/economy.mjs`, `src/essences.mjs` | 성장, 거래, 정수 원장과 검증 |
@@ -70,7 +73,7 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 
 ## 세계와 시간의 불변 조건
 
-- 공유 세계는 Git의 공개 JSON이고 Firebase는 현재 인증에 사용한다. Pages나 브라우저 타이머가 자율적으로 AI를 실행하거나 세계를 저장한다고 설명하지 않는다.
+- 공유 세계는 Git의 공개 JSON이다. world.json은 기존 세계와 이력, life.json은 새 자율 생활의 정본이다. Firebase는 현재 인증에 사용한다. Pages 자체가 서버 엔진은 아니며 GitHub Actions가 자율 액션을 진행·저장한다. 브라우저의 결정적 미리보기를 서버 저장 결과와 혼동하지 않는다.
 - 저장 시각은 ISO UTC, 화면 시각은 기존 Asia/Seoul 표시를 따른다. 예정 시각, 일정 진행, 결과 확인 대기, 실제 정산 완료를 구분한다.
 - 지도·건물·던전·주민 상태는 `activityState`와 같은 일정 데이터를 읽는다. 화면마다 서로 다른 현재 위치·행동을 만들어내지 않는다.
 - `activityPlans`와 `queuedActivityPlans`의 승격은 주민별 시작·종료 시각으로 판단한다. 첫 주민의 시각으로 전원을 바꾸지 않는다.
@@ -80,6 +83,7 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 - 고유 조우·거래·드롭 ID의 중복 처리를 막고, 재접속·재생·반복 정산이 보상을 늘리지 않게 한다.
 - `adventureRewards`, 거래 원장, `essenceDrops/essenceAbsorptions/essenceDecisions`, XP 초기화 기준점은 역사 기록이다. UI 수정이나 오류 회피를 위해 삭제·초기화하지 않는다.
 - 현재 성장 v3는 도시 활동 XP 없이 주민별 몬스터 종류 최초 승리의 level만 XP로 지급한다. 필요 XP는 1, 2, 3, …이며 상한 Lv.50이다. 상세 계산은 progression.mjs와 테스트를 사용한다.
+- 일상 재생은 저장된 액션의 before/after·경로·결과를 사용하며 원본을 변경하거나 액션을 재실행하지 않는다. 일별 압축 기록과 영구 원장은 보존하고, 액션 규칙 변경은 새 액션부터 적용한다.
 - 전투 재생은 저장된 턴을 표시한다. 과거 전투를 새 능력치로 다시 계산하거나 미완료 승리·수확·협업을 완료 사실로 기록하지 않는다.
 
 ## 화면과 플레이 확인

@@ -21,7 +21,7 @@ export function createTileScene(world){
  const rack=world.projects.find(p=>p.id==='storage-rack');
  if(rack)place(rack.progress===100?32:34,41,68,64,'rack');
  if(rack?.progress===100){const n=world.storageState?.shelf??0;for(let i=0;i<n;i++)place(35,40+i%4*3.5,81+Math.floor(i/4)*3.5,28,'shelf-stock');}
- for(let i=0;i<(world.storageState?.day??0);i++)place(35,57+i*4,81,32,'day-stock');
+ for(let i=0;i<(world.storageState?.day??0);i++)place(35,57+i%6*4,81+Math.floor(i/6)*3.5,32,'day-stock');
  if(world.cycle>=2){place(57,49,23,40,'ramp');place(29,85,69,44,'barrel');place(52,24,43,48,'table');}
  if(world.projects.some(p=>p.id==='water-bike'))place(55,23,72,48,'bike');
  if(world.cycle>=9)place(56,69,71,40,'relay');

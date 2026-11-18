@@ -3,6 +3,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -23,6 +28,8 @@ jobs:
       VITE_ADSENSE_SLOT: ${{ secrets.VITE_ADSENSE_SLOT || vars.VITE_ADSENSE_SLOT }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

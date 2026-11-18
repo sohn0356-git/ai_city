@@ -5,7 +5,7 @@ async function walk(dir) {
   const nested = await Promise.all(entries.map((entry) => entry.isDirectory() ? walk(`${dir}/${entry.name}`) : `${dir}/${entry.name}`));
   return nested.flat();
 }
-const files = (await walk('dist')).filter((file) => !file.endsWith('/sw.js')).sort();
+const files = (await walk('dist')).filter((file) => !file.endsWith('/sw.js') && !file.endsWith('/world.json') && !file.endsWith('/life.json') && !file.includes('/life/')).sort();
 const hash = createHash('sha256');
 for (const file of files) hash.update(await readFile(file));
 const cacheName = `ai-city-${hash.digest('hex').slice(0, 16)}`;
@@ -20,13 +20,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin || !url.pathname.startsWith('/ai_city/')) return;
-  if (url.pathname === '/ai_city/world.json') {
+  if (url.pathname === '/ai_city/world.json' || url.pathname === '/ai_city/life.json' || url.pathname.startsWith('/ai_city/life/')) {
     event.respondWith(fetch(event.request).then((response) => {
       if (!response.ok) throw new Error('World fetch failed');
       const copy = response.clone();
-      event.waitUntil(caches.open(CACHE).then((cache) => cache.put('/ai_city/world.json', copy)));
+      event.waitUntil(caches.open(CACHE).then((cache) => cache.put(event.request.url, copy)));
       return response;
-    }).catch(() => caches.match('/ai_city/world.json')));
+    }).catch(() => caches.match(event.request.url).then(cached => cached || Response.error())));
   } else if (event.request.mode === 'navigate') {
     event.respondWith(fetch(event.request).catch(() => caches.match('/ai_city/index.html')));
   } else if (FILES.includes(url.pathname)) {

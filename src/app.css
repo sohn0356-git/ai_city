@@ -1075,3 +1075,130 @@
   margin-right: 10px;
   flex-shrink: 0;
 }
+.life-timeline {
+  border: 1px solid #dce3d3;
+  background: #fffef9;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 0 0 18px;
+}
+.timeline-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.timeline-heading small {
+  display: block;
+  font-size: 12px;
+  color: #7c896e;
+  margin-top: 6px;
+}
+.timeline-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.app-shell .timeline-controls select {
+  min-height: 44px;
+  font-size: 12px;
+}
+.timeline-slider {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 12px;
+  color: #728267;
+}
+.timeline-slider input {
+  flex: 1;
+  min-width: 0;
+  accent-color: #3d6e4b;
+  cursor: pointer;
+}
+.action-log-list {
+  max-height: 340px;
+  overflow: auto;
+}
+.action-log-list article {
+  border-top: 1px solid #e2e7d9;
+  padding: 10px 0;
+}
+.app-shell .action-log-list article > button {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-align: left;
+  background: transparent;
+  border: 0;
+}
+.action-log-list time,
+.action-log-list small {
+  font-size: 12px;
+  color: #7c8c70;
+}
+.action-log-list b {
+  font-size: 13px;
+}
+.action-log-list span {
+  width: 100%;
+  font-size: 13px;
+}
+.action-log-list pre,
+.life-action-details pre {
+  max-height: 230px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.7;
+  background: #f1f4e9;
+  border-radius: 8px;
+  padding: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.action-catalog {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.action-catalog article {
+  padding: 12px;
+  background: #f5f7ed;
+  border-radius: 8px;
+}
+.action-catalog p,
+.action-catalog small {
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.life-action-details p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.life-action-details pre {
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .life-timeline {
+    padding: 14px;
+  }
+  .timeline-heading {
+    align-items: flex-start;
+  }
+  .timeline-heading b {
+    font-size: 14px;
+  }
+  .timeline-heading button {
+    font-size: 12px;
+  }
+  .action-catalog {
+    grid-template-columns: 1fr 1fr;
+  }
+  .timeline-slider {
+    gap: 7px;
+    font-size: 12px;
+  }
+}

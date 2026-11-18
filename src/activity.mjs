@@ -4,22 +4,23 @@ import {BOSS_RULES,bossProgress,floorUnlocked,spawnState,floorMonster,SLOTS} fro
 import {MONSTERS,monsterById,defeated,damage} from './monsters.mjs';
 import {progression,combatStats} from './progression.mjs';
 export const DUNGEON={id:'dungeon',name:'메아리 동굴',x:49,y:88};
-export function battle(player,monster='echo-shadow'){
+export function battle(player,monster='echo-shadow',options={}){
  const m=typeof monster==='string'?monsterById(monster):monster,stats=combatStats(player);
  const bonus=m.essenceRulesVersion===1?passiveBonus(m.essenceSkills):{attack:0,defense:0,maxHp:0},enemyMaxHp=m.hp+bonus.maxHp,lastUsed=new Map(),skills=equippedSkills(player);
- let hp=stats.maxHp,enemyHp=enemyMaxHp;const turns=[],{attack,defense}=stats;
+ let hp=Math.max(1,Math.min(stats.maxHp,options.initialHp??stats.maxHp)),enemyHp=enemyMaxHp;const turns=[],{attack,defense}=stats;
  for(let turn=1;turn<=24&&hp>0&&enemyHp>0;turn++){
   const phase=m.pattern[(turn-1)%m.pattern.length],guard=phase==='skill';
   const used=guard?null:nextActiveSkill(skills,turn,lastUsed);if(used)lastUsed.set(used.id,turn);
   const hit=guard?0:damage(attack,m.defense+bonus.defense,used?.multiplier||1);enemyHp=Math.max(0,enemyHp-hit);
   const received=enemyHp>0&&['attack','skill'].includes(phase)?Math.max(1,Math.floor(damage(m.attack+bonus.attack,defense,phase==='skill'?m.multiplier:1)*(guard?.5:1))):0;
   hp=Math.max(0,hp-received);turns.push({turn,hp,enemyHp,damage:hit,received,phase,skill:m.skill,guard,...(used?{usedSkill:{id:used.id,name:used.name,multiplier:used.multiplier}}:{})});
-  if(hp<=stats.maxHp*.3&&enemyHp>0)break;
+  if(hp<=stats.maxHp*(options.retreatRatio??.3)&&enemyHp>0)break;
  }
  return {enemy:m.name,monsterId:m.id,monster:m,turns,outcome:enemyHp===0?'victory':'retreat',xp:enemyHp===0?m.level:0,hp,maxHp:stats.maxHp,enemyMaxHp,playerStats:stats,playerSkills:structuredClone(skills)};
 }
 export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y));let remaining=Math.min(1,Math.max(0,t))*distances.reduce((a,b)=>a+b,0);for(let i=0;i<3;i++){if(remaining<=distances[i]||i===2){const f=distances[i]?remaining/distances[i]:1;return {x:points[i].x+(points[i+1].x-points[i].x)*f,y:points[i].y+(points[i+1].y-points[i].y)*f};}remaining-=distances[i];}return b;}
 export function activityState(player,world,now){
+ if(world.lifeActivities)return world.lifeActivities[player.id]||null;
  const queued=world.queuedActivityPlans?.find(p=>p.playerId===player.id);
  const plan=queued&&now>=Date.parse(queued.startsAt)?queued:world.activityPlans?.find(p=>p.playerId===player.id);if(!plan||now<Date.parse(plan.startsAt))return null;
 

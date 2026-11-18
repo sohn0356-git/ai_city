@@ -2,6 +2,10 @@ import React, { lazy, Suspense, useEffect, useMemo, useReducer, useState } from 
 import useObserverAuth from './hooks/useObserverAuth';
 import useWorld from './hooks/useWorld';
 import useClock from './hooks/useClock';
+import useLife from './hooks/useLife';
+import useLifePlayback from './hooks/useLifePlayback';
+import { lifeWorld, projectLife } from './simulation/replay.mjs';
+import LifeTimeline from './ui/LifeTimeline';
 import useAppUpdates from './hooks/useAppUpdates';
 import { layoutWorld } from './mapLayout.mjs';
 import { observeWorld, observationReducer } from './observation.mjs';
@@ -19,15 +23,43 @@ const initialSelection = { view: 'city', residentId: null, placeId: 'all' };
 
 export default function App() {
   const session = useObserverAuth();
-  const { world, error, refreshing, reload } = useWorld();
+  const { world: baseWorld, error, refreshing, reload } = useWorld();
   const now = useClock(Boolean(session.user));
+  const lifeData = useLife(Boolean(session.user));
+  const playback = useLifePlayback(lifeData.life, now);
+  const frame = useMemo(() => {
+    if (!baseWorld || !lifeData.life) return null;
+    if (playback.replay)
+      return {
+        world: lifeWorld(baseWorld, playback.state, playback.time, { replay: true }),
+        at: playback.time,
+      };
+    const preview = projectLife(lifeData.life, now);
+    const snapshot = { ...preview.state, logs: lifeData.life.logs };
+    return {
+      ...preview,
+      world: {
+        ...lifeWorld(baseWorld, snapshot, preview.at),
+        lastUpdated: lifeData.life.updatedAt,
+      },
+    };
+  }, [baseWorld, lifeData.life, playback.replay, playback.state, playback.time, now]);
+  const world = frame?.world || baseWorld;
+  const viewNow = frame?.at || now;
   const updates = useAppUpdates();
   const [selection, dispatch] = useReducer(observationReducer, initialSelection);
   const [dungeon, setDungeon] = useState(false);
-  const sceneWorld = useMemo(() => (world ? layoutWorld(world) : null), [world]);
+  const sceneWorld = useMemo(
+    () =>
+      baseWorld
+        ? layoutWorld({ ...baseWorld, metrics: world.metrics, storageState: world.storageState })
+        : null,
+    [baseWorld, world?.metrics.food, world?.metrics.materials],
+  );
   const observation = useMemo(
-    () => (sceneWorld ? observeWorld(sceneWorld, now) : null),
-    [sceneWorld, now],
+    () =>
+      sceneWorld ? observeWorld({ ...world, buildings: sceneWorld.buildings }, viewNow) : null,
+    [sceneWorld, world, viewNow],
   );
   useEffect(() => {
     if (selection.residentId && window.matchMedia('(max-width:800px)').matches) {
@@ -48,6 +80,10 @@ export default function App() {
     setDungeon(false);
   };
   const reset = () => dispatch({ type: 'reset' });
+  const replayRecord = (record) => {
+    playback.seek(Date.parse(record.startsAt));
+    follow(record.actorId);
+  };
   async function logout() {
     await session.logout();
     reset();
@@ -115,15 +151,27 @@ export default function App() {
             <>
               <div className="world-status">
                 <span>
-                  {world.players.length}명 · {world.cycle}회차
+                  {world.players.length}명 · {lifeData.life ? '자율 생활' : world.cycle + '회차'}
                 </span>
                 <span>
-                  {next > 0
-                    ? '다음 갱신 약 ' + Math.ceil(next / 60000) + '분 후'
-                    : '새 일정 대기 · 마지막 기록 표시 중'}
+                  {lifeData.life
+                    ? playback.replay
+                      ? '저장된 일상 재생'
+                      : frame?.behind
+                        ? '자동 저장 지연 · 마지막 진행 표시'
+                        : '실시간 진행 · 주기적으로 저장'
+                    : next > 0
+                      ? '다음 갱신 약 ' + Math.ceil(next / 60000) + '분 후'
+                      : '새 일정 대기 · 마지막 기록 표시 중'}
                 </span>
                 <span>실제 갱신 {formatDate(world.lastUpdated)}</span>
               </div>
+              {lifeData.error && (
+                <div className="app-alert" role="alert">
+                  {lifeData.error}
+                  <button onClick={lifeData.reload}>다시 연결</button>
+                </div>
+              )}
               {selection.view === 'city' && (
                 <>
                   <div className="screen-title">
@@ -148,6 +196,15 @@ export default function App() {
                       )}
                     </div>
                   </div>
+                  {lifeData.life && (
+                    <LifeTimeline
+                      life={lifeData.life}
+                      playback={playback}
+                      history={lifeData.history}
+                      selected={selected?.player.id}
+                      onRecord={replayRecord}
+                    />
+                  )}
                   <div className="city-layout">
                     <div className="city-stage-panel">
                       {dungeon ? (
@@ -159,8 +216,8 @@ export default function App() {
                           }
                         >
                           <DungeonView
-                            world={sceneWorld}
-                            now={now}
+                            world={{ ...world, buildings: sceneWorld.buildings }}
+                            now={viewNow}
                             residents={observation.residents}
                             selected={selected?.player.id || 'all'}
                             onSelect={follow}
@@ -184,7 +241,7 @@ export default function App() {
                           key={selected.player.id}
                           resident={selected}
                           world={world}
-                          now={now}
+                          now={viewNow}
                           onClose={reset}
                           onSelect={follow}
                         />
@@ -192,7 +249,7 @@ export default function App() {
                         <PlaceInspector
                           placeId={validPlace}
                           observation={observation}
-                          now={now}
+                          now={viewNow}
                           onClose={reset}
                           onPlace={place}
                           onSelect={follow}
@@ -242,6 +299,7 @@ export default function App() {
                     onReset={reset}
                     onSelect={follow}
                     onPlace={place}
+                    onReplay={replayRecord}
                   />
                 </Suspense>
               )}
