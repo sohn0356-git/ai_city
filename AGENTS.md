@@ -42,7 +42,9 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 
 | 경로 | 역할 |
 | --- | --- |
-| `src/main.jsx`, `src/style.css` | 앱 진입점, 인증 UI, 세계 로딩, 주민 선택, 화면 구성 |
+| `src/main.jsx`, `src/App.jsx`, `src/app.css`, `src/style.css` | 앱 시작, 도시·주민·기록 화면 조합과 스타일 |
+| `src/hooks/`, `src/worldClient.mjs` | 인증·세계 연결·공유 시계·PWA와 요청 병합 |
+| `src/observation.mjs`, `src/ui/` | 공통 현재 상태·선택 전이·검색과 기능별 화면 |
 | `src/CityStage.jsx`, `src/TileGround.jsx`, `src/mapLayout.mjs` | 도시 무대, 타일, 좌표 배치 |
 | `src/ComparisonStage.jsx` | 저장된 회차 상태 비교 |
 | `src/activity.mjs`, `src/planSteps.mjs` | 공유 시각에 따른 활동·경로·단계 계산 |

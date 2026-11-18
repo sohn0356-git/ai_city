@@ -1,7 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,15 +12,11 @@ const config = {
 export const missingFirebaseKeys = Object.entries(config).filter(([, value]) => !value?.trim()).map(([key]) => key);
 export let app = null;
 export let auth = null;
-export let db = null;
-export let storage = null;
 export let firebaseError = null;
 if (!missingFirebaseKeys.length) {
   try {
     app = getApps().length ? getApp() : initializeApp(config);
     auth = getAuth(app);
-    db = getFirestore(app);
-    storage = getStorage(app);
   } catch (error) {
     firebaseError = error;
   }

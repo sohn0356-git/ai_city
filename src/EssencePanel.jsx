@@ -1,4 +1,74 @@
 import React from 'react';
-import {progression} from './progression.mjs';
-import {describeSkill} from './essenceSkills.mjs';
-export default function EssencePanel({world,selected}){const p=world.players.find(p=>p.id===selected),drops=(world.essenceDrops||[]).filter(d=>!p||d.ownerId===p.id),absorbed=world.essenceAbsorptions||[],level=p?progression(p,[]).level:null,used=p&&absorbed.some(a=>a.playerId===p.id&&a.level===level);return <details className="public-guide"><summary>몬스터 정수 · 보유/습득 스킬</summary><p>새 규칙 전투에서 승리 시 5% 확률로 몬스터의 액티브 또는 패시브 스킬 정수 1개. 재처치도 드롭 가능하며 XP 최초 처치 규칙과 별개입니다.</p><p>주민이 흡수 또는 보관을 선택합니다. 현재 레벨당 1개만 흡수하며, 지나간 레벨의 빈 흡수권은 소급 사용하지 않습니다. 이미 배운 스킬은 중복 흡수하지 않습니다.</p>{p&&<><h4>{p.name} · Lv.{level} 흡수권 {used?'사용함':'미사용'}</h4>{(p.skills||[]).map(s=><p key={s.id}><b>{s.name}</b> · {s.type==='active'?'액티브':'패시브'} · {describeSkill(s)}</p>)}{!p.skills?.length&&<p>아직 습득한 정수 스킬이 없습니다.</p>}</>}<h4>정수 기록</h4>{drops.slice(-20).reverse().map(d=>{const a=absorbed.find(a=>a.itemId===d.id);return <article key={d.id}><b>{d.monsterName}의 정수 · {d.skill.name}</b><p>{world.players.find(p=>p.id===d.ownerId)?.name} · {d.skill.type==='active'?'액티브':'패시브'} · {describeSkill(d.skill)}</p><small>{a?`흡수 완료 · Lv.${a.level}`:'보관 중 · 아직 미흡수'}</small></article>;})}{!drops.length&&<p>아직 정수가 드롭된 기록이 없습니다. 과거 전투에 소급 생성하지 않습니다.</p>}<h4>주민의 선택</h4>{(world.essenceDecisions||[]).filter(d=>!p||d.playerId===p.id).slice(-8).reverse().map(d=><p key={d.id}>{world.players.find(p=>p.id===d.playerId)?.name} · {d.choice==='absorb'?'흡수':'보관'} — {d.reason}</p>)}<small>관찰 전용. 흡수한 스킬은 다음 새 전투 계획의 스냅샷부터 적용됩니다. 진행 중 전투와 저장된 재생 결과는 바뀌지 않습니다.</small></details>;}
+import { progression } from './progression.mjs';
+import { describeSkill } from './essenceSkills.mjs';
+
+export default function EssencePanel({ world, selected }) {
+  const player = world.players.find((p) => p.id === selected);
+  const drops = (world.essenceDrops || []).filter((d) => !player || d.ownerId === player.id);
+  const absorbed = world.essenceAbsorptions || [];
+  const level = player ? progression(player, []).level : null;
+  const used = player && absorbed.some((a) => a.playerId === player.id && a.level === level);
+  return (
+    <section className="essence-panel">
+      <h3>정수와 스킬</h3>
+      {player && (
+        <>
+          <p>
+            Lv.{level} 흡수권 · {used ? '사용함' : '미사용'}
+          </p>
+          {(player.skills || []).map((s) => (
+            <p key={s.id}>
+              <b>{s.name}</b>
+              <br />
+              <small>{describeSkill(s)}</small>
+            </p>
+          ))}
+          {!player.skills?.length && <p>아직 습득한 스킬이 없어요.</p>}
+        </>
+      )}
+      <details>
+        <summary>정수 기록 · {drops.length}개</summary>
+        {drops
+          .slice(-20)
+          .reverse()
+          .map((d) => (
+            <article key={d.id}>
+              <h4>
+                {d.monsterName} · {d.skill.name}
+              </h4>
+              <p>{describeSkill(d.skill)}</p>
+              <small>{absorbed.some((a) => a.itemId === d.id) ? '흡수 완료' : '보관 중'}</small>
+            </article>
+          ))}
+        {!drops.length && <p>아직 발견한 정수가 없어요.</p>}
+      </details>
+      <details>
+        <summary>주민이 선택한 이유</summary>
+        {(world.essenceDecisions || [])
+          .filter((d) => !player || d.playerId === player.id)
+          .slice(-8)
+          .reverse()
+          .map((d) => (
+            <p key={d.id}>
+              <b>{d.choice === 'absorb' ? '흡수' : '보관'}</b> · {d.reason}
+            </p>
+          ))}
+      </details>
+      <details>
+        <summary>정수 규칙</summary>
+        <p>
+          새 정수 규칙이 적용된 전투 승리 시 5% 확률로 한 개를 발견합니다. 재처치 승리도 대상이며
+          최초 처치 XP와는 별개입니다.
+        </p>
+        <p>
+          현재 레벨마다 한 개만 흡수합니다. 지난 레벨의 빈 흡수권은 소급하지 않고, 배운 스킬은 중복
+          흡수하지 않아요.
+        </p>
+        <p>
+          흡수한 스킬은 다음 새 전투 계획부터 적용됩니다. 진행 중 전투나 저장된 결과는 바꾸지
+          않습니다.
+        </p>
+      </details>
+    </section>
+  );
+}

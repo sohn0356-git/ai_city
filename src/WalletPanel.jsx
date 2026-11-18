@@ -1,3 +1,67 @@
 import React from 'react';
-import {balance,economy,SERVICES} from './economy.mjs';
-export default function WalletPanel({world,selected}){const p=world.players.find(p=>p.id===selected),data=economy(world);return <section className="wallet-panel"><h3>던전 골드 · 마을 거래</h3><p>{p?`${p.name}의 지갑 ${balance(world,p.id)} G`:'주민을 선택하면 개인 지갑을 확인할 수 있어요.'} · 마을 금고 {balance(world,'town-treasury')} G</p><p>새 경제 규칙이 적용된 일정부터 승리당 3G. 기존 전투에 소급 지급하지 않습니다.</p><div>{SERVICES.map(s=><p key={s.id}>{s.name} · {s.price}G · 의뢰 접수 후 실제 활동에서 처리</p>)}</div>{world.queuedActivityPlans?.length>0&&<p>다음 탐험 예약 · {new Date(world.queuedActivityPlans[0].startsAt).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})} 시작 · 현재 탐험 종료 후 이어집니다.</p>}<h4>의뢰 진행 · 실제 활동 증거</h4>{data.orders.filter(o=>!p||o.playerId===p.id).slice(-8).reverse().map(o=><p key={o.id}>{world.players.find(p=>p.id===o.playerId)?.name} · {SERVICES.find(s=>s.id===o.serviceId)?.name} · {o.status==='completed'?`완료 · ${world.players.find(p=>p.id===o.providerId)?.name} 담당 · 증거 ${o.evidenceIds.length}건`:'접수 · 아직 미완료'}</p>)}<small>회차당 카페 2자리·도구 점검 1건. 실제 활동 증거가 있어야 완료됩니다.</small><h4>최근 거래</h4>{data.ledger.filter(t=>!p||t.from===p.id||t.to===p.id).slice(-8).reverse().map(t=><p key={t.id}>{t.kind==='victory'?'던전 승리 보상':'마을 의뢰 접수'} · {t.amount}G · {t.at}</p>)}{!data.ledger.length&&<p>아직 골드 거래가 없습니다.</p>}<small>관찰 전용. 구매·의뢰는 주민의 다음 세계 활동에서 선택합니다. 접수는 서비스 완료를 뜻하지 않습니다.</small></section>;}
+import { balance, economy, SERVICES } from './economy.mjs';
+import { formatDate } from './ui/format.mjs';
+
+export default function WalletPanel({ world, selected }) {
+  const player = world.players.find((p) => p.id === selected);
+  const data = economy(world);
+  const orders = data.orders.filter((o) => !player || o.playerId === player.id);
+  const ledger = data.ledger.filter((t) => !player || t.from === player.id || t.to === player.id);
+  const nextPlan = world.queuedActivityPlans?.find((p) => p.playerId === player?.id);
+  return (
+    <section className="wallet-panel">
+      <h3>{player ? player.name + '의 지갑' : '마을 거래'}</h3>
+      <p>
+        <b>{player ? balance(world, player.id) + ' G' : '주민을 선택해 주세요'}</b> · 마을 금고{' '}
+        {balance(world, 'town-treasury')} G
+      </p>
+      {!!orders.length && (
+        <>
+          <h4>주민이 맡긴 의뢰</h4>
+          {orders
+            .slice(-5)
+            .reverse()
+            .map((o) => (
+              <details key={o.id}>
+                <summary>
+                  {SERVICES.find((s) => s.id === o.serviceId)?.name} ·{' '}
+                  {o.status === 'completed' ? '완료' : '접수'}
+                </summary>
+                <p>
+                  {o.status === 'completed'
+                    ? (world.players.find((p) => p.id === o.providerId)?.name || '담당자') +
+                      ' · 활동 증거 ' +
+                      (o.evidenceIds?.length || 0) +
+                      '건'
+                    : '아직 실제 활동 결과를 확인하지 않았어요.'}
+                </p>
+              </details>
+            ))}
+        </>
+      )}
+      <details>
+        <summary>최근 거래 · {ledger.length}건</summary>
+        {ledger
+          .slice(-8)
+          .reverse()
+          .map((t) => (
+            <p key={t.id}>
+              {t.kind === 'victory' ? '대련 승리' : '마을 의뢰'} · {t.amount}G<br />
+              <small>{formatDate(t.at)}</small>
+            </p>
+          ))}
+        {!ledger.length && <p>아직 거래 기록이 없어요.</p>}
+      </details>
+      <details>
+        <summary>이용 가능한 마을 서비스</summary>
+        {SERVICES.map((s) => (
+          <p key={s.id}>
+            {s.name} · {s.price}G
+          </p>
+        ))}
+        <p>이용 여부는 주민이 다음 활동에서 선택해요. 접수와 실제 완료는 별도로 기록됩니다.</p>
+      </details>
+      {nextPlan && <p className="muted">이 주민의 다음 일정 · {formatDate(nextPlan.startsAt)}</p>}
+    </section>
+  );
+}

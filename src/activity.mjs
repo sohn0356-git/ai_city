@@ -21,7 +21,7 @@ export function battle(player,monster='echo-shadow'){
 export function route(a,b,t){const points=[a,{x:a.x,y:50},{x:b.x,y:50},b];const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y));let remaining=Math.min(1,Math.max(0,t))*distances.reduce((a,b)=>a+b,0);for(let i=0;i<3;i++){if(remaining<=distances[i]||i===2){const f=distances[i]?remaining/distances[i]:1;return {x:points[i].x+(points[i+1].x-points[i].x)*f,y:points[i].y+(points[i+1].y-points[i].y)*f};}remaining-=distances[i];}return b;}
 export function activityState(player,world,now){
  const queued=world.queuedActivityPlans?.find(p=>p.playerId===player.id);
- const plan=queued&&now>=Date.parse(queued.startsAt)?queued:world.activityPlans?.find(p=>p.playerId===player.id);if(!plan)return null;
+ const plan=queued&&now>=Date.parse(queued.startsAt)?queued:world.activityPlans?.find(p=>p.playerId===player.id);if(!plan||now<Date.parse(plan.startsAt))return null;
 
  if(plan.steps&&now>=Date.parse(plan.endsAt)){const last=stepState(plan,Date.parse(plan.endsAt)-1);return {...last,id:'resting',kind:'resting',label:'계획 종료 · 결과 확인 대기',progress:1,after:true,plan,result:null,turn:null};}
  if(plan.steps&&now>=Date.parse(plan.startsAt)&&now<Date.parse(plan.endsAt)){const state=stepState(plan,now);if(!state)return null;const result=state.kind==='fighting'?battle(plan.combatSnapshot||player,plan.monsterSnapshot):null;if(result){result.firstKillEligible=!defeated(world,player.id,result.monsterId);result.awardXp=result.firstKillEligible?result.xp:0;}return {...state,plan,result,turn:result?result.turns[Math.min(result.turns.length-1,Math.floor(state.progress*result.turns.length))]:null};}
