@@ -1,5 +1,20 @@
 export const MINUTE = 60000;
 export const ACTIONS = Object.freeze({
+  buy_food: {
+    name: '음식 구매',
+    kind: 'working',
+    duration: [1, 2],
+    inputs: ['placeId', 'quantity', 'unitPrice', 'durationSeconds'],
+  },
+  treat: {
+    name: '치료',
+    kind: 'resting',
+    duration: [3, 5],
+    inputs: ['placeId', 'price', 'durationSeconds'],
+  },
+  condition: { name: '건강·생활 변화', event: true, inputs: [] },
+  death: { name: '사망', event: true, inputs: [] },
+  arrival: { name: '신규 입주', event: true, inputs: [] },
   move: {
     name: '이동',
     kind: 'walking',
@@ -136,7 +151,8 @@ export function pathPoint(path, progress) {
 }
 export function validateRequest(state, actor, request) {
   const definition = ACTIONS[request.type];
-  if (!definition || definition.composite) throw Error('Unknown primitive action');
+  if (!definition || definition.composite || definition.event)
+    throw Error('Unknown primitive action');
   const p = request.params || {};
   if (!Number.isInteger(p.durationSeconds) || p.durationSeconds < 1 || p.durationSeconds > 7200)
     throw Error('Invalid action duration');
@@ -183,6 +199,23 @@ export function validateRequest(state, actor, request) {
     throw Error('Invalid work parameters');
   if (request.type === 'eat' && (!Number.isInteger(p.foodCost) || p.foodCost < 1 || p.foodCost > 3))
     throw Error('Invalid meal cost');
+  if (
+    request.type === 'buy_food' &&
+    (!Number.isInteger(p.quantity) ||
+      p.quantity < 1 ||
+      p.quantity > 3 ||
+      !Number.isSafeInteger(p.unitPrice) ||
+      p.unitPrice < 1)
+  )
+    throw Error('Invalid food purchase');
+  if (request.type === 'treat' && (!Number.isSafeInteger(p.price) || p.price < 1))
+    throw Error('Invalid treatment price');
+  if (
+    request.type === 'work' &&
+    p.wage !== undefined &&
+    (!Number.isSafeInteger(p.wage) || p.wage < 1)
+  )
+    throw Error('Invalid wage');
   return true;
 }
 export function validateRules(rules) {

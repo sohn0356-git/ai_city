@@ -49,6 +49,7 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 | `src/observation.mjs`, `src/ui/` | 공통 현재 상태·선택 전이·검색과 기능별 화면 |
 | `src/CityStage.jsx`, `src/TileGround.jsx`, `src/mapLayout.mjs` | 도시 무대, 타일, 좌표 배치 |
 | `src/ComparisonStage.jsx` | 저장된 회차 상태 비교 |
+| `src/simulation/survival.mjs`, `src/simulation/state.mjs` | 임금·음식·허기·나이·상태 이상·사망·인구 사건과 스냅샷 |
 | `src/simulation/`, `src/hooks/useLife*`, `src/ui/Life*` | 가중 랜덤 액션·자율 실행·저장된 일상 재생 |
 | `src/activity.mjs`, `src/planSteps.mjs` | 공유 시각에 따른 활동·경로·단계 계산 |
 | `src/DungeonView.jsx`, `src/dungeonRules.mjs`, `src/monsters.mjs` | 던전 표시와 전투·출현 규칙 |
@@ -83,6 +84,7 @@ Node.js 22.12 이상과 npm을 사용한다. 잠금 파일은 package-lock.json�
 - 고유 조우·거래·드롭 ID의 중복 처리를 막고, 재접속·재생·반복 정산이 보상을 늘리지 않게 한다.
 - `adventureRewards`, 거래 원장, `essenceDrops/essenceAbsorptions/essenceDecisions`, XP 초기화 기준점은 역사 기록이다. UI 수정이나 오류 회피를 위해 삭제·초기화하지 않는다.
 - 현재 성장 v3는 도시 활동 XP 없이 주민별 몬스터 종류 최초 승리의 level만 XP로 지급한다. 필요 XP는 1, 2, 3, …이며 상한 Lv.50이다. 상세 계산은 progression.mjs와 테스트를 사용한다.
+- 사망한 주민은 활동 인구에서 제거하되 departed·거래·보상·정수·재생 이력은 보존한다. 신규 입주는 ID를 재사용하지 않고 활동 인구100 상한을 강제한다. 생존 규칙 마이그레이션은 지난 시간에 소급 적용하지 않는다.
 - 일상 재생은 저장된 액션의 before/after·경로·결과를 사용하며 원본을 변경하거나 액션을 재실행하지 않는다. 일별 압축 기록과 영구 원장은 보존하고, 액션 규칙 변경은 새 액션부터 적용한다.
 - 전투 재생은 저장된 턴을 표시한다. 과거 전투를 새 능력치로 다시 계산하거나 미완료 승리·수확·협업을 완료 사실로 기록하지 않는다.
 

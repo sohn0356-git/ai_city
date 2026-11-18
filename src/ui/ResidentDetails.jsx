@@ -91,8 +91,16 @@ export default function ResidentDetails({ world, player, now, onSelect }) {
           </details>
           <h4>이웃과의 관계</h4>
           {player.relationships.map((r) => (
-            <button className="relationship" key={r.playerId} onClick={() => onSelect(r.playerId)}>
-              <b>{world.players.find((p) => p.id === r.playerId)?.name || '이웃'}</b>
+            <button
+              className="relationship"
+              key={r.playerId}
+              disabled={!world.players.some((p) => p.id === r.playerId)}
+              onClick={() => onSelect(r.playerId)}
+            >
+              <b>
+                {(world.lifePeople || world.players).find((p) => p.id === r.playerId)?.name ||
+                  '이웃'}
+              </b>
               <span>{r.affinity}</span>
               <small>{r.reason}</small>
             </button>

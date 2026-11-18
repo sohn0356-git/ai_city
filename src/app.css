@@ -1202,3 +1202,20 @@
     font-size: 12px;
   }
 }
+.survival-summary {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  padding: 10px 0 16px;
+  color: #6e7e62;
+}
+.health-warning {
+  font-size: 12px;
+  line-height: 1.8;
+  background: #f7e4d8;
+  border: 1px solid #e0c2ad;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #895f44;
+}

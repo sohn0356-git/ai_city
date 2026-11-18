@@ -27,7 +27,16 @@ import {
 } from '../dungeonRules.mjs';
 import { monsterSkills } from '../essenceSkills.mjs';
 import { dropEssence, decideEssences, validateEssences } from '../essences.mjs';
-import { creditVictory } from '../economy.mjs';
+import { creditVictory, creditWage, payLivingCost, balance } from '../economy.mjs';
+import { snapshotActor, appendLog, knownActors } from './state.mjs';
+import {
+  migrateSurvival,
+  survivalChoice,
+  tickVitals,
+  tickPopulation,
+  killActor,
+} from './survival.mjs';
+export { snapshotActor } from './state.mjs';
 import { recordBattle } from '../combatHistory.mjs';
 
 const copy = (value) => structuredClone(value);
@@ -42,29 +51,21 @@ const LEDGERS = [
   'essenceAbsorptions',
   'essenceDecisions',
 ];
-export function snapshotActor(actor) {
+export function ledgerWorld(state, includeDeparted = false) {
   return {
-    id: actor.id,
-    placeId: actor.placeId,
-    energy: actor.energy,
-    hunger: actor.hunger,
-    hp: actor.hp,
-    combatXp: actor.player.combatXp || 0,
-    skillRulesVersion: actor.player.skillRulesVersion,
-    skills: copy(actor.player.skills || []),
-    relationships: copy(actor.player.relationships || []),
-    memory: (actor.player.memory || []).slice(-5),
-    workCount: actor.workCount,
+    ...state.ledger,
+    players: (includeDeparted ? knownActors(state) : state.actors).map((a) => a.player),
+    buildings: state.places,
   };
-}
-export function ledgerWorld(state) {
-  return { ...state.ledger, players: state.actors.map((a) => a.player), buildings: state.places };
 }
 function duration(actor, type) {
   const [low, high] = ACTIONS[type].duration;
   return Math.round((low + random(actor) * (high - low)) * 60);
 }
-export function createLife(base, { at, seed = 'ai-city-life-v1', rules = DEFAULT_RULES } = {}) {
+export function createLife(
+  base,
+  { at, seed = 'ai-city-life-v1', rules = DEFAULT_RULES, survival = true, roster = [] } = {},
+) {
   validateRules(rules);
   if (!Number.isFinite(at)) throw Error('An explicit start time is required');
   const world = layoutWorld(base);
@@ -78,6 +79,7 @@ export function createLife(base, { at, seed = 'ai-city-life-v1', rules = DEFAULT
     replayStartsAt: iso(at),
     revision: 0,
     completed: 0,
+    logSequence: 0,
     places: [...world.buildings, DUNGEON],
     resources: { food: world.metrics.food, materials: world.metrics.materials, knowledge: 0 },
     actors: world.players.map((p) => {
@@ -109,6 +111,7 @@ export function createLife(base, { at, seed = 'ai-city-life-v1', rules = DEFAULT
     },
     logs: [],
   };
+  if (survival) migrateSurvival(state, { at, roster, log: false });
   state.replayActors = state.actors.map(snapshotActor);
   state.replayResources = copy(state.resources);
   for (const actor of state.actors) startNext(state, actor, at);
@@ -116,19 +119,23 @@ export function createLife(base, { at, seed = 'ai-city-life-v1', rules = DEFAULT
 }
 export function chooseAction(state, actor, at) {
   const maxHp = combatStats(actor.player).maxHp;
+  if (state.survival) {
+    const choice = survivalChoice(state, actor, at);
+    if (choice) return choice;
+  }
   if (actor.energy < 24 || actor.hp < maxHp * 0.45)
     return {
       type: 'rest',
       params: { placeId: actor.placeId },
       reason: '피로와 체력을 먼저 회복한다.',
     };
-  if (actor.hunger > 65 && state.resources.food <= 0)
+  if (!state.survival && actor.hunger > 65 && state.resources.food <= 0)
     return {
       type: 'work',
       params: { placeId: 'farm', task: '함께 식재료 수확하기', resource: 'food', amount: 2 },
       reason: '식량이 부족해 수확을 돕는다.',
     };
-  if (actor.hunger > 65 && state.resources.food > 0)
+  if (!state.survival && actor.hunger > 65 && state.resources.food > 0)
     return {
       type: 'eat',
       params: { placeId: 'cafe', foodCost: 1 },
@@ -211,7 +218,15 @@ export function chooseAction(state, actor, at) {
 export function startAction(state, actor, request, at) {
   if (actor.active) throw Error('An actor cannot execute overlapping actions');
   const params = copy(request.params || {});
-  params.durationSeconds ??= duration(actor, request.type);
+  params.durationSeconds ??= Math.round(duration(actor, request.type) * (actor.illness ? 1.25 : 1));
+  if (state.survival) {
+    if (request.type === 'work') params.wage ??= state.rules.survival.workWage;
+    if (request.type === 'buy_food') {
+      params.quantity ??= 1;
+      params.unitPrice ??= state.rules.survival.foodPrice;
+    }
+    if (request.type === 'treat') params.price ??= state.rules.survival.treatmentPrice;
+  }
   if (request.type === 'move') {
     params.from ??= actor.placeId;
     params.path ??= routePoints(
@@ -228,6 +243,7 @@ export function startAction(state, actor, request, at) {
     params,
     startsAt: iso(at),
     endsAt: iso(at + params.durationSeconds * 1000),
+    survivalVersion: state.survival ? 1 : 0,
     before: snapshotActor(actor),
     reason: request.reason || '다음 행동을 선택한다.',
     parentId: actor.expedition?.id || null,
@@ -434,7 +450,10 @@ function settleFight(state, actor, action, at) {
     xp,
   });
   actor.player.combatXp = (actor.player.combatXp || 0) + xp;
-  actor.hp = r.hp;
+  actor.hp = Math.max(
+    0,
+    r.hp - Math.max(0, (actor.healthDamage || 0) - (action.before.healthDamage || 0)),
+  );
   actor.expedition.encounters++;
   dropEssence(view, plan, r, iso(at));
   for (const a of state.actors) a.player.energy = a.energy;
@@ -455,7 +474,7 @@ function finishAction(state, actor, at) {
     case 'move':
       actor.placeId = action.params.to;
       actor.energy -= 3;
-      actor.hunger += 4;
+      if (!action.survivalVersion) actor.hunger += 4;
       result.summary = state.places.find((p) => p.id === actor.placeId).name + ' 도착';
       break;
     case 'work': {
@@ -477,7 +496,7 @@ function finishAction(state, actor, at) {
       state.resources[resource] += made;
       actor.workCount++;
       actor.energy -= 10;
-      actor.hunger += 10;
+      if (!action.survivalVersion) actor.hunger += 10;
       result = {
         summary: made
           ? `${action.params.task} · ${made}만큼 생산`
@@ -485,25 +504,97 @@ function finishAction(state, actor, at) {
         resource,
         amount: made,
       };
+      if (action.survivalVersion && made > 0) {
+        creditWage(ledgerWorld(state), {
+          id: 'wage-' + action.id,
+          playerId: actor.id,
+          amount: action.params.wage,
+          at: iso(at),
+        });
+        result.wage = action.params.wage;
+        result.summary += ' · 임금 ' + action.params.wage + 'G';
+      }
       break;
     }
-    case 'eat':
-      if (state.resources.food >= action.params.foodCost) {
-        state.resources.food -= action.params.foodCost;
+    case 'buy_food': {
+      const { quantity, unitPrice } = action.params;
+      const paid =
+        state.resources.food >= quantity &&
+        payLivingCost(ledgerWorld(state), {
+          id: 'food-' + action.id,
+          playerId: actor.id,
+          amount: quantity * unitPrice,
+          at: iso(at),
+          kind: 'food',
+        });
+      if (paid) {
+        state.resources.food -= quantity;
+        for (let i = 0; i < quantity; i++)
+          actor.food.push({
+            id: action.id + '-' + i,
+            boughtAt: iso(at),
+            expiresAt: iso(at + state.rules.survival.foodShelfDays * state.rules.survival.dayMs),
+          });
+      }
+      result = {
+        summary: paid
+          ? '음식 ' + quantity + '개 구매 · ' + quantity * unitPrice + 'G 지불'
+          : '돈 또는 음식 재고가 부족해 구매하지 못함',
+        success: paid,
+        quantity: paid ? quantity : 0,
+        cost: paid ? quantity * unitPrice : 0,
+      };
+      break;
+    }
+    case 'treat': {
+      const paid =
+        actor.illness &&
+        payLivingCost(ledgerWorld(state), {
+          id: 'treatment-' + action.id,
+          playerId: actor.id,
+          amount: action.params.price,
+          at: iso(at),
+          kind: 'treatment',
+        });
+      if (paid) {
+        actor.illness = null;
+        actor.hp = Math.min(combatStats(actor.player).maxHp, actor.hp + 8);
+      }
+      result = {
+        summary: paid ? '치료를 받고 상태 이상에서 회복함' : '치료가 필요 없거나 비용이 부족함',
+        success: Boolean(paid),
+        cost: paid ? action.params.price : 0,
+      };
+      break;
+    }
+    case 'eat': {
+      let available;
+      if (action.survivalVersion) {
+        actor.food = actor.food.filter((item) => Date.parse(item.expiresAt) > at);
+        available = actor.food.length >= action.params.foodCost;
+        if (available) actor.food.splice(0, action.params.foodCost);
+      } else {
+        available = state.resources.food >= action.params.foodCost;
+        if (available) state.resources.food -= action.params.foodCost;
+      }
+      if (available) {
         actor.hunger -= 45;
         actor.energy += 24;
-        result.summary = '식사를 마치고 기운을 회복함';
-      } else result.summary = '식재료가 없어 식사를 미룸';
+        if (actor.hunger < 90) actor.starvingSince = null;
+        result.summary = '구매한 음식을 먹고 기운을 회복함';
+      } else result.summary = '먹을 음식이 없어 식사를 미룸';
+      result.success = available;
       break;
+    }
     case 'rest':
       actor.energy += 22;
-      actor.hunger += 2;
+      if (!action.survivalVersion) actor.hunger += 2;
       actor.hp = Math.min(combatStats(actor.player).maxHp, actor.hp + 12);
       result.summary = '휴식을 마치고 회복함';
       break;
     case 'social': {
       const partner = state.actors.find((a) => a.id === action.params.partnerId);
-      if (partner.placeId === actor.placeId && partner.active?.type !== 'move') {
+      if (partner && partner.placeId === actor.placeId && partner.active?.type !== 'move') {
         relationship(actor.player, partner.id, 1);
         relationship(partner.player, actor.id, 1);
         result = {
@@ -521,7 +612,7 @@ function finishAction(state, actor, at) {
         };
       } else result.summary = '이웃이 자리를 떠나 다음에 이야기하기로 함';
       actor.energy -= 2;
-      actor.hunger += 3;
+      if (!action.survivalVersion) actor.hunger += 3;
       break;
     }
     case 'prepare':
@@ -530,14 +621,14 @@ function finishAction(state, actor, at) {
       break;
     case 'search':
       actor.energy -= 5;
-      actor.hunger += 6;
+      if (!action.survivalVersion) actor.hunger += 6;
       actor.expedition.searches++;
       result.summary = '동굴 안을 살펴봄';
       break;
     case 'fight':
       result = settleFight(state, actor, action, at);
       actor.energy -= 8;
-      actor.hunger += 8;
+      if (!action.survivalVersion) actor.hunger += 8;
       break;
   }
   actor.energy = clamp(actor.energy);
@@ -556,13 +647,17 @@ function finishAction(state, actor, at) {
     ),
   };
   // Battle snapshots and turn logs remain immutable in the action record.
-  state.logs.push(record);
+  appendLog(state, record);
   state.completed++;
   actor.active = null;
+  if (state.survival && actor.hp <= 0) {
+    killActor(state, actor, at, '질병과 부상 악화');
+    return;
+  }
   const trip = actor.expedition;
   if (trip) {
     if (trip.returning && actor.placeId === trip.returnTo && action.type === 'move') {
-      state.logs.push({
+      appendLog(state, {
         id: trip.id,
         actorId: actor.id,
         type: 'explore',
@@ -587,6 +682,7 @@ function finishAction(state, actor, at) {
         at + 11 * MINUTE >= Date.parse(trip.deadline) ||
         actor.hp <= combatStats(actor.player).maxHp * trip.retreatHpRatio ||
         actor.energy < 25 ||
+        (state.survival && actor.hunger >= 90) ||
         trip.encounters >= trip.maxEncounters ||
         trip.searches >= 4 ||
         result.outcome === 'retreat';
@@ -623,6 +719,12 @@ export function advanceLife(state, target, { maxActions = 20000 } = {}) {
   if (!Number.isFinite(target) || target < Date.parse(state.updatedAt))
     throw Error('Cannot rewind the authoritative world');
   let count = 0;
+  const nextTime = () =>
+    Math.min(
+      ...state.actors.map((a) => Date.parse(a.active.endsAt)),
+      state.survival ? Date.parse(state.survival.nextVitalAt) : Infinity,
+      state.survival ? Date.parse(state.survival.nextPopulationAt) : Infinity,
+    );
   while (count < maxActions) {
     const next = state.actors
       .slice()
@@ -630,14 +732,19 @@ export function advanceLife(state, target, { maxActions = 20000 } = {}) {
         (a, b) =>
           Date.parse(a.active.endsAt) - Date.parse(b.active.endsAt) || a.id.localeCompare(b.id),
       )[0];
-    const at = Date.parse(next.active.endsAt);
+    const actionAt = next ? Date.parse(next.active.endsAt) : Infinity;
+    const vitalAt = state.survival ? Date.parse(state.survival.nextVitalAt) : Infinity;
+    const populationAt = state.survival ? Date.parse(state.survival.nextPopulationAt) : Infinity;
+    const at = Math.min(actionAt, vitalAt, populationAt);
     if (at > target) break;
-    finishAction(state, next, at);
+    if (actionAt <= vitalAt && actionAt <= populationAt) finishAction(state, next, at);
+    else if (vitalAt <= populationAt) tickVitals(state, at);
+    else for (const actor of tickPopulation(state, at)) startNext(state, actor, at);
     count++;
   }
-  const nextAt = Math.min(...state.actors.map((a) => Date.parse(a.active.endsAt)));
-  const reached = nextAt > target;
-  const time = reached ? target : nextAt - 1;
+  const nextAt = nextTime(),
+    reached = nextAt > target,
+    time = reached ? target : nextAt - 1;
   if (time > Date.parse(state.updatedAt)) {
     state.updatedAt = iso(time);
     state.revision++;
@@ -649,15 +756,14 @@ export function validateLife(state) {
   if (
     state.schemaVersion !== 1 ||
     state.rules.version !== 1 ||
-    !state.actors?.length ||
+    !Array.isArray(state.actors) ||
+    state.actors.length > 100 ||
     !Number.isFinite(Date.parse(state.updatedAt))
   )
     throw Error('Invalid life state');
-  const ids = new Set(state.actors.map((a) => a.id));
-  if (
-    ids.size !== state.actors.length ||
-    new Set(state.logs.map((r) => r.id)).size !== state.logs.length
-  )
+  const all = knownActors(state);
+  const ids = new Set(all.map((a) => a.id));
+  if (ids.size !== all.length || new Set(state.logs.map((r) => r.id)).size !== state.logs.length)
     throw Error('Duplicate life identity or log');
   const now = Date.parse(state.updatedAt);
   for (const actor of state.actors) {
@@ -676,13 +782,18 @@ export function validateLife(state) {
       Date.parse(actor.active.endsAt) <= now
     )
       throw Error('Invalid active interval');
-    validateRequest(state, actor, { type: actor.active.type, params: actor.active.params });
+    validateRequest({ ...state, actors: all }, actor, {
+      type: actor.active.type,
+      params: actor.active.params,
+    });
   }
   for (const record of state.logs)
     if (
       !ids.has(record.actorId) ||
       Date.parse(record.endsAt) > now ||
-      Date.parse(record.startsAt) >= Date.parse(record.endsAt)
+      (record.event
+        ? Date.parse(record.startsAt) > Date.parse(record.endsAt)
+        : Date.parse(record.startsAt) >= Date.parse(record.endsAt))
     )
       throw Error('Invalid performed action');
   for (const amount of Object.values(state.resources))
@@ -693,15 +804,49 @@ export function validateLife(state) {
       for (const [key, delta] of Object.entries(record.resourceDelta || {})) balances[key] += delta;
   for (const key of Object.keys(state.resources))
     if (balances[key] !== state.resources[key]) throw Error('Life resource ledger mismatch');
-  const view = ledgerWorld(state);
+  const view = ledgerWorld(state, true);
   if (new Set(view.adventureRewards.map((r) => r.id)).size !== view.adventureRewards.length)
     throw Error('Duplicate life reward');
-  for (const actor of state.actors)
+  for (const actor of all)
     if (
       (actor.player.combatXp || 0) !==
       view.adventureRewards.filter((r) => r.playerId === actor.id).reduce((n, r) => n + r.xp, 0)
     )
       throw Error('Life XP ledger mismatch');
+  if (state.survival) {
+    const rules = state.rules.survival;
+    if (
+      rules.populationCap > 100 ||
+      rules.populationCap < 1 ||
+      rules.newcomerChance < 0 ||
+      rules.newcomerChance > 1 ||
+      rules.dayMs <= 0 ||
+      rules.daysPerYear <= 0 ||
+      rules.foodPrice < 1 ||
+      !Number.isInteger(rules.foodPrice) ||
+      rules.workWage < 1
+    )
+      throw Error('Invalid survival rules');
+    for (const actor of state.actors) {
+      if (
+        actor.alive === false ||
+        !Number.isFinite(actor.initialAge) ||
+        !Array.isArray(actor.food) ||
+        balance(view, actor.id) < 0
+      )
+        throw Error('Invalid living resident');
+    }
+    for (const actor of Object.values(state.departed || {}))
+      if (
+        actor.alive !== false ||
+        actor.active ||
+        !actor.deathAt ||
+        state.actors.some((a) => a.id === actor.id)
+      )
+        throw Error('Invalid deceased resident');
+    if (new Set(view.economy.ledger.map((t) => t.id)).size !== view.economy.ledger.length)
+      throw Error('Duplicate living transaction');
+  }
   validateEssences(view);
   return true;
 }

@@ -1,12 +1,19 @@
 import { ACTIONS, pathPoint, pointFor } from './catalog.mjs';
 import { advanceLife } from './engine.mjs';
 import { retainBattleLogs } from '../combatHistory.mjs';
+import { knownActors } from './state.mjs';
+import { applyVitals, ageAt } from './survival.mjs';
 const copy = (value) => structuredClone(value);
 const time = (value) => Date.parse(value);
 function actionAt(records, active, id, at) {
   return (
     records.find(
-      (r) => !r.composite && r.actorId === id && time(r.startsAt) <= at && at < time(r.endsAt),
+      (r) =>
+        !r.composite &&
+        !r.event &&
+        r.actorId === id &&
+        time(r.startsAt) <= at &&
+        at < time(r.endsAt),
     ) || (active && time(active.startsAt) <= at && at < time(active.endsAt) ? active : null)
   );
 }
@@ -16,26 +23,39 @@ export function replayLife(state, requestedAt) {
   const resources = copy(state.replayResources);
   for (const record of state.logs) {
     if (record.composite || time(record.endsAt) > at) continue;
-    actors.set(record.actorId, copy(record.after));
-    if (record.result.partnerAfter)
+    if (record.after?.alive === false || record.type === 'death') actors.delete(record.actorId);
+    else if (record.after) actors.set(record.actorId, copy(record.after));
+    if (record.result.partnerAfter && actors.has(record.result.partnerAfter.id))
       actors.set(record.result.partnerAfter.id, copy(record.result.partnerAfter));
     for (const [key, delta] of Object.entries(record.resourceDelta || {})) resources[key] += delta;
   }
-  const frames = state.actors.map((actor) => {
-    const snapshot = actors.get(actor.id);
-    const active = actionAt(state.logs, actor.active, actor.id, at);
-    const progress = active
-      ? Math.max(
-          0,
-          Math.min(1, (at - time(active.startsAt)) / (time(active.endsAt) - time(active.startsAt))),
-        )
-      : 0;
-    const position =
-      active?.type === 'move'
-        ? pathPoint(active.params.path, progress)
-        : pointFor(state, actor, snapshot.placeId);
-    return { ...snapshot, position, active, progress };
-  });
+  const frames = knownActors(state)
+    .filter(
+      (actor) =>
+        (!actor.joinedAt || time(actor.joinedAt) <= at) &&
+        (!actor.deathAt || time(actor.deathAt) > at),
+    )
+    .flatMap((actor) => {
+      const snapshot = actors.get(actor.id);
+      if (!snapshot) return [];
+      applyVitals(snapshot, at, state.rules.survival);
+      const active = actionAt(state.logs, actor.active, actor.id, at);
+      const progress = active
+        ? Math.max(
+            0,
+            Math.min(
+              1,
+              (at - time(active.startsAt)) /
+                (time(active.scheduledEndsAt || active.endsAt) - time(active.startsAt)),
+            ),
+          )
+        : 0;
+      const position =
+        active?.type === 'move'
+          ? pathPoint(active.params.path, progress)
+          : pointFor(state, actor, snapshot.placeId);
+      return [{ ...snapshot, position, active, progress }];
+    });
   return { at, actors: frames, resources };
 }
 export function compactReplay(state, { maxLogs = 1500 } = {}) {
@@ -102,7 +122,7 @@ export function lifeWorld(base, state, at, { replay = false } = {}) {
         }),
       };
   const players = frame.actors.map((actor) => {
-    const current = state.actors.find((a) => a.id === actor.id);
+    const current = knownActors(state).find((a) => a.id === actor.id);
     const source = base.players.find((p) => p.id === actor.id) || current.player;
     const snapshot = replay
       ? {
@@ -118,11 +138,22 @@ export function lifeWorld(base, state, at, { replay = false } = {}) {
       ...snapshot,
       id: actor.id,
       energy: actor.energy,
-      hp: combatFrame(actor.active, actor.progress)?.hp ?? actor.hp,
+      hp: actor.active?.combat
+        ? Math.max(
+            0,
+            combatFrame(actor.active, actor.progress).hp -
+              Math.max(0, (actor.healthDamage || 0) - (actor.active.before.healthDamage || 0)),
+          )
+        : actor.hp,
       hunger: actor.hunger,
+      age: ageAt(actor, frame.at, state.rules.survival),
+      illness: actor.illness,
+      food: actor.food || [],
+      starvingSince: actor.starvingSince,
       location: actor.active?.type === 'move' ? actor.active.params.from : actor.placeId,
-      mood:
-        actor.energy < 30
+      mood: actor.illness
+        ? actor.illness.name
+        : actor.energy < 30
           ? '피곤'
           : actor.hunger > 65
             ? '배고픔'
@@ -186,6 +217,7 @@ export function lifeWorld(base, state, at, { replay = false } = {}) {
       type: r.type === 'social' ? 'dialogue' : 'action',
       actorId: r.actorId,
       targetId: r.result.partnerId,
+      actorName: r.actorName || knownActors(state).find((a) => a.id === r.actorId)?.player.name,
       location: r.after.placeId,
       text: r.result.summary,
       reason: r.reason,
@@ -198,6 +230,25 @@ export function lifeWorld(base, state, at, { replay = false } = {}) {
     players,
     lifeActivities: activities,
     lifeReplay: replay,
+    lifePeople: knownActors(state).map((a) => a.player),
+    lifePopulation: {
+      alive: players.length,
+      deaths: Object.values(state.departed || {}).filter(
+        (a) => !replay || time(a.deathAt) <= frame.at,
+      ).length,
+      arrivals: knownActors(state).filter(
+        (a) =>
+          a.joinedAt &&
+          state.survival &&
+          time(a.joinedAt) > time(state.survival.startsAt) &&
+          (!replay || time(a.joinedAt) <= frame.at),
+      ).length,
+      cap: 100,
+    },
+    lifeSurvival:
+      state.survival && (!replay || time(state.survival.startsAt) <= frame.at)
+        ? state.rules.survival
+        : null,
     lifeLogs: ended,
     lifeAt: new Date(frame.at).toISOString(),
     lifeResources: frame.resources,
@@ -215,7 +266,7 @@ export function lifeWorld(base, state, at, { replay = false } = {}) {
           mergeIds(
             base.battleLogs || [],
             ended
-              .filter((r) => r.type === 'fight')
+              .filter((r) => r.type === 'fight' && r.completed !== false)
               .map((r) => ({
                 id: r.id,
                 playerId: r.actorId,
@@ -276,6 +327,14 @@ export function archiveDay(state, day) {
     replayActors: first.actors.map(({ position, active, progress, ...actor }) => actor),
     replayResources: first.resources,
     logs: state.logs.filter((r) => time(r.endsAt) > begin && time(r.endsAt) <= end),
-    actors: state.actors.map((a) => ({ ...a, ...last.actors.find((r) => r.id === a.id) })),
+    actors: last.actors.map((frame) => ({
+      ...knownActors(state).find((a) => a.id === frame.id),
+      ...frame,
+    })),
+    departed: Object.fromEntries(
+      knownActors(state)
+        .filter((a) => a.deathAt && time(a.deathAt) <= end)
+        .map((a) => [a.id, a]),
+    ),
   };
 }

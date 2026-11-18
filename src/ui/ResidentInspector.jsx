@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useState } from 'react';
 import ResidentAvatar from '../ResidentAvatar';
 import { combatStats, progression } from '../progression.mjs';
+import { balance } from '../economy.mjs';
 import { formatTime } from './format.mjs';
 const ResidentDetails = lazy(() => import('./ResidentDetails'));
 
@@ -26,6 +27,19 @@ export default function ResidentInspector({ resident, world, onClose, onSelect, 
         </div>
         <span className="status-chip">{player.mood}</span>
       </div>
+      {player.age !== null && player.age !== undefined && (
+        <div className="survival-summary">
+          <span>{Math.floor(player.age)}세</span>
+          <span>지갑 {balance(world, player.id)}G</span>
+          <span>음식 {player.food?.length || 0}개</span>
+        </div>
+      )}
+      {player.illness && (
+        <p className="health-warning">{player.illness.name} · 치료나 회복이 필요해요.</p>
+      )}
+      {player.starvingSince && (
+        <p className="health-warning">굶주림이 지속되고 있어요. 음식을 사서 먹어야 해요.</p>
+      )}
       <section className="current-activity">
         <span className="status-chip">{resident.phase}</span>
         <h3>{resident.summary}</h3>

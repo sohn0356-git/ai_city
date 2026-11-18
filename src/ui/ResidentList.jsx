@@ -69,7 +69,13 @@ export default function ResidentList({
                 <small>{r.phase}</small>
               </span>
               <span className="resident-action">{r.summary}</span>
-              <span className="resident-location">{r.location}</span>
+              <span className="resident-location">
+                {r.location}
+                {r.player.age !== null && r.player.age !== undefined
+                  ? ' · ' + Math.floor(r.player.age) + '세'
+                  : ''}
+                {r.player.illness ? ' · ' + r.player.illness.name : ''}
+              </span>
             </span>
             <span aria-hidden="true">↗</span>
           </button>

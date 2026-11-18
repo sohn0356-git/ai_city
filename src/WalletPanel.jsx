@@ -46,21 +46,36 @@ export default function WalletPanel({ world, selected }) {
           .reverse()
           .map((t) => (
             <p key={t.id}>
-              {t.kind === 'victory' ? '대련 승리' : '마을 의뢰'} · {t.amount}G<br />
+              {{
+                victory: '대련 승리',
+                wage: '노동 수입',
+                food: '음식 구매',
+                treatment: '치료비',
+                order: '마을 의뢰',
+              }[t.kind] || '거래'}{' '}
+              · {t.amount}G<br />
               <small>{formatDate(t.at)}</small>
             </p>
           ))}
         {!ledger.length && <p>아직 거래 기록이 없어요.</p>}
       </details>
-      <details>
-        <summary>이용 가능한 마을 서비스</summary>
-        {SERVICES.map((s) => (
-          <p key={s.id}>
-            {s.name} · {s.price}G
-          </p>
-        ))}
-        <p>이용 여부는 주민이 다음 활동에서 선택해요. 접수와 실제 완료는 별도로 기록됩니다.</p>
-      </details>
+      {!world.lifeSurvival && (
+        <details>
+          <summary>이용 가능한 마을 서비스</summary>
+          {SERVICES.map((s) => (
+            <p key={s.id}>
+              {s.name} · {s.price}G
+            </p>
+          ))}
+          <p>이용 여부는 주민이 다음 활동에서 선택해요. 접수와 실제 완료는 별도로 기록됩니다.</p>
+        </details>
+      )}
+      {world.lifeSurvival && (
+        <p>
+          음식 {world.lifeSurvival.foodPrice}G · 직업 활동 임금 {world.lifeSurvival.workWage}G ·
+          치료 {world.lifeSurvival.treatmentPrice}G
+        </p>
+      )}
       {nextPlan && <p className="muted">이 주민의 다음 일정 · {formatDate(nextPlan.startsAt)}</p>}
     </section>
   );

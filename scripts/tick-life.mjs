@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { gzipSync, gunzipSync } from 'node:zlib';
 import { createLife, advanceLife, validateLife } from '../src/simulation/engine.mjs';
+import { migrateSurvival } from '../src/simulation/survival.mjs';
 import { archiveDay, compactReplay } from '../src/simulation/replay.mjs';
 
 const readJSON = async (path) => JSON.parse(await readFile(path, 'utf8'));
@@ -16,18 +17,26 @@ export async function tickLife({
   maxAdvanceMs = 6 * 3600000,
 } = {}) {
   const world = await readJSON(root + '/world.json');
+  let roster = [];
+  try {
+    roster = await readJSON(root + '/roster.json');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
   let state;
   try {
     state = await readJSON(root + '/life.json');
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
-    state = createLife(world, { at: now });
+    state = createLife(world, { at: now, roster });
   }
   // Explicit migration: old world/roster/plans and all existing reward evidence stay untouched.
   const before = Date.parse(state.updatedAt);
   if (now < before) throw Error('Worker clock moved backwards');
   const target = Math.min(now, before + maxAdvanceMs);
   const result = advanceLife(state, target);
+  if (!state.survival && result.reached)
+    migrateSurvival(state, { at: Date.parse(state.updatedAt), roster });
   validateLife(state);
   const days = new Set(
     state.logs.filter((r) => Date.parse(r.endsAt) > before).map((r) => r.endsAt.slice(0, 10)),
@@ -57,7 +66,10 @@ export async function tickLife({
       fresh.replayActors = saved.replayActors;
       fresh.replayResources = saved.replayResources;
       fresh.logs = [...new Map([...saved.logs, ...fresh.logs].map((r) => [r.id, r])).values()].sort(
-        (a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt) || a.id.localeCompare(b.id),
+        (a, b) =>
+          Date.parse(a.endsAt) - Date.parse(b.endsAt) ||
+          (a.order || 0) - (b.order || 0) ||
+          a.id.localeCompare(b.id),
       );
     }
     await writeFile(path + '.tmp', gzipSync(JSON.stringify(fresh), { level: 9 }));

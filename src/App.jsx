@@ -68,6 +68,15 @@ export default function App() {
         ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [selection.residentId, selection.view]);
+  useEffect(() => {
+    if (
+      !playback.replay &&
+      world &&
+      selection.residentId &&
+      !world.players.some((p) => p.id === selection.residentId)
+    )
+      dispatch({ type: 'reset' });
+  }, [world, selection.residentId, playback.replay]);
   const selected = observation?.residents.find((r) => r.player.id === selection.residentId);
   const validPlace = observation?.places.has(selection.placeId) ? selection.placeId : 'all';
   const follow = (id) => {
@@ -81,7 +90,7 @@ export default function App() {
   };
   const reset = () => dispatch({ type: 'reset' });
   const replayRecord = (record) => {
-    playback.seek(Date.parse(record.startsAt));
+    playback.seek(Date.parse(record.startsAt) - (record.type === 'death' ? 1000 : 0));
     follow(record.actorId);
   };
   async function logout() {
@@ -151,7 +160,8 @@ export default function App() {
             <>
               <div className="world-status">
                 <span>
-                  {world.players.length}명 · {lifeData.life ? '자율 생활' : world.cycle + '회차'}
+                  {world.players.length}명{world.lifeSurvival ? '/100' : ''} ·{' '}
+                  {lifeData.life ? '자율 생활' : world.cycle + '회차'}
                 </span>
                 <span>
                   {lifeData.life
@@ -165,6 +175,12 @@ export default function App() {
                       : '새 일정 대기 · 마지막 기록 표시 중'}
                 </span>
                 <span>실제 갱신 {formatDate(world.lastUpdated)}</span>
+                {world.lifeSurvival && (
+                  <span>
+                    신규 입주 {world.lifePopulation.arrivals}명 · 사망 {world.lifePopulation.deaths}
+                    명
+                  </span>
+                )}
               </div>
               {lifeData.error && (
                 <div className="app-alert" role="alert">

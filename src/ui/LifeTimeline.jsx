@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { knownActors } from '../simulation/state.mjs';
 import { ACTIONS } from '../simulation/catalog.mjs';
 import { formatDate, formatTime } from './format.mjs';
 const inputNames = {
@@ -20,6 +21,10 @@ const inputNames = {
   timeLimitMinutes: '제한 시간(분)',
   maxEncounters: '최대 조우 횟수',
   returnTo: '귀환지',
+  quantity: '구매 수량',
+  unitPrice: '개당 가격',
+  price: '비용',
+  wage: '임금',
 };
 export default function LifeTimeline({ life, playback, history, selected, onRecord }) {
   const [logsOpen, setLogsOpen] = useState(false),
@@ -101,6 +106,12 @@ export default function LifeTimeline({ life, playback, history, selected, onReco
       </label>
       {playback.loading && <p role="status">저장된 일상을 여는 중…</p>}
       {playback.error && <p role="alert">{playback.error}</p>}
+      {life.rules.survival && (
+        <p className="muted">
+          세계 1일 {life.rules.survival.dayMs / 60000}분 · 음식 {life.rules.survival.foodPrice}G ·
+          허기 100이 {life.rules.survival.starvationDays}일 지속되면 사망 · 최대 100명
+        </p>
+      )}
       {!logs.length && (
         <p className="muted">
           주민들이 첫 행동을 수행 중이에요. 완료된 행동부터 재생 기록이 쌓입니다.
@@ -120,8 +131,9 @@ export default function LifeTimeline({ life, playback, history, selected, onReco
                     {formatTime(record.startsAt)}–{formatTime(record.endsAt)}
                   </time>
                   <b>
-                    {state.actors.find((a) => a.id === record.actorId)?.player.name} ·{' '}
-                    {record.label}
+                    {record.actorName ||
+                      knownActors(state).find((a) => a.id === record.actorId)?.player.name}{' '}
+                    · {record.label}
                   </b>
                   <span>{record.result.summary}</span>
                   <small>여기서 재생 ↗</small>
@@ -150,17 +162,19 @@ export default function LifeTimeline({ life, playback, history, selected, onReco
         <summary>주민이 선택할 수 있는 액션</summary>
         {rulesOpen && (
           <div className="action-catalog">
-            {Object.entries(ACTIONS).map(([id, action]) => (
-              <article key={id}>
-                <h3>{action.name}</h3>
-                <small>
-                  {action.composite
-                    ? '여러 단계를 연결한 행동'
-                    : action.duration.join('–') + '분 · 기본 범위'}
-                </small>
-                <p>입력: {action.inputs.map((key) => inputNames[key] || key).join(', ')}</p>
-              </article>
-            ))}
+            {Object.entries(ACTIONS)
+              .filter(([, action]) => !action.event)
+              .map(([id, action]) => (
+                <article key={id}>
+                  <h3>{action.name}</h3>
+                  <small>
+                    {action.composite
+                      ? '여러 단계를 연결한 행동'
+                      : action.duration.join('–') + '분 · 기본 범위'}
+                  </small>
+                  <p>입력: {action.inputs.map((key) => inputNames[key] || key).join(', ')}</p>
+                </article>
+              ))}
           </div>
         )}
       </details>

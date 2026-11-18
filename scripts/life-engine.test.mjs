@@ -22,7 +22,7 @@ import {
 import { tickLife } from './tick-life.mjs';
 const base = JSON.parse(await readFile('public/world.json', 'utf8'));
 const start = Date.parse('2026-11-18T00:00:00Z');
-const make = () => createLife(base, { at: start, seed: 'test-world' });
+const make = () => createLife(base, { at: start, seed: 'test-world', survival: false });
 const normalize = (s) => {
   const copy = structuredClone(s);
   delete copy.revision;
@@ -218,6 +218,7 @@ test('short exploration budgets still reserve time for the return journey', () =
   const state = createLife(base, {
     at: start,
     seed: 'test-world',
+    survival: false,
     rules: {
       ...DEFAULT_RULES,
       exploration: { ...DEFAULT_RULES.exploration, timeLimitMinutes: 15 },

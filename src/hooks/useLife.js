@@ -28,7 +28,8 @@ export default function useLife(enabled) {
         const value = await response.json();
         if (
           value.schemaVersion !== 1 ||
-          !value.actors?.length ||
+          !Array.isArray(value.actors) ||
+          value.actors.length > 100 ||
           !Array.isArray(value.logs) ||
           !value.replayActors ||
           !Number.isFinite(Date.parse(value.updatedAt))

@@ -77,7 +77,9 @@ export default function CityRecords({ world, selection, onReset, onSelect, onPla
               <details className="record-item" key={e.id}>
                 <summary>
                   <span className="record-meta">
-                    <b>{world.players.find((p) => p.id === e.actorId)?.name || '도시'}</b>
+                    <b>
+                      {e.actorName || world.players.find((p) => p.id === e.actorId)?.name || '도시'}
+                    </b>
                     <time dateTime={e.at}>{formatDate(e.at)}</time>
                   </span>
                   <span className="record-summary">{e.text}</span>
@@ -87,7 +89,12 @@ export default function CityRecords({ world, selection, onReset, onSelect, onPla
                   <p>{e.text}</p>
                   <p>{e.outcome}</p>
                   {e.reason && <p className="muted">선택한 이유 · {e.reason}</p>}
-                  <button onClick={() => onSelect(e.actorId)}>이 주민 따라보기 ↗</button>
+                  <button
+                    disabled={!world.players.some((p) => p.id === e.actorId)}
+                    onClick={() => onSelect(e.actorId)}
+                  >
+                    이 주민 따라보기 ↗
+                  </button>
                   {e.lifeRecord && onReplay && (
                     <button onClick={() => onReplay(e.lifeRecord)}>이 행동 재생 ▶</button>
                   )}
